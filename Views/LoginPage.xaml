@@ -18,9 +18,9 @@
             <TextBlock Name="PasswordTextBlock" Text="Password"/>
             <PasswordBox Name="PasswordBox" Height="19" Margin="0,6,0,18"/>
 
-            <Button Name="LoginButton" Content="Log in" Height="36" Click="UserLoginButton_Click"/>
+            <Button Name="LoginButton" Style="{StaticResource NiceButton}" Content="Log in" Height="36" Click="UserLoginButton_Click"/>
 
-            <Button Name="ContinueAsGuestButton" Content="Continue as Guest" Height="36" Margin="0,10,0,0" Click ="ContinueAsGuestButton_Click"/>
+            <Button Name="ContinueAsGuestButton" Style="{StaticResource NiceButton}" Content="Continue as Guest" Height="36" Margin="0,10,0,0" Click ="ContinueAsGuestButton_Click"/>
         </StackPanel>
     </Grid>
 </Page>

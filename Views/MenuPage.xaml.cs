@@ -24,9 +24,6 @@ namespace TetrisApp.Views {
         private void SettingsButton_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new SettingsPage());
         }
-        private void HardButton_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Đã chọn Hard", "Difficulty");
-        }
         private void ExitButton_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
         }

@@ -49,11 +49,7 @@
 
                 <!-- Top Bar -->
                 <DockPanel Margin="0,0,0,12">
-                    <TextBlock Text="Game play"
-                               Foreground="White"
-                               FontSize="20"
-                               FontWeight="Bold"
-                               DockPanel.Dock="Left"/>
+                    <TextBlock Text="GAME PLAY" Foreground="White" FontSize="20" FontWeight="Bold" DockPanel.Dock="Left" HorizontalAlignment="Center"/>
                 </DockPanel>
 
                 <!-- Board -->
@@ -65,25 +61,14 @@
                     <!-- Viewbox -->
                     <Viewbox Stretch="Uniform">
                         <!-- Scale 10x20 -->
-                        <Grid Width="260" Height="520">
-                            <TextBlock Text="BOARD 10x20"
-                                       Foreground="#8E8EA0"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Grid>
+                        <Grid Width="260" Height="520"></Grid>
                     </Viewbox>
                 </Border>
             </Grid>
         </Border>
 
         <!-- RIGHT: Info Panel -->
-        <Border Grid.Column="1"
-                Margin="16,0,0,0"
-                Padding="16"
-                CornerRadius="18"
-                Background="#15151A"
-                BorderBrush="#2A2A33"
-                BorderThickness="1">
+        <Border Grid.Column="1" Margin="16,0,0,0" Padding="16" CornerRadius="18" Background="#15151A" BorderBrush="#2A2A33" BorderThickness="1">
             <StackPanel>
 
                 <!-- Score / Level / Lines -->
@@ -95,23 +80,23 @@
 
                     <Border Padding="12" CornerRadius="12" Background="#101015" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,10,0">
                         <StackPanel>
-                            <TextBlock Text="SCORE" Foreground="#B9B9C6"/>
-                            <TextBlock Text="0" Foreground="White" FontSize="26" FontWeight="Bold"/>
+                            <TextBlock Text="SCORE" Foreground="#B9B9C6" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock Text="0" Foreground="White" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
                     <Border Grid.Column="1" Padding="12" CornerRadius="12" Background="#101015" BorderBrush="#2A2A33" BorderThickness="1">
                         <StackPanel>
-                            <TextBlock Text="LEVEL" Foreground="#B9B9C6"/>
-                            <TextBlock Text="1" Foreground="White" FontSize="26" FontWeight="Bold"/>
+                            <TextBlock Text="LEVEL" Foreground="#B9B9C6" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock Text="1" Foreground="White" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                 </Grid>
 
                 <Border Padding="12" CornerRadius="12" Background="#101015" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,0,14">
                     <StackPanel>
-                        <TextBlock Text="LINES" Foreground="#B9B9C6"/>
-                        <TextBlock Text="0" Foreground="White" FontSize="26" FontWeight="Bold"/>
+                        <TextBlock Text="LINES" Foreground="#B9B9C6" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="0" Foreground="White" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
 
@@ -124,20 +109,16 @@
 
                     <Border Padding="12" CornerRadius="12" Background="#101015" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,10,0">
                         <StackPanel>
-                            <TextBlock Text="HOLD" Foreground="#B9B9C6"/>
-                            <Border Height="120" Margin="0,8,0,0" CornerRadius="10" BorderBrush="#2A2A33" BorderThickness="1"
-                                    Background="{StaticResource GridTileBrush}">
-                                <TextBlock Text="4x4" Foreground="#8E8EA0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="HOLD" Foreground="#B9B9C6" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <Border Height="120" Margin="0,8,0,0" CornerRadius="10" BorderBrush="#2A2A33" BorderThickness="1" Background="{StaticResource GridTileBrush}">
                             </Border>
                         </StackPanel>
                     </Border>
 
                     <Border Grid.Column="1" Padding="12" CornerRadius="12" Background="#101015" BorderBrush="#2A2A33" BorderThickness="1">
                         <StackPanel>
-                            <TextBlock Text="NEXT" Foreground="#B9B9C6"/>
-                            <Border Height="120" Margin="0,8,0,0" CornerRadius="10" BorderBrush="#2A2A33" BorderThickness="1"
-                                    Background="{StaticResource GridTileBrush}">
-                                <TextBlock Text="4x4" Foreground="#8E8EA0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="NEXT" Foreground="#B9B9C6" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <Border Height="120" Margin="0,8,0,0" CornerRadius="10" BorderBrush="#2A2A33" BorderThickness="1"  Background="{StaticResource GridTileBrush}">
                             </Border>
                         </StackPanel>
                     </Border>
@@ -146,14 +127,14 @@
                 <!-- Controls -->
                 <Border Padding="12" CornerRadius="12" Background="#101015" BorderBrush="#2A2A33" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="CONTROLS" Foreground="#B9B9C6"/>
+                        <TextBlock Text="CONTROLS" Foreground="#B9B9C6" FontWeight="Bold" HorizontalAlignment="Center"/>
                         <TextBlock Foreground="#E6E6F0" Margin="0,8,0,0"
-                                   Text="← → : Change&#10;↑ : Rotate&#10;↓ : Hard Drop&#10;Space : Fast Drop&#10;C/Shift : Hold&#10;P : Pause"/>
+                                   Text="← → : Change&#10;↑ : Rotate&#10;↓ : Fast Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;P : Pause"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Back -->
-                <Button Content="Back to Menu" Click="Back_Click"/>
+                <Button Style="{StaticResource NiceButton}" Content="Back to Menu" Click="Back_Click"/>
             </StackPanel>
         </Border>
     </Grid>

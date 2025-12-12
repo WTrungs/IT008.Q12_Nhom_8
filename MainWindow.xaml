@@ -9,5 +9,5 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanMinimize">
-    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Cursor="None"/>
+    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Cursor="Arrow"/>
 </Window>
