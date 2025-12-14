@@ -2,13 +2,8 @@
 using System.Data;
 using System.Windows;
 
-namespace TetrisApp
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
+namespace TetrisApp {
+    public partial class App : Application {
     }
 
 }

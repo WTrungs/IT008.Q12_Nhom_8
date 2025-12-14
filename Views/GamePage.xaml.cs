@@ -15,15 +15,12 @@ using System.Windows.Shapes;
 
 namespace TetrisApp.Views {
     public partial class GamePage : Page {
-        private Border[,] _Cells = new Border[20, 10];
-        private Border[,] _NextCells = new Border[4, 4];
-
         public GamePage() {
             InitializeComponent();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e) {
-            NavigationService?.Navigate(new MenuPage());
+            NavigationService?.Navigate(new Uri("Views/MenuPage.xaml", UriKind.Relative));
         }
     }
 }

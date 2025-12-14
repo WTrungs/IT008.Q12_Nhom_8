@@ -4,30 +4,105 @@
              xmlns:local="clr-namespace:TetrisApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="NiceButton" TargetType="Button">
-            <Setter Property="Height" Value="44"/>
+        <Style TargetType="Window">
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <Style TargetType="Page">
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <Style TargetType="{x:Type Control}">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+        </Style>
+        <!-- Palette -->
+        <Color x:Key="SpaceBg0">#05060F</Color>
+        <Color x:Key="SpaceBg1">#0B1026</Color>
+        <Color x:Key="SpacePurple">#7C3AED</Color>
+        <Color x:Key="SpaceCyan">#22D3EE</Color>
+        <Color x:Key="SpacePink">#FB7185</Color>
+
+        <SolidColorBrush x:Key="TextMuted" Color="#9AA6C8"/>
+
+        <!-- Background gradient -->
+        <LinearGradientBrush x:Key="SpaceBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="{StaticResource SpaceBg0}" Offset="0"/>
+            <GradientStop Color="{StaticResource SpaceBg1}" Offset="0.55"/>
+            <GradientStop Color="#140A2A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Stars pattern -->
+        <DrawingBrush x:Key="StarsBrush" TileMode="Tile"
+                  Viewport="0,0,240,240" ViewportUnits="Absolute"
+                  Viewbox="0,0,240,240" ViewboxUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="#60FFFFFF">
+                        <GeometryDrawing.Geometry>
+                            <GeometryGroup>
+                                <EllipseGeometry Center="20,30" RadiusX="1.3" RadiusY="1.3"/>
+                                <EllipseGeometry Center="70,90" RadiusX="1.0" RadiusY="1.0"/>
+                                <EllipseGeometry Center="110,40" RadiusX="1.6" RadiusY="1.6"/>
+                                <EllipseGeometry Center="160,120" RadiusX="1.1" RadiusY="1.1"/>
+                                <EllipseGeometry Center="210,60" RadiusX="1.4" RadiusY="1.4"/>
+                                <EllipseGeometry Center="40,180" RadiusX="1.0" RadiusY="1.0"/>
+                                <EllipseGeometry Center="120,200" RadiusX="1.3" RadiusY="1.3"/>
+                                <EllipseGeometry Center="200,190" RadiusX="1.0" RadiusY="1.0"/>
+                            </GeometryGroup>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <!-- Glass card -->
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="Background" Value="#9910152A"/>
+        </Style>
+
+        <!-- Outer-space button -->
+        <Style x:Key="SpaceButton" TargetType="Button">
+            <Setter Property="Height" Value="50"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#2A2A33"/>
-            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="Background" Value="#1A1D2B"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Bd"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="12"
-                        Padding="12,4,12,4">
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
                             <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"
+                                          Margin="0,0,0,0"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.9"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="50" ShadowDepth="0" Opacity="0.55"/>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.75"/>
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>

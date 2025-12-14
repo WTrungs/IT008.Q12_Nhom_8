@@ -21,7 +21,7 @@ namespace TetrisApp.Views {
         private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new MenuPage());
         }
-        private void UserLoginButton_Click(object sender, RoutedEventArgs e) {
+        private void LoginButton_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new MenuPage());
         }
 

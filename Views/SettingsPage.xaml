@@ -26,7 +26,7 @@
                 <ComboBoxItem Content="Track 3" />
             </ComboBox>
 
-            <Button Style="{StaticResource NiceButton}" Content="Save and back to Menu" Height="45" Margin="0,10,0,0" Click="Back_Click"/>
+            <Button Style="{StaticResource SpaceButton}" Content="Save and back to Menu" Height="45" Margin="0,10,0,0" Click="Back_Click"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -1,22 +1,328 @@
 ﻿<Page x:Class="TetrisApp.Views.MenuPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:TetrisApp.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="MenuPage">
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="650" d:DesignWidth="1000"
+      Title="Menu"
+      Background="{StaticResource SpaceBackground}"
+      UseLayoutRounding="True"
+      SnapsToDevicePixels="True">
+
+    <Page.Resources>
+
+        <!-- Side menu style (hover/click open) -->
+        <Style x:Key="SideMenuStyle"
+               TargetType="Border"
+               BasedOn="{StaticResource GlassCard}">
+
+            <Setter Property="Width" Value="280"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,62,0,0"/>
+            <Setter Property="Panel.ZIndex" Value="50"/>
+
+            <!-- Default: hidden to the left -->
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform X="-300"/>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <!-- Click pin open -->
+                <DataTrigger Binding="{Binding IsChecked, ElementName=HamburgerToggle}" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <TranslateTransform X="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+
+                <!-- Hover on hamburger -->
+                <DataTrigger Binding="{Binding IsMouseOver, ElementName=HamburgerToggle}" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <TranslateTransform X="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+
+                <!-- Hover on drawer itself -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <TranslateTransform X="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Hamburger button -->
+        <Style x:Key="HamburgerButton" TargetType="ToggleButton">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#1A1D2B"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14">
+                            <Grid Margin="14,14">
+                                <StackPanel VerticalAlignment="Center">
+                                    <Rectangle Height="2" RadiusX="1" RadiusY="1" Fill="#EAF0FF"/>
+                                    <Rectangle Height="2" RadiusX="1" RadiusY="1" Fill="#EAF0FF" Margin="0,6,0,0"/>
+                                    <Rectangle Height="2" RadiusX="1" RadiusY="1" Fill="#EAF0FF" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="22" ShadowDepth="0" Opacity="0.55"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Width" Value="34"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#1A1D2B"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="18" ShadowDepth="0" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="320">
-            <TextBlock Name="MenuTextBlock" Text="Menu" FontSize="40" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+        <!-- Background -->
+        <Rectangle Fill="{StaticResource SpaceBackground}"/>
 
-            <Button Name="StartButton" Style="{StaticResource NiceButton}" Content="Start" Height="45" Click="NewGameButton_Click"/>
-            <Button Name="DifficultyButton" Style="{StaticResource NiceButton}" Content="Difficulty" Height="45" Margin="0,10,0,0"/>
-            <Button Name="SettingsButton" Style="{StaticResource NiceButton}" Content="Settings" Height="45" Margin="0,10,0,0" Click="SettingsButton_Click"/>
-            <Button x:Name="BackToLoginButton" Style="{StaticResource NiceButton}" Content="Back to Login" Height="45" Margin="0,10,0,0" Click="BackToLoginButton_Click"/>
-            <Button Name="ExitButton" Style="{StaticResource NiceButton}" Content="Exit" Height="45" Margin="0,10,0,0" Click="ExitButton_Click"/>
-        </StackPanel>
+        <!-- NEBULA / GLOW -->
+        <Canvas IsHitTestVisible="True" Opacity="0.9">
+            <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+        </Canvas>
+
+        <!-- Stars -->
+        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
+
+        <!-- Content -->
+        <Grid Margin="22">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top bar -->
+            <DockPanel Grid.Row="0" Margin="0,0,0,14">
+                <ToggleButton x:Name="HamburgerToggle"
+                              Style="{StaticResource HamburgerButton}"
+                              DockPanel.Dock="Left"/>
+
+                <TextBlock Text="TETRIS"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="12,0,0,0"
+                           DockPanel.Dock="Left"/>
+            </DockPanel>
+
+            <!-- Main area -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left: main menu -->
+                <Border Style="{StaticResource GlassCard}" Width="520" VerticalAlignment="Center">
+                    <StackPanel>
+                        <TextBlock Text="MENU"
+                                   FontSize="44"
+                                   FontWeight="Bold"
+                                   FontStretch="Expanded"
+                                   HorizontalAlignment="Center"/>
+
+                        <TextBlock Text="Choose your mission"
+                                   Foreground="{StaticResource TextMuted}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,6,0,22"/>
+
+                        <Button Style="{StaticResource SpaceButton}" Content="New Game"
+                                Click="NewGameButton_Click" Margin="0,0,0,10"/>
+
+                        <Button Style="{StaticResource SpaceButton}" Content="Continue"
+                                Click="ContinueButton_Click" Margin="0,0,0,10"/>
+
+                        <Button Style="{StaticResource SpaceButton}" Content="Save Game"
+                                Click="SaveGameButton_Click" Margin="0,0,0,10"/>
+
+                        <Button Style="{StaticResource SpaceButton}" Content="Exit"
+                                Click="ExitButton_Click" BorderBrush="#FB7185"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Side drawer -->
+                <Border x:Name="SideMenu"
+                        Grid.RowSpan="2"
+                        Style="{StaticResource SideMenuStyle}" Margin="0,0,0,0">
+
+                    <StackPanel>
+                        <TextBlock Text="Account" FontSize="18" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+                        <Border CornerRadius="14"
+                            BorderBrush="#2A2A33" BorderThickness="1"
+                            Background="#14182A"
+                            Padding="12"
+                            Margin="0,0,0,11">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- AVATAR -->
+                                <Button Grid.Column="0"
+                                    Width="44" Height="44"
+                                    Padding="0"
+                                    BorderThickness="1"
+                                    BorderBrush="#2A2A33"
+                                    Background="#20243A"
+                                    Cursor="Hand"
+                                    ToolTip="Change avatar"
+                                    Click="ChangeAvatar_Click">
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="AvatarBd"
+                                                Width="44" Height="44"
+                                                CornerRadius="22"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                <!-- Placeholder: Change to ImageBrush -->
+                                                <TextBlock Text="👤"
+                                                   FontSize="18"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{StaticResource TextMuted}"/>
+                                            </Border>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="AvatarBd" Property="BorderBrush" Value="#22D3EE"/>
+                                                    <Setter TargetName="AvatarBd" Property="Effect">
+                                                        <Setter.Value>
+                                                            <DropShadowEffect Color="#22D3EE" BlurRadius="18" ShadowDepth="0" Opacity="0.55"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="AvatarBd" Property="Opacity" Value="0.85"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <!-- NAME -->
+                                <StackPanel Grid.Column="1" Margin="12,0,12,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Guest"
+                                        FontWeight="Bold"
+                                        FontSize="15"/>
+                                </StackPanel>
+
+                                <!-- PENCIL ICON -->
+                                <Button Grid.Column="2"
+                                    Style="{StaticResource IconButton}"
+                                    ToolTip="Rename"
+                                    Click="Rename_Click">
+                                    <!-- Icon -->
+                                    <TextBlock Text="✎" FontSize="16" FontWeight="Bold" Margin="0,0,0,1"/>
+                                </Button>
+                            </Grid>
+                        </Border>
+                        
+                        <Button Style="{StaticResource SpaceButton}" Content="Settings" Click="SettingsButton_Click" Margin="0,0,0,10"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="About" Margin="0,0,0,10"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

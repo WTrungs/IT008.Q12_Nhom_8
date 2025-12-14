@@ -19,17 +19,30 @@ namespace TetrisApp.Views {
             InitializeComponent();
         }
         private void NewGameButton_Click(object sender, RoutedEventArgs e) {
-            NavigationService?.Navigate(new GamePage());
+            NavigationService?.Navigate(new Uri("Views/Difficulty.xaml", UriKind.Relative));
         }
         private void SettingsButton_Click(object sender, RoutedEventArgs e) {
-            NavigationService?.Navigate(new SettingsPage());
+            NavigationService?.Navigate(new Uri("Views/SettingsPage.xaml", UriKind.Relative));
         }
         private void ExitButton_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
         }
+        private void ContinueButton_Click(object sender, RoutedEventArgs e) {
+            NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative));
+        }
+        private void SaveGameButton_Click(object sender, RoutedEventArgs e) {
+        
+        }
+        private void LogoutButton_Click(object sender, RoutedEventArgs e) {
+            NavigationService?.Navigate(new Uri("Views/LoginPage.xaml", UriKind.Relative));
+        }
 
-        private void BackToLoginButton_Click(object sender, RoutedEventArgs e) {
-            NavigationService?.Navigate(new LoginPage());
+        private void ChangeAvatar_Click(object sender, RoutedEventArgs e) {
+            NavigationService?.Navigate(new Uri("Views/ChangeAvatarPage.xaml", UriKind.Relative));
+        }
+
+        private void Rename_Click(object sender, RoutedEventArgs e) {
+            NavigationService?.Navigate(new Uri("Views/ScoresPage.xaml", UriKind.Relative));
         }
     }
 }

@@ -10,7 +10,7 @@
 
     <Grid>
         <StackPanel Width="360" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Name="LoginTextBlock" Text="Login" FontSize="40" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+            <TextBlock Name="LoginTextBlock" Text="Tetris Game" FontSize="40" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
             <TextBlock Name="UsernameTextBlock" Text="Username"/>
             <TextBox Name="UsernameTextBox" Height="19" Margin="0,6,0,18"/>
@@ -18,9 +18,9 @@
             <TextBlock Name="PasswordTextBlock" Text="Password"/>
             <PasswordBox Name="PasswordBox" Height="19" Margin="0,6,0,18"/>
 
-            <Button Name="LoginButton" Style="{StaticResource NiceButton}" Content="Log in" Height="36" Click="UserLoginButton_Click"/>
+            <Button Name="LoginButton" Style="{StaticResource SpaceButton}" Content="Log in" Height="36" Click="LoginButton_Click"/>
 
-            <Button Name="ContinueAsGuestButton" Style="{StaticResource NiceButton}" Content="Continue as Guest" Height="36" Margin="0,10,0,0" Click ="ContinueAsGuestButton_Click"/>
+            <Button Name="ContinueAsGuestButton" Style="{StaticResource SpaceButton}" Content="Continue as Guest" Height="36" Margin="0,10,0,0" Click ="ContinueAsGuestButton_Click"/>
         </StackPanel>
     </Grid>
 </Page>
