@@ -5,26 +5,295 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TetrisApp.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SettingsPage">
+      d:DesignHeight="650" d:DesignWidth="1000"
+      Title="SettingPage"
+      Background="{StaticResource SpaceBackground}"
+      UseLayoutRounding="True"
+      SnapsToDevicePixels="True">
 
-    <Grid Background="{StaticResource SpaceBackground}">
+    <Page.Resources>
+        
+        <!--CheckBox style-->
+        <Style x:Key="SpaceToggle" TargetType="CheckBox">
+            <Setter Property="Width" Value="52"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <!-- Track -->
+                            <Border x:Name="Track"
+                            Background="#2A2F3F"
+                            CornerRadius="14"/>
 
-        <Grid Background="{StaticResource StarsBrush}"
-              Opacity="0.3"/>
-        <Ellipse Width="600"
-         Height="400"
-         HorizontalAlignment="Center"
-         VerticalAlignment="Center"
-         IsHitTestVisible="False">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#553A7BFF" Offset="0"/>
-                    <GradientStop Color="Transparent" Offset="1"/>
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-        </Ellipse>
+                            <!-- Thumb -->
+                            <Ellipse x:Name="Thumb"
+                             Width="22"
+                             Height="22"
+                             Fill="#EAF0FF"
+                             Margin="3"
+                             HorizontalAlignment="Left"/>
+                        </Grid>
 
+                        <ControlTemplate.Triggers>
+
+                            <!-- Checked -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Track"
+                                Property="Background"
+                                Value="#22D3EE"/>
+                                <Setter TargetName="Thumb"
+                                Property="HorizontalAlignment"
+                                Value="Right"/>
+                                <Setter TargetName="Track" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE"
+                                                  BlurRadius="20"
+                                                  ShadowDepth="0"
+                                                  Opacity="0.6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Track"
+                                Property="Background"
+                                Value="#3A4058"/>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Slider style-->
+        <Style x:Key="SpaceSlider" TargetType="Slider">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid Height="28">
+                            <!-- Background track -->
+                            <Border Height="4"
+                            VerticalAlignment="Center"
+                            Background="#2A2F3F"
+                            CornerRadius="2"/>
+
+                            <!-- Value track -->
+                            <Border x:Name="PART_SelectionRange"
+                            Height="4"
+                            VerticalAlignment="Center"
+                            Background="#22D3EE"
+                            CornerRadius="2"/>
+
+                            <!-- Thumb -->
+                            <Thumb x:Name="Thumb"
+                           Width="14"
+                           Height="14"
+                           Background="#EAF0FF"
+                           BorderBrush="#22D3EE"
+                           BorderThickness="2">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Ellipse Fill="{TemplateBinding Background}"
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         StrokeThickness="{TemplateBinding BorderThickness}"/>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Thumb"
+                                Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE"
+                                                  BlurRadius="20"
+                                                  ShadowDepth="0"
+                                                  Opacity="0.6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ComboBox style-->
+        <Style x:Key="SpaceComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="Background" Value="#1A1D2B"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <!-- Main box -->
+                            <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12"
+                            Padding="{TemplateBinding Padding}">
+                                <Grid>
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                    <Path x:Name="Arrow"
+                                  Data="M 0 0 L 6 6 L 12 0 Z"
+                                  Fill="#9AA6C8"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Popup -->
+                            <Popup x:Name="Popup"
+                           Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True"
+                           Focusable="False">
+                                <Border Background="#10152A"
+                                CornerRadius="12"
+                                Margin="0,6,0,0"
+                                BorderBrush="#2A2A33"
+                                BorderThickness="1">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd"
+                                Property="BorderBrush"
+                                Value="#22D3EE"/>
+                            </Trigger>
+
+                            <!-- Open -->
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Arrow"
+                                Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="180"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ComboboxIteam style-->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Bd"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="8">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd"
+                                Property="Background"
+                                Value="#2A2F4A"/>
+                            </Trigger>
+
+                            <!-- Selected -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd"
+                                Property="Background"
+                                Value="#22D3EE"/>
+                                <Setter Property="Foreground"
+                                Value="#05060F"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
+    <Grid>
+        <Rectangle Fill="{StaticResource SpaceBackground}"/>
+        
+        <!-- Grid makeup -->
+        <Canvas IsHitTestVisible="True" Opacity="0.9">
+            <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+        </Canvas>
+
+        <!-- Stars -->
+        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
+        
         <!-- Phan chua settings -->
         <Border Style="{StaticResource GlassCard}"
                 Width="480"
@@ -36,54 +305,63 @@
 
                     <!-- Title -->
                     <TextBlock Text="SETTINGS"
-                               FontSize="30"
-                               FontWeight="SemiBold"
-                               Foreground="#E6ECFF"
                                Margin="0,0,0,26"
+                               FontSize="30"
+                               FontWeight="Bold"
                                HorizontalAlignment="Center"/>
 
                     <!-- mucsic checkbox -->
-                    <CheckBox x:Name="MusicToggle"
-                              VerticalAlignment="Center"
-                              VerticalContentAlignment="Center"
-                              Margin="0,0,0,16"
-                              FontSize="18"
-                              Height="36">
-                        <TextBlock Text="Music" Foreground="#E6ECFF" FontSize="18"/>
-                    </CheckBox>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="0,0,0,20">
+
+                        <TextBlock Text="MUSIC"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Opacity="0.75"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,12,0"/>
+
+                        <CheckBox x:Name="MusicToggle"
+                                  Style="{StaticResource SpaceToggle}"
+                                  IsChecked="True"/>
+                    </StackPanel>
 
                     <!-- Volume -->
                     <TextBlock Text="VOLUME"
-                               FontSize="13"
+                               FontSize="15"
                                FontWeight="SemiBold"
                                Opacity="0.75"
                                Margin="0,0,0,4"
                                Foreground="#E6ECFF"/>
-                    
-                    <Slider x:Name="VolumeSlider"
-                            Minimum="0"
-                            Maximum="1"
-                            TickFrequency="0.01"
-                            IsSnapToTickEnabled="True"
+
+                    <Slider x:Name="MusicVolumeSlider"
+                            Style="{StaticResource SpaceSlider}"
+                            Margin="0,0,22,14"/>
+
+                    <!-- SFX Volume -->
+                    <TextBlock Text="SFX VOLUME"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Opacity="0.75"
+                               Margin="0,0,0,4"
+                               Foreground="#E6ECFF"/>
+
+                    <Slider x:Name="SfxVolumeSlider"
+                            Style="{StaticResource SpaceSlider}"
                             Margin="0,0,22,18"/>
                     
                     <!-- SELECT TRACK -->
                     <TextBlock Text="SELECT TRACK"
-                               FontSize="13"
+                               FontSize="15"
                                FontWeight="SemiBold"
                                Opacity="0.75"
                                Margin="0,0,0,4"
                                Foreground="#E6ECFF"/>
 
                     <ComboBox x:Name="TrackCombo"
-                              Height="36"
-                              Padding="10,4"
-                              Margin="0,6,22,20"
-                              FontSize="14"
-                              Foreground="White"
-                              Background="#252A3A"
-                              BorderBrush="#3A3F4B"
-                              IsEditable="False">
+                              Style="{StaticResource SpaceComboBox}"
+                              Margin="0,6,22,20">
                         <ComboBoxItem Content="Track 1"/>
                         <ComboBoxItem Content="Track 2"/>
                         <ComboBoxItem Content="Track 3"/>

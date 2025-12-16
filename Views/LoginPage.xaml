@@ -5,27 +5,166 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:TetrisApp.Views"
       mc:Ignorable="d"
-      d:DesignHeight="450"
-      d:DesignWidth="800"
-      Title="Login">
+      d:DesignHeight="650" d:DesignWidth="1000"
+      Title="LoginPage"
+      Background="{StaticResource SpaceBackground}"
+      UseLayoutRounding="True"
+      SnapsToDevicePixels="True">
 
-    <Grid Background="{StaticResource SpaceBackground}">
-        <Grid Background="{StaticResource StarsBrush}"
-              Opacity="0.35" />
+    <!-- Page Resources -->
+    <Page.Resources>
+
+        <!-- TextBox Stye -->
+        <Style x:Key="SpaceTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#14182A"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="CaretBrush" Value="#22D3EE"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Bd"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="12">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE"
+                                                  BlurRadius="16"
+                                                  ShadowDepth="0"
+                                                  Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- PasswordBox Style -->
+        <Style x:Key="SpacePasswordBox" TargetType="PasswordBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#14182A"/>
+            <Setter Property="BorderBrush" Value="#2A2A33"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="CaretBrush" Value="#22D3EE"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="Bd"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="12">
+
+                            <!-- Password host -->
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                  Margin="{TemplateBinding Padding}"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd"
+                                Property="BorderBrush"
+                                Value="#22D3EE"/>
+                            </Trigger>
+
+                            <!-- Focus -->
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd"
+                                Property="BorderBrush"
+                                Value="#22D3EE"/>
+                                <Setter TargetName="Bd"
+                                Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE"
+                                                  BlurRadius="16"
+                                                  ShadowDepth="0"
+                                                  Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd"
+                                Property="Opacity"
+                                Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
+    <Grid>
+        <Rectangle Fill="{StaticResource SpaceBackground}"/>
+        
         <!-- Grid makeup -->
-        <Ellipse Width="600"
-         Height="400"
-         HorizontalAlignment="Center"
-         VerticalAlignment="Center"
-         IsHitTestVisible="False">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#553A7BFF" Offset="0"/>
-                    <GradientStop Color="Transparent" Offset="1"/>
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-        </Ellipse>
+        <Canvas IsHitTestVisible="True" Opacity="0.9">
+            <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
 
+            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+        </Canvas>
+
+        <!-- Stars -->
+        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
+        
         <!-- Login card -->
         <Border Style="{StaticResource GlassCard}"
                 Width="380"
@@ -46,8 +185,9 @@
                            Foreground="White"
                            Opacity="0.9" />
 
-                <TextBox Height="36"
-                         Margin="0,6,0,18" />
+                <TextBox Style="{StaticResource SpaceTextBox}"
+                           Margin="0,6,0,18"/>
+                
                 <!-- Password -->
                 <TextBlock Text="Password"
                            FontSize="14"
@@ -55,8 +195,9 @@
                            Foreground="White"
                            Opacity="0.9" />
 
-                <PasswordBox Height="36"
-                             Margin="0,6,0,18" />
+                <PasswordBox Style="{StaticResource SpacePasswordBox}"
+                           Margin="0,6,0,18"/>
+                
                 <!-- Login -->
                 <Button Style="{StaticResource SpaceButton}"
                         Content="Log in"
@@ -68,7 +209,33 @@
                         Height="36"
                         Margin="0,10,0,0"
                         Click="ContinueAsGuestButton_Click" />
+                
+                <!--Hyperlink-->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,14,0,0">
 
+                    <TextBlock FontSize="13">
+                        <Hyperlink Click="Register_Click"
+                                   Foreground="#22D3EE"
+                                   TextDecorations="None">
+                            Register new account
+                        </Hyperlink>
+                    </TextBlock>
+
+                    <TextBlock Text="  |  "
+                               FontSize="13"
+                               Foreground="{StaticResource TextMuted}"/>
+
+                    <TextBlock FontSize="13">
+                        <Hyperlink Click="ForgotPassword_Click"
+                                   Foreground="#22D3EE"
+                                   TextDecorations="None">
+                            Forgot password?
+                        </Hyperlink>
+                    </TextBlock>
+
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>
