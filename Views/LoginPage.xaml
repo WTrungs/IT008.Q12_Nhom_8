@@ -216,10 +216,10 @@
                             Margin="0,14,0,0">
 
                     <TextBlock FontSize="13">
-                        <Hyperlink Click="Register_Click"
+                        <Hyperlink Click="SignUpLink_Click"
                                    Foreground="#22D3EE"
                                    TextDecorations="None">
-                            Register new account
+                                   Register new account
                         </Hyperlink>
                     </TextBlock>
 
@@ -228,10 +228,10 @@
                                Foreground="{StaticResource TextMuted}"/>
 
                     <TextBlock FontSize="13">
-                        <Hyperlink Click="ForgotPassword_Click"
+                        <Hyperlink Click="ForgotPasswordLink_Click"
                                    Foreground="#22D3EE"
                                    TextDecorations="None">
-                            Forgot password?
+                                   Forgot password?
                         </Hyperlink>
                     </TextBlock>
 

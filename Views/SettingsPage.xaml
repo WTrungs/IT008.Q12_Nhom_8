@@ -12,7 +12,7 @@
       SnapsToDevicePixels="True">
 
     <Page.Resources>
-        
+
         <!--CheckBox style-->
         <Style x:Key="SpaceToggle" TargetType="CheckBox">
             <Setter Property="Width" Value="52"/>
@@ -254,10 +254,10 @@
             </Setter>
         </Style>
     </Page.Resources>
-    
+
     <Grid>
         <Rectangle Fill="{StaticResource SpaceBackground}"/>
-        
+
         <!-- Grid makeup -->
         <Canvas IsHitTestVisible="True" Opacity="0.9">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
@@ -293,15 +293,15 @@
 
         <!-- Stars -->
         <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
-        
+
         <!-- Phan chua settings -->
         <Border Style="{StaticResource GlassCard}"
                 Width="480"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
 
-            <Grid Margin="30">
-                <StackPanel Width="400" VerticalAlignment="Center">
+            <Grid Margin="30,0,30,0" Height="437">
+                <StackPanel VerticalAlignment="Center" Height="437" Margin="-1,0,-22,0">
 
                     <!-- Title -->
                     <TextBlock Text="SETTINGS"
@@ -329,7 +329,7 @@
 
                     <!-- Volume -->
                     <TextBlock Text="VOLUME"
-                               FontSize="15"
+                               FontSize="16"
                                FontWeight="SemiBold"
                                Opacity="0.75"
                                Margin="0,0,0,4"
@@ -341,7 +341,7 @@
 
                     <!-- SFX Volume -->
                     <TextBlock Text="SFX VOLUME"
-                               FontSize="15"
+                               FontSize="16"
                                FontWeight="SemiBold"
                                Opacity="0.75"
                                Margin="0,0,0,4"
@@ -350,10 +350,10 @@
                     <Slider x:Name="SfxVolumeSlider"
                             Style="{StaticResource SpaceSlider}"
                             Margin="0,0,22,18"/>
-                    
+
                     <!-- SELECT TRACK -->
                     <TextBlock Text="SELECT TRACK"
-                               FontSize="15"
+                               FontSize="16"
                                FontWeight="SemiBold"
                                Opacity="0.75"
                                Margin="0,0,0,4"

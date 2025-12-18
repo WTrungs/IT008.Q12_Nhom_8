@@ -22,5 +22,12 @@ namespace TetrisApp.Views {
         private void Back_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new MenuPage());
         }
+        private void Accept_Click(object sender, RoutedEventArgs e) { 
+            // Save settings logic here
+            NavigationService?.Navigate(new MenuPage());
+        }
+        private void Cancel_Click(object sender, RoutedEventArgs e) {
+            NavigationService?.Navigate(new MenuPage());
+        }
     }
 }

@@ -24,6 +24,11 @@ namespace TetrisApp.Views {
         private void LoginButton_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new MenuPage());
         }
+        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e) {
 
+        }
+        private void SignUpLink_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }
