@@ -134,14 +134,14 @@
                         <Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,10,0">
                             <StackPanel>
                                 <TextBlock Text="SCORE" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <TextBlock Text="0" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="ScoreText" Text="0" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <Border Grid.Column="1" Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1">
                             <StackPanel>
                                 <TextBlock Text="LEVEL" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <TextBlock Text="1" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="LevelText" Text="1" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -150,7 +150,7 @@
                     <Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,0,14">
                         <StackPanel>
                             <TextBlock Text="LINES" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Text="0" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="LinesText" Text="0" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
