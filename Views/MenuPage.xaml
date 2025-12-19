@@ -102,7 +102,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        
+        <!--Icon button-->
         <Style x:Key="IconButton" TargetType="Button">
             <Setter Property="Width" Value="34"/>
             <Setter Property="Height" Value="34"/>
@@ -114,10 +115,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Bd"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="10">
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -133,6 +134,98 @@
                                 <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <SolidColorBrush x:Key="ScrollTrackBrush" Color="#331A1D2B"/>
+        <SolidColorBrush x:Key="ScrollThumbBrush" Color="#22D3EE"/>
+
+        <Style x:Key="SpaceScrollBar" TargetType="ScrollBar">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Background" Value="#3A3F4A"/>
+            <Setter Property="Foreground" Value="#8A8F9B"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="1"
+                                SnapsToDevicePixels="True"
+                                ClipToBounds="True">
+
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True"
+                                   Orientation="{TemplateBinding Orientation}"
+                                   Minimum="{TemplateBinding Minimum}"
+                                   Maximum="{TemplateBinding Maximum}"
+                                   Value="{TemplateBinding Value}"
+                                   ViewportSize="{TemplateBinding ViewportSize}"
+                                   Margin="0,1">
+
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand"
+                                                  Opacity="0"
+                                                  Focusable="False"/>
+                                </Track.DecreaseRepeatButton>
+
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand"
+                                                  Opacity="0"
+                                                  Focusable="False"/>
+                                </Track.IncreaseRepeatButton>
+
+                                <Track.Thumb>
+                                    <Thumb Focusable="False">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border x:Name="ThumbBd"
+                                                        Background="{TemplateBinding Foreground}"
+                                                        CornerRadius="8"
+                                                        MinHeight="22"/>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="ThumbBd" Property="Background" Value="#A7ACB7"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsDragging" Value="True">
+                                                        <Setter TargetName="ThumbBd" Property="Background" Value="#C2C6CF"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SpaceScrollViewer" TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ScrollContentPresenter Grid.Column="0" Margin="0,0,8,0"/>
+
+                            <ScrollBar Grid.Column="1"
+                               Orientation="Vertical"
+                               Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                               Maximum="{TemplateBinding ScrollableHeight}"
+                               ViewportSize="{TemplateBinding ViewportHeight}"
+                               Value="{TemplateBinding VerticalOffset}"
+                               Style="{StaticResource SpaceScrollBar}"/>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -236,8 +329,7 @@
 
                 <!-- Side drawer -->
                 <Border x:Name="SideMenu"
-                        Grid.RowSpan="2"
-                        Style="{StaticResource SideMenuStyle}" Margin="0,0,0,0">
+                        Style="{StaticResource SideMenuStyle}" Margin="-4,-14,0,0">
 
                     <StackPanel>
                         <TextBlock Text="Account" FontSize="18" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
@@ -324,18 +416,18 @@
                 </Border>
                 <!-- ABOUT POPUP OVERLAY -->
                 <Grid x:Name="AboutOverlay"
-      Visibility="Collapsed"
-      Background="#AA000000"
-      Panel.ZIndex="999"
-      MouseDown="AboutOverlay_MouseDown">
+                      Visibility="Collapsed"
+                      Background="#AA000000"
+                      Panel.ZIndex="999"
+                      MouseDown="AboutOverlay_MouseDown">
 
                     <!-- Dialog -->
                     <Border Style="{StaticResource GlassCard}"
-            Width="720"
-            Height="520"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            MouseDown="AboutDialog_MouseDown">
+                            Width="720"
+                            Height="520"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            MouseDown="AboutDialog_MouseDown">
 
                         <Grid>
                             <Grid.RowDefinitions>
@@ -348,63 +440,73 @@
                             <!-- Title -->
                             <StackPanel Grid.Row="0">
                                 <TextBlock Text="ABOUT"
-                           FontSize="22"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
+                                           FontSize="22"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"/>
                                 <TextBlock Text="TETRIS - Outer Space Edition"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           Margin="0,8,0,0"
-                           HorizontalAlignment="Center"/>
-                                <TextBlock Text="Scroll to read the description"
-                           Foreground="{StaticResource TextMuted}"
-                           Margin="0,6,0,0"
-                           HorizontalAlignment="Center"/>
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Margin="0,8,0,0"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
 
                             <!-- Scrollable Game Description -->
                             <Border Grid.Row="1"
-                    Margin="0,16,0,16"
-                    CornerRadius="14"
-                    BorderBrush="#2A2A33"
-                    BorderThickness="1"
-                    Background="#6610152A"
-                    Padding="14">
+                                    Margin="0,16,0,16"
+                                    CornerRadius="14"
+                                    BorderBrush="#2A2A33"
+                                    BorderThickness="1"
+                                    Background="#4410152A"
+                                    Padding="12"
+                                    MaxHeight="260">
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
+                                              HorizontalScrollBarVisibility="Disabled"
+                                              CanContentScroll="False"
+                                              Padding="0,0,6,0">
+
+                                    <ScrollViewer.Resources>
+                                        <Style TargetType="ScrollBar" BasedOn="{StaticResource SpaceScrollBar}"/>
+                                    </ScrollViewer.Resources>
 
                                     <StackPanel>
+
                                         <TextBlock Text="Game Overview"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,10"/>
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
 
                                         <TextBlock TextWrapping="Wrap"
-                                   Foreground="#EAF0FF"
-                                   LineHeight="22">
-A classic Tetris experience reimagined with an outer-space atmosphere. In this game, you control falling tetromino blocks and place them on a 10×20 board. Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
+                                                   Foreground="#EAF0FF"
+                                                   LineHeight="22">
+                                        A classic Tetris experience reimagined with an outer-space atmosphere. In this game, you control falling tetromino blocks and place them on a 10×20 board. Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
 
-The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects. The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
+                                        The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects. The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
 
-This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay. The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend. Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
+                                        This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay. The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend. Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
                                         </TextBlock>
 
                                         <TextBlock Text="Features"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   Margin="0,14,0,8"/>
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Margin="0,14,0,8"/>
 
-                                        <TextBlock TextWrapping="Wrap"
-                                   Foreground="{StaticResource TextMuted}"
-                                   LineHeight="20">
-• New Game / Continue / Save Game flow&#10;
-• Score, level, lines, hold and next preview panel&#10;
-• Settings panel for music and volume (UI-ready)&#10;
-• Account drawer with avatar and rename entry points (UI-ready)
-                                        </TextBlock>
+                                        <!-- Features-->
+                                        <StackPanel>
+                                            <TextBlock Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" LineHeight="20"
+                                                       Text="• Classic Tetris gameplay on a 10×20 board"/>
+                                            <TextBlock Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" LineHeight="20" Margin="0,4,0,0"
+                                                       Text="• New Game / Continue / Save Game flow"/>
+                                            <TextBlock Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" LineHeight="20" Margin="0,4,0,0"
+                                                       Text="• Score, level, lines, hold and next preview panel"/>
+                                            <TextBlock Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" LineHeight="20" Margin="0,4,0,0"
+                                                       Text="• Settings panel for music and volume (UI-ready)"/>
+                                            <TextBlock Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" LineHeight="20" Margin="0,4,0,0"
+                                                       Text="• Account drawer with avatar and rename entry points (UI-ready)"/>
+                                        </StackPanel>
+
+                                        <Border Height="10" Opacity="0"/>
                                     </StackPanel>
-
                                 </ScrollViewer>
                             </Border>
 
@@ -413,8 +515,8 @@ This version is built as a WPF desktop application. The front-end provides multi
                                 <Border Height="1" Background="#2A2A33" Margin="0,0,0,12"/>
 
                                 <TextBlock Text="Team"
-                           FontSize="16"
-                           FontWeight="Bold"/>
+                                           FontSize="16"
+                                           FontWeight="Bold"/>
 
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -442,14 +544,14 @@ This version is built as a WPF desktop application. The front-end provides multi
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="Version: 1.0"
-                           Foreground="{StaticResource TextMuted}"
-                           VerticalAlignment="Center"/>
+                                           Foreground="{StaticResource TextMuted}"
+                                           VerticalAlignment="Center"/>
 
                                 <Button Grid.Column="1"
-                        Style="{StaticResource SpaceButton}"
-                        Width="140"
-                        Content="Close"
-                        Click="CloseAbout_Click"/>
+                                        Style="{StaticResource SpaceButton}"
+                                        Width="140"
+                                        Content="Close"
+                                        Click="CloseAbout_Click"/>
                             </Grid>
 
                         </Grid>

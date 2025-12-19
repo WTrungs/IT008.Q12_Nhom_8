@@ -89,8 +89,8 @@
                     <ControlTemplate TargetType="Slider">
                         <Grid Height="28">
                             <Track x:Name="PART_Track"
-                           VerticalAlignment="Center"
-                           IsDirectionReversed="False">
+                                   VerticalAlignment="Center"
+                                   IsDirectionReversed="False">
 
                                 <Track.DecreaseRepeatButton>
                                     <RepeatButton Command="{x:Static Slider.DecreaseLarge}">
@@ -117,8 +117,8 @@
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
                                                 <Ellipse Fill="#EAF0FF"
-                                                 Stroke="#22D3EE"
-                                                 StrokeThickness="2"/>
+                                                         Stroke="#22D3EE"
+                                                         StrokeThickness="2"/>
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>
@@ -140,10 +140,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Border x:Name="templateRoot"
-                Background="#1A1F2E"
-                BorderThickness="1"
-                BorderBrush="#3A4058"
-                CornerRadius="8">
+                                Background="#1A1F2E"
+                                BorderThickness="1"
+                                BorderBrush="#3A4058"
+                                CornerRadius="8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
