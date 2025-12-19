@@ -73,6 +73,7 @@
 
         <!-- Outer-space button -->
         <Style x:Key="SpaceButton" TargetType="Button">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -98,6 +99,15 @@
                                 <Setter TargetName="Bd" Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect Color="#22D3EE" BlurRadius="50" ShadowDepth="0" Opacity="0.55"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <!-- Tab Focus -->
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="22" ShadowDepth="0" Opacity="0.55"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
