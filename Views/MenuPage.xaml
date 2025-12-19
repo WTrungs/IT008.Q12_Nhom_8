@@ -283,7 +283,8 @@
             <DockPanel Grid.Row="0" Margin="0,0,0,14">
                 <ToggleButton x:Name="HamburgerToggle"
                               Style="{StaticResource HamburgerButton}"
-                              DockPanel.Dock="Left"/>
+                              DockPanel.Dock="Left"
+                              TabIndex="0"/>
 
                 <TextBlock Text="TETRIS"
                            FontSize="22"
@@ -314,16 +315,20 @@
                                    Margin="0,6,0,22"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="New Game"
-                                Click="NewGameButton_Click" Margin="0,0,0,10"/>
+                                Click="NewGameButton_Click" Margin="0,0,0,10"
+                                TabIndex="1"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Continue"
-                                Click="ContinueButton_Click" Margin="0,0,0,10"/>
+                                Click="ContinueButton_Click" Margin="0,0,0,10" 
+                                TabIndex="2"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Save Game"
-                                Click="SaveGameButton_Click" Margin="0,0,0,10"/>
+                                Click="SaveGameButton_Click" Margin="0,0,0,10"
+                                TabIndex="3"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Exit"
-                                Click="ExitButton_Click" BorderBrush="#FB7185"/>
+                                Click="ExitButton_Click" BorderBrush="#FB7185"
+                                TabIndex="4"/>
                     </StackPanel>
                 </Border>
 
@@ -425,6 +430,7 @@
                     <Border Style="{StaticResource GlassCard}"
                             Width="720"
                             Height="520"
+                            Background="#CC10152A"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             MouseDown="AboutDialog_MouseDown">
