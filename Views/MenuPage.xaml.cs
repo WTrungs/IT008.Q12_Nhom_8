@@ -36,13 +36,23 @@ namespace TetrisApp.Views {
         private void LogoutButton_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new Uri("Views/LoginPage.xaml", UriKind.Relative));
         }
-
         private void ChangeAvatar_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new Uri("Views/ChangeAvatarPage.xaml", UriKind.Relative));
         }
-
         private void Rename_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new Uri("Views/ScoresPage.xaml", UriKind.Relative));
+        }
+        private void AboutButton_Click(object sender, RoutedEventArgs e) {
+            AboutOverlay.Visibility = Visibility.Visible;
+        }
+        private void CloseAbout_Click(object sender, RoutedEventArgs e) {
+            AboutOverlay.Visibility = Visibility.Collapsed;
+        }
+        private void AboutOverlay_MouseDown(object sender, MouseButtonEventArgs e) {
+            AboutOverlay.Visibility = Visibility.Collapsed;
+        }
+        private void AboutDialog_MouseDown(object sender, MouseButtonEventArgs e) {
+            e.Handled = true;
         }
     }
 }

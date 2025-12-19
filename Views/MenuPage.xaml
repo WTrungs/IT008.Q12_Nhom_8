@@ -318,10 +318,143 @@
                         </Border>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Settings" Click="SettingsButton_Click" Margin="0,0,0,10"/>
-                        <Button Style="{StaticResource SpaceButton}" Content="About" Margin="0,0,0,10"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="About" Click="AboutButton_Click" Margin="0,0,0,10"/>
                         <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" />
                     </StackPanel>
                 </Border>
+                <!-- ABOUT POPUP OVERLAY -->
+                <Grid x:Name="AboutOverlay"
+      Visibility="Collapsed"
+      Background="#AA000000"
+      Panel.ZIndex="999"
+      MouseDown="AboutOverlay_MouseDown">
+
+                    <!-- Dialog -->
+                    <Border Style="{StaticResource GlassCard}"
+            Width="720"
+            Height="520"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            MouseDown="AboutDialog_MouseDown">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Title -->
+                            <StackPanel Grid.Row="0">
+                                <TextBlock Text="ABOUT"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="TETRIS - Outer Space Edition"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,8,0,0"
+                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Scroll to read the description"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="0,6,0,0"
+                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Scrollable Game Description -->
+                            <Border Grid.Row="1"
+                    Margin="0,16,0,16"
+                    CornerRadius="14"
+                    BorderBrush="#2A2A33"
+                    BorderThickness="1"
+                    Background="#6610152A"
+                    Padding="14">
+
+                                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+
+                                    <StackPanel>
+                                        <TextBlock Text="Game Overview"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10"/>
+
+                                        <TextBlock TextWrapping="Wrap"
+                                   Foreground="#EAF0FF"
+                                   LineHeight="22">
+A classic Tetris experience reimagined with an outer-space atmosphere. In this game, you control falling tetromino blocks and place them on a 10×20 board. Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
+
+The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects. The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
+
+This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay. The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend. Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
+                                        </TextBlock>
+
+                                        <TextBlock Text="Features"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,14,0,8"/>
+
+                                        <TextBlock TextWrapping="Wrap"
+                                   Foreground="{StaticResource TextMuted}"
+                                   LineHeight="20">
+• New Game / Continue / Save Game flow&#10;
+• Score, level, lines, hold and next preview panel&#10;
+• Settings panel for music and volume (UI-ready)&#10;
+• Account drawer with avatar and rename entry points (UI-ready)
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                </ScrollViewer>
+                            </Border>
+
+                            <!-- Team (Fixed at bottom) -->
+                            <StackPanel Grid.Row="2">
+                                <Border Height="1" Background="#2A2A33" Margin="0,0,0,12"/>
+
+                                <TextBlock Text="Team"
+                           FontSize="16"
+                           FontWeight="Bold"/>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="• Member 1 - Role" Foreground="{StaticResource TextMuted}"/>
+                                        <TextBlock Text="• Member 2 - Role" Foreground="{StaticResource TextMuted}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="• Member 3 - Role" Foreground="{StaticResource TextMuted}"/>
+                                        <TextBlock Text="• Member 4 - Role" Foreground="{StaticResource TextMuted}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Bottom buttons -->
+                            <Grid Grid.Row="3" Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Version: 1.0"
+                           Foreground="{StaticResource TextMuted}"
+                           VerticalAlignment="Center"/>
+
+                                <Button Grid.Column="1"
+                        Style="{StaticResource SpaceButton}"
+                        Width="140"
+                        Content="Close"
+                        Click="CloseAbout_Click"/>
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

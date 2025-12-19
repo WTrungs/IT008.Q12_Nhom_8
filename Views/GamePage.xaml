@@ -11,7 +11,7 @@
       SnapsToDevicePixels="True">
 
     <Page.Resources>
-        <!-- Grid Tile Brush (giữ lại, chỉ chỉnh màu cho hợp theme) -->
+        <!-- Grid Tile Brush -->
         <DrawingBrush x:Key="GridTileBrush"
                       TileMode="Tile"
                       Viewport="0,0,26,26" ViewportUnits="Absolute"
@@ -104,14 +104,13 @@
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center">
 
-                            <!-- Đây mới là vùng board thật: 10*26 = 260, 20*26 = 520 -->
+                            <!-- Vùng board: 10*26 = 260, 20*26 = 520 -->
                             <Border Width="260" Height="520"
                                     CornerRadius="12"
                                     BorderBrush="#FF5E5E7E"
                                     BorderThickness="2"
                                     Background="{StaticResource GridTileBrush}">
 
-                                <!-- sau này bạn m có thể thay chỗ này bằng Canvas/UniformGrid để vẽ block -->
                                 <!--<Canvas/>-->
                             </Border>
                         </Viewbox>
