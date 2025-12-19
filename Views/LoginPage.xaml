@@ -17,13 +17,15 @@
         <!-- TextBox Stye -->
         <Style x:Key="SpaceTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="38"/>
-            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Padding" Value="12,0"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Background" Value="#14182A"/>
             <Setter Property="BorderBrush" Value="#2A2A33"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="#EAF0FF"/>
             <Setter Property="CaretBrush" Value="#22D3EE"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -36,27 +38,8 @@
                         </Border>
 
                         <ControlTemplate.Triggers>
-                            <!-- Hover -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
-                            </Trigger>
-
-                            <!-- Focus -->
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
-                                <Setter TargetName="Bd" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#22D3EE"
-                                                  BlurRadius="16"
-                                                  ShadowDepth="0"
-                                                  Opacity="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-
-                            <!-- Disabled -->
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -67,13 +50,14 @@
         <!-- PasswordBox Style -->
         <Style x:Key="SpacePasswordBox" TargetType="PasswordBox">
             <Setter Property="Height" Value="38"/>
-            <Setter Property="Padding" Value="12,6"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Background" Value="#14182A"/>
             <Setter Property="BorderBrush" Value="#2A2A33"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="#EAF0FF"/>
             <Setter Property="CaretBrush" Value="#22D3EE"/>
+            <Setter Property="PasswordChar" Value="●"/>
+            <Setter Property="Padding" Value="12,0"/>
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -84,12 +68,19 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="12">
 
-                            <!-- Password host -->
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                  Margin="{TemplateBinding Padding}"/>
+                            <Grid VerticalAlignment="Center">
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Stretch">
+                                    <ScrollViewer.RenderTransform>
+                                        <TranslateTransform Y="-1.5"/>
+                                    </ScrollViewer.RenderTransform>
+                                </ScrollViewer>
+                            </Grid>
                         </Border>
 
                         <ControlTemplate.Triggers>
+
                             <!-- Hover -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd"
@@ -119,6 +110,7 @@
                                 Property="Opacity"
                                 Value="0.4"/>
                             </Trigger>
+
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
