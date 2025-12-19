@@ -19,7 +19,7 @@ namespace TetrisApp.Views {
             InitializeComponent();
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e) {
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
             NavigationService?.Navigate(new Uri("Views/MenuPage.xaml", UriKind.Relative));
         }
     }

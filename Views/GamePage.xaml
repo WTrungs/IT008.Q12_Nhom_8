@@ -121,7 +121,7 @@
 
             <!-- RIGHT: Info Panel -->
             <Border Grid.Column="1"
-                    Margin="16,0,0,0"
+                    Margin="16,0,0,1"
                     Style="{StaticResource GlassCard}">
                 <StackPanel>
 
@@ -165,18 +165,18 @@
                         <Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,10,0">
                             <StackPanel>
                                 <TextBlock Text="HOLD" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <Border Height="120" Margin="0,8,0,0" CornerRadius="12"
+                                <Border Height="105" Margin="0,8,0,0" CornerRadius="12"
                                         BorderBrush="#2A2A33" BorderThickness="1"
-                                        Background="{StaticResource GridTileBrush}"/>
+                                        Background="{StaticResource GridTileBrush}" Width="105"/>
                             </StackPanel>
                         </Border>
 
                         <Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1" Grid.Column="1" Margin="0,0,-1,0">
                             <StackPanel>
                                 <TextBlock Text="NEXT" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <Border Height="120" Margin="0,8,0,0" CornerRadius="12"
+                                <Border Height="105" Margin="0,8,0,0" CornerRadius="12"
                                         BorderBrush="#2A2A33" BorderThickness="1"
-                                        Background="{StaticResource GridTileBrush}"/>
+                                        Background="{StaticResource GridTileBrush}" Width="105"/>
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -186,7 +186,7 @@
                         <StackPanel>
                             <TextBlock Text="CONTROLS" Foreground="{StaticResource TextMuted}" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <TextBlock Margin="0,8,0,0"
-                                       Text="← → : Change&#10;↑ : Rotate&#10;↓ : Fast Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;P : Pause"/>
+                                       Text="← → : Change&#10;↑ : Rotate&#10;↓ : Soft Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;P : Pause"/>
                         </StackPanel>
                     </Border>
 
@@ -194,7 +194,7 @@
                     <Button Style="{StaticResource SpaceButton}"
                             Content="Back to Menu"
                             Margin="0,14,0,0"
-                            Click="Back_Click"/>
+                            Click="BackButton_Click"/>
                 </StackPanel>
             </Border>
         </Grid>

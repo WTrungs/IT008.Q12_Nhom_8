@@ -102,7 +102,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="IconButton" TargetType="Button">
             <Setter Property="Width" Value="34"/>
             <Setter Property="Height" Value="34"/>
@@ -147,31 +147,31 @@
         <Canvas IsHitTestVisible="True" Opacity="0.9">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="100"/>
+                    <BlurEffect Radius="60"/>
                 </Ellipse.Effect>
             </Ellipse>
 
             <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="100"/>
+                    <BlurEffect Radius="60"/>
                 </Ellipse.Effect>
             </Ellipse>
 
             <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="100"/>
+                    <BlurEffect Radius="60"/>
                 </Ellipse.Effect>
             </Ellipse>
 
             <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="100"/>
+                    <BlurEffect Radius="70"/>
                 </Ellipse.Effect>
             </Ellipse>
 
             <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="100"/>
+                    <BlurEffect Radius="80"/>
                 </Ellipse.Effect>
             </Ellipse>
         </Canvas>
@@ -316,7 +316,7 @@
                                 </Button>
                             </Grid>
                         </Border>
-                        
+
                         <Button Style="{StaticResource SpaceButton}" Content="Settings" Click="SettingsButton_Click" Margin="0,0,0,10"/>
                         <Button Style="{StaticResource SpaceButton}" Content="About" Margin="0,0,0,10"/>
                         <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" />
