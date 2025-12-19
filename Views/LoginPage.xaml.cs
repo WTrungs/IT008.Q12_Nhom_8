@@ -24,8 +24,7 @@ namespace TetrisApp.Views {
             InitializeComponent();
         }
         private void LoginPage_Loaded(object sender, RoutedEventArgs e) {
-            Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() =>
-            {
+            Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
                 Keyboard.Focus(RootGrid);   
                 RootGrid.Focus();
             }));
