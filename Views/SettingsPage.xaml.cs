@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
+using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Input; // Quan trọng: dùng để xử lý phím bấm
-using TetrisApp.Models;
+using System.Windows.Threading;
+using TetrisApp.Models; // Đảm bảo namespace này đúng với project của bạn
 
 namespace TetrisApp.Views
 {
@@ -19,7 +19,7 @@ namespace TetrisApp.Views
             set { SetValue(IsHoverEnabledProperty, value); }
         }
 
-        // Lưu ý: Đã sửa typeof(LoginPage) thành typeof(SettingsPage) để tránh lỗi crash
+        // QUAN TRỌNG: Đã sửa typeof(LoginPage) -> typeof(SettingsPage) để không bị lỗi
         public static readonly DependencyProperty IsHoverEnabledProperty =
             DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(SettingsPage), new PropertyMetadata(true));
 
@@ -28,26 +28,35 @@ namespace TetrisApp.Views
             InitializeComponent();
         }
 
+        // 2. KHI TRANG LOAD: Focus vào chính trang Page (Clean Start)
+        // Để ban đầu màn hình tối om, không có nút nào bị sáng viền
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
                 Keyboard.Focus(this);
                 this.Focus();
+
+                // Load giá trị hiện tại lên UI (nếu cần)
+                if (MusicToggle != null) MusicToggle.IsChecked = AppSettings.IsMusicEnabled;
+                if (MusicVolumeSlider != null) MusicVolumeSlider.Value = AppSettings.MusicVolume;
+                if (SfxVolumeSlider != null) SfxVolumeSlider.Value = AppSettings.SfxVolume;
             }));
         }
 
-        // 3. XỬ LÝ PHÍM TRUNG TÂM
+        // 3. BỘ ĐIỀU HƯỚNG TRUNG TÂM (XỬ LÝ PHÍM)
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            // A. LUÔN TẮT HOVER: Hễ đụng vào phím điều hướng là tắt chuột ngay
+            // A. TẮT HOVER: Hễ đụng vào phím điều hướng là tắt chuột ngay
             if (e.Key == Key.Down || e.Key == Key.Up ||
                 e.Key == Key.Left || e.Key == Key.Right ||
                 e.Key == Key.Tab)
             {
                 IsHoverEnabled = false;
             }
-            // B. LOGIC "ĐÁNH THỨC": Nhảy vào MusicToggle khi chưa chọn gì
+
             var currentFocus = Keyboard.FocusedElement;
+
+            // B. LOGIC "ĐÁNH THỨC": Nhảy vào MusicToggle khi chưa chọn gì
             if (currentFocus == this || currentFocus == null)
             {
                 if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Right)
@@ -61,66 +70,52 @@ namespace TetrisApp.Views
                 }
             }
 
-            // C. LOGIC DI CHUYỂN UP/DOWN (Chuyển dòng)
+            // C. LOGIC RIÊNG CHO CHECKBOX (Toggle bằng phím Trái/Phải)
+            if (currentFocus == MusicToggle)
+            {
+                if (e.Key == Key.Left)
+                {
+                    MusicToggle.IsChecked = false; // Tắt
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Right)
+                {
+                    MusicToggle.IsChecked = true;  // Bật
+                    e.Handled = true;
+                }
+                // Nếu bấm Lên/Xuống thì để nó chạy xuống logic D bên dưới
+            }
+
+            // D. LOGIC DI CHUYỂN (Chỉ xử lý Lên/Xuống)
+            // Lưu ý: Tuyệt đối KHÔNG xử lý Key.Left/Key.Right ở đây 
+            // để Slider có thể nhận phím và tự tăng giảm âm lượng.
             if (e.Key == Key.Down)
             {
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Next);
-                return;
             }
             else if (e.Key == Key.Up)
             {
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Previous);
-                return;
-            }
-
-            // Load Settings
-            MusicToggle.IsChecked = AppSettings.IsMusicEnabled;
-            MusicVolumeSlider.Value = AppSettings.MusicVolume;
-            SfxVolumeSlider.Value = AppSettings.SfxVolume;
-
-            foreach (ComboBoxItem item in TrackCombo.Items)
-            {
-                if (item.Content.ToString() == AppSettings.SelectedTrack)
-                {
-                    TrackCombo.SelectedItem = item;
-                    break;
-                }
             }
         }
 
-        // --- XỬ LÝ PHÍM ENTER ---
-
-        // Cho phép nhấn Enter để bật/tắt Music Toggle
-        private void MusicToggle_PreviewKeyDown(object sender, KeyEventArgs e)
+        // Hàm hỗ trợ di chuyển Focus
+        private void MoveFocus(FocusNavigationDirection direction)
         {
-            if (e.Key == Key.Enter)
+            var focusedElement = Keyboard.FocusedElement;
+            if (focusedElement is UIElement uiElement)
             {
-                var checkbox = sender as CheckBox;
-                if (checkbox != null)
-                {
-                    checkbox.IsChecked = !checkbox.IsChecked;
-                    e.Handled = true; // Ngăn không cho phím Enter làm việc khác
-                }
+                uiElement.MoveFocus(new TraversalRequest(direction));
+            }
+            else if (focusedElement is FrameworkContentElement contentElement)
+            {
+                contentElement.MoveFocus(new TraversalRequest(direction));
             }
         }
 
-        // Cho phép nhấn Enter để mở danh sách chọn bài hát
-        private void TrackCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var combo = sender as ComboBox;
-                if (combo != null && !combo.IsDropDownOpen)
-                {
-                    combo.IsDropDownOpen = true; // Mở dropdown
-                    e.Handled = true;
-                }
-            }
-        }
-
-        // -----------------------
+        // --- CÁC HÀM LOGIC
 
         private void PlayClickSound()
         {
@@ -137,18 +132,22 @@ namespace TetrisApp.Views
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
+            PlayClickSound();
+
+            // Lưu cài đặt
             AppSettings.IsMusicEnabled = MusicToggle.IsChecked ?? true;
             AppSettings.MusicVolume = MusicVolumeSlider.Value;
             AppSettings.SfxVolume = SfxVolumeSlider.Value;
 
             if (TrackCombo.SelectedItem is ComboBoxItem selectedItem)
             {
+                // Lấy nội dung text của Item được chọn
                 AppSettings.SelectedTrack = selectedItem.Content.ToString();
             }
 
-            if (Application.Current is App myApp)
+            if (Application.Current is App myApp) 
             {
-                myApp.UpdateBackgroundMusic();
+                // myApp.UpdateBackgroundMusic(); 
             }
 
             NavigationService?.Navigate(new MenuPage());
@@ -158,26 +157,6 @@ namespace TetrisApp.Views
         {
             PlayClickSound();
             NavigationService?.Navigate(new MenuPage());
-        }
-
-        // Bạn có thể gán sự kiện PreviewKeyDown cho Slider trong XAML:
-        // PreviewKeyDown="Slider_PreviewKeyDown"
-
-        private void Slider_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var slider = sender as Slider;
-            if (slider == null) return;
-
-            if (e.Key == Key.Left)
-            {
-                slider.Value -= 0.05;
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Right)
-            {
-                slider.Value += 0.05;
-                e.Handled = true;
-            }
         }
     }
 }
