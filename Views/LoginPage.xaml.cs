@@ -36,17 +36,13 @@ namespace TetrisApp.Views
         }
 
         // --- 1. XỬ LÝ PHÍM: TẮT HOVER (Giữ nguyên) ---
-        private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            // Logic nhảy vào Username khi chưa chọn gì
+        private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
+            // Nhảy vào username nếu đang ở ngoài
             var currentFocus = Keyboard.FocusedElement;
-            if (currentFocus == this || currentFocus == null || currentFocus == RootGrid)
-            {
-                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab)
-                {
+            if (currentFocus == this || currentFocus == null || currentFocus == RootGrid) {
+                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab) {
                     IsHoverEnabled = false; // Tắt Hover
-                    if (UsernameTextBox != null)
-                    {
+                    if (UsernameTextBox != null) {
                         UsernameTextBox.Focus();
                         e.Handled = true;
                     }
@@ -54,22 +50,34 @@ namespace TetrisApp.Views
                 }
             }
 
-            // Logic di chuyển và tắt Hover
-            if (e.Key == Key.Down)
-            {
+            // Di chuyển focus với Up/Down/Tab
+            if (e.Key == Key.Down) {
                 IsHoverEnabled = false; // Tắt Hover
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Next);
             }
-            else if (e.Key == Key.Up)
-            {
+            else if (e.Key == Key.Up) {
                 IsHoverEnabled = false; // Tắt Hover
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Previous);
             }
-            else if (e.Key == Key.Tab)
-            {
+            else if (e.Key == Key.Tab) {
                 IsHoverEnabled = false; // Tắt Hover
+            }
+            if (e.Key != Key.Enter) return;
+
+            // Enter ở Username -> nhảy xuống Password
+            if (Keyboard.FocusedElement == UsernameTextBox) {
+                e.Handled = true;
+                PasswordBox.Focus();
+                return;
+            }
+
+            // Enter ở Password -> thử login
+            if (Keyboard.FocusedElement == PasswordBox) {
+                e.Handled = true;
+                TryLogin();
+                return;
             }
         }
 
@@ -104,12 +112,32 @@ namespace TetrisApp.Views
             }
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void LoginButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            NavigationService?.Navigate(new MenuPage());
+            TryLogin();
         }
 
+        private void TryLogin() {
+            string Username = (UsernameTextBox.Text ?? "").Trim();
+            string Password = PasswordBox.Password ?? "";
+
+            // Demo: kiểm tra login, thay bằng kiểm tra database thật sau
+            bool IsOk = IsValidLogin(Username, Password);
+
+            if (IsOk) {
+                // Nếu Page đang được navigate trong Frame/NavigationService
+                NavigationService?.Navigate(new MenuPage());
+            }
+            else {
+                ((MainWindow)Application.Current.MainWindow).ShowOverlay("Login thất bại", "Sai username hoặc password.");
+                PasswordBox.Clear();
+                PasswordBox.Focus();
+            }
+        }
+        private bool IsValidLogin(string Username, string Password) {
+            // Demo tạm: chỉ chấp nhận admin / 1
+            return Username == "admin" && Password == "1";
+        }
         private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e)
         {
             PlayClickSound();

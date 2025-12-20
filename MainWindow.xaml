@@ -10,6 +10,77 @@
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanMinimize"
         WindowState="Maximized" d:DesignHeight="800" d:DesignWidth="600" PreviewKeyDown="Window_PreviewKeyDown">
-        
-    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Cursor="Arrow"/>
+
+    <Grid x:Name="RootGrid" Background="{StaticResource SpaceBackground}">
+
+        <!-- Nội dung app -->
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+
+        <!-- OVERLAY DIALOG -->
+        <Grid x:Name="OverlayLayer"
+              Visibility="Collapsed"
+              IsHitTestVisible="False"
+              Background="#A0000000"
+              Panel.ZIndex="999"
+              Focusable="True"
+              KeyboardNavigation.IsTabStop="False"
+              KeyboardNavigation.TabNavigation="Cycle"
+              PreviewKeyDown="OverlayLayer_PreviewKeyDown">
+
+            <Border Width="420"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    CornerRadius="18"
+                    Padding="18"
+                    Background="#CC10152A"
+                    BorderBrush="#22D3EE"
+                    BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#22D3EE" BlurRadius="30" ShadowDepth="0" Opacity="0.35"/>
+                </Border.Effect>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="18"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock x:Name="OverlayTitleText"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#EAF0FF"/>
+
+                    <TextBlock x:Name="OverlayMessageText"
+                               Grid.Row="2"
+                               TextWrapping="Wrap"
+                               Foreground="#EAF0FF"
+                               Opacity="0.92"/>
+
+                    <StackPanel Grid.Row="4"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button x:Name="OverlayOkButton"
+                                Style="{StaticResource SpaceButton}"
+                                Content="OK"
+                                Height="40"
+                                MinWidth="110"
+                                Margin="0,0,10,0"
+                                Click="OverlayOkButton_Click"
+                                TabIndex="0"/>
+
+                        <Button x:Name="OverlayCancelButton"
+                                Style="{StaticResource SpaceButton}"
+                                Content="Cancel"
+                                Height="40"
+                                MinWidth="110"
+                                Click="OverlayCancelButton_Click"
+                                TabIndex="1"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
 </Window>

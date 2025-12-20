@@ -27,16 +27,16 @@
 
                             <!-- Track -->
                             <Border x:Name="Track"
-                            Background="#2A2F3F"
-                            CornerRadius="11"/>
+                                    Background="#2A2F3F"
+                                    CornerRadius="11"/>
 
                             <!-- Thumb -->
                             <Ellipse x:Name="Thumb"
-                             Width="16"
-                             Height="16"
-                             Fill="#EAF0FF"
-                             Margin="3"
-                             HorizontalAlignment="Left"/>
+                                     Width="16"
+                                     Height="16"
+                                     Fill="#EAF0FF"
+                                     Margin="3"
+                                     HorizontalAlignment="Left"/>
                         </Grid>
 
                         <ControlTemplate.Triggers>
@@ -44,17 +44,17 @@
                             <!-- Checked -->
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Track"
-                                Property="Background"
-                                Value="#22D3EE"/>
+                                        Property="Background"
+                                        Value="#22D3EE"/>
                                 <Setter TargetName="Thumb"
-                                Property="HorizontalAlignment"
-                                Value="Right"/>
+                                        Property="HorizontalAlignment"
+                                        Value="Right"/>
                                 <Setter TargetName="Track" Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect Color="#22D3EE"
-                                                  BlurRadius="14"
-                                                  ShadowDepth="0"
-                                                  Opacity="0.5"/>
+                                                          BlurRadius="14"
+                                                          ShadowDepth="0"
+                                                          Opacity="0.5"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
@@ -62,8 +62,8 @@
                             <!-- Hover -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Track"
-                                Property="Background"
-                                Value="#3A4058"/>
+                                        Property="Background"
+                                        Value="#3A4058"/>
                             </Trigger>
 
                             <!-- Disabled -->
@@ -362,7 +362,7 @@
                             Margin="0,0,22,14"/>
 
                     <!-- SFX Volume -->
-                    <TextBlock Text="SFX VOLUME"
+                    <TextBlock Text="SFX"
                                FontSize="16"
                                FontWeight="SemiBold"
                                Opacity="0.75"
@@ -405,14 +405,13 @@
                                 Click="Cancel_Click"/>
                         <!-- Accept -->
                         <Button Grid.Column="1"
-                        Style="{StaticResource SpaceButton}"
-                        Content="ACCEPT"
-                        FontWeight="SemiBold"
-                        Height="45"
-                        Margin="8,0,1,0"
-                        Click="Accept_Click"/>
+                                Style="{StaticResource SpaceButton}"
+                                Content="ACCEPT"
+                                FontWeight="SemiBold"
+                                Height="45"
+                                Margin="8,0,1,0"
+                                Click="Accept_Click"/>
                     </Grid>
-
                 </StackPanel>
             </Grid>
         </Border>

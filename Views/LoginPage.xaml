@@ -268,7 +268,8 @@
                            Foreground="White"
                            Opacity="0.9" />
 
-                <PasswordBox Style="{StaticResource SpacePasswordBox}"
+                <PasswordBox x:Name="PasswordBox"
+                             Style="{StaticResource SpacePasswordBox}"
                              Margin="0,6,0,18"
                              TabIndex="1"/>
                 

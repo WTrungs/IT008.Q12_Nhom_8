@@ -62,8 +62,12 @@ namespace TetrisApp.Views {
         }
         private async void ExitButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            await System.Threading.Tasks.Task.Delay(300);
-            Application.Current.Shutdown();
+            ((MainWindow)Application.Current.MainWindow).ShowOverlay("Thoát trò chơi", "Bạn có chắc chắn muốn thoát không?", true, async (result) => {
+                if (result) {
+                    await System.Threading.Tasks.Task.Delay(300);
+                    Application.Current.Shutdown();
+                }
+            });
         }
         private void ContinueButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
