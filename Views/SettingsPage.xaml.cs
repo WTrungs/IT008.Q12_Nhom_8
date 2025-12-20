@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media; // Thư viện để dùng MediaPlayer
 using System.Windows.Navigation;
-using System.Windows.Threading;
+using System.Windows.Media;
+using System.Windows.Input; // Quan trọng: dùng để xử lý phím bấm
 using TetrisApp.Models;
 
 namespace TetrisApp.Views
 {
     public partial class SettingsPage : Page
     {
-        // Khai báo trình phát nhạc cho trang Settings
         private MediaPlayer _clickSound = new MediaPlayer();
 
         // 1. Dependency Property: Công tắc Hover
@@ -77,57 +75,68 @@ namespace TetrisApp.Views
                 return;
             }
 
-            if (currentFocus == MusicToggle)
+            // Load Settings
+            MusicToggle.IsChecked = AppSettings.IsMusicEnabled;
+            MusicVolumeSlider.Value = AppSettings.MusicVolume;
+            SfxVolumeSlider.Value = AppSettings.SfxVolume;
+
+            foreach (ComboBoxItem item in TrackCombo.Items)
             {
-                if (e.Key == Key.Left)
+                if (item.Content.ToString() == AppSettings.SelectedTrack)
                 {
-                    MusicToggle.IsChecked = false; 
-                    e.Handled = true;              
-                }
-                else if (e.Key == Key.Right)
-                {
-                    MusicToggle.IsChecked = true;  
-                    e.Handled = true;              
+                    TrackCombo.SelectedItem = item;
+                    break;
                 }
             }
         }
 
-        // Hàm hỗ trợ di chuyển Focus (Helper)
-        private void MoveFocus(FocusNavigationDirection direction)
+        // --- XỬ LÝ PHÍM ENTER ---
+
+        // Cho phép nhấn Enter để bật/tắt Music Toggle
+        private void MusicToggle_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var focusedElement = Keyboard.FocusedElement;
-            if (focusedElement is UIElement uiElement)
+            if (e.Key == Key.Enter)
             {
-                uiElement.MoveFocus(new TraversalRequest(direction));
-            }
-            else if (focusedElement is FrameworkContentElement contentElement)
-            {
-                contentElement.MoveFocus(new TraversalRequest(direction));
+                var checkbox = sender as CheckBox;
+                if (checkbox != null)
+                {
+                    checkbox.IsChecked = !checkbox.IsChecked;
+                    e.Handled = true; // Ngăn không cho phím Enter làm việc khác
+                }
             }
         }
 
-        // Hàm hỗ trợ phát tiếng click
+        // Cho phép nhấn Enter để mở danh sách chọn bài hát
+        private void TrackCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var combo = sender as ComboBox;
+                if (combo != null && !combo.IsDropDownOpen)
+                {
+                    combo.IsDropDownOpen = true; // Mở dropdown
+                    e.Handled = true;
+                }
+            }
+        }
+
+        // -----------------------
+
         private void PlayClickSound()
         {
             try
             {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
                 _clickSound.Open(new Uri(soundPath));
-                _clickSound.Volume = AppSettings.SfxVolume; // Sử dụng mức âm lượng SFX người dùng đã cài đặt
+                _clickSound.Volume = AppSettings.SfxVolume;
                 _clickSound.Stop();
                 _clickSound.Play();
             }
-            catch
-            {
-                // Bỏ qua nếu file âm thanh bị thiếu
-            }
+            catch { }
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            
-
-            // Lưu cài đặt vào AppSettings
             AppSettings.IsMusicEnabled = MusicToggle.IsChecked ?? true;
             AppSettings.MusicVolume = MusicVolumeSlider.Value;
             AppSettings.SfxVolume = SfxVolumeSlider.Value;
@@ -137,21 +146,38 @@ namespace TetrisApp.Views
                 AppSettings.SelectedTrack = selectedItem.Content.ToString();
             }
 
-            PlayClickSound(); // Phát âm thanh khi lưu
+            if (Application.Current is App myApp)
+            {
+                myApp.UpdateBackgroundMusic();
+            }
 
             NavigationService?.Navigate(new MenuPage());
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            PlayClickSound(); // Phát âm thanh khi hủy
+            PlayClickSound();
             NavigationService?.Navigate(new MenuPage());
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        // Bạn có thể gán sự kiện PreviewKeyDown cho Slider trong XAML:
+        // PreviewKeyDown="Slider_PreviewKeyDown"
+
+        private void Slider_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            PlayClickSound(); // Phát âm thanh khi quay lại
-            NavigationService?.Navigate(new MenuPage());
+            var slider = sender as Slider;
+            if (slider == null) return;
+
+            if (e.Key == Key.Left)
+            {
+                slider.Value -= 0.05;
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Right)
+            {
+                slider.Value += 0.05;
+                e.Handled = true;
+            }
         }
     }
 }
