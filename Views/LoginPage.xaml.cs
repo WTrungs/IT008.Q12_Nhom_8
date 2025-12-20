@@ -1,71 +1,131 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using TetrisApp.Models; 
+using TetrisApp.Models;
 
-namespace TetrisApp.Views {
-    public partial class LoginPage : Page {
-        // Khai báo trình phát nhạc dùng chung cho trang Login
+namespace TetrisApp.Views
+{
+    public partial class LoginPage : Page
+    {
         private MediaPlayer _clickSound = new MediaPlayer();
 
-        public LoginPage() {
+        // Dependency Property
+        public bool IsHoverEnabled
+        {
+            get { return (bool)GetValue(IsHoverEnabledProperty); }
+            set { SetValue(IsHoverEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsHoverEnabledProperty =
+            DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(LoginPage), new PropertyMetadata(true));
+
+        public LoginPage()
+        {
             InitializeComponent();
         }
-        private void LoginPage_Loaded(object sender, RoutedEventArgs e) {
+
+        private void LoginPage_Loaded(object sender, RoutedEventArgs e)
+        {
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
-                Keyboard.Focus(RootGrid);   
+                Keyboard.Focus(RootGrid);
                 RootGrid.Focus();
             }));
-        }        // Hàm phát tiếng click
-        private void PlayClickSound() {
-            try {
-                // Đường dẫn đến file âm thanh trong thư mục Assets
-                string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
+        }
 
+        // --- 1. XỬ LÝ PHÍM: TẮT HOVER (Giữ nguyên) ---
+        private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Logic nhảy vào Username khi chưa chọn gì
+            var currentFocus = Keyboard.FocusedElement;
+            if (currentFocus == this || currentFocus == null || currentFocus == RootGrid)
+            {
+                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab)
+                {
+                    IsHoverEnabled = false; // Tắt Hover
+                    if (UsernameTextBox != null)
+                    {
+                        UsernameTextBox.Focus();
+                        e.Handled = true;
+                    }
+                    return;
+                }
+            }
+
+            // Logic di chuyển và tắt Hover
+            if (e.Key == Key.Down)
+            {
+                IsHoverEnabled = false; // Tắt Hover
+                e.Handled = true;
+                MoveFocus(FocusNavigationDirection.Next);
+            }
+            else if (e.Key == Key.Up)
+            {
+                IsHoverEnabled = false; // Tắt Hover
+                e.Handled = true;
+                MoveFocus(FocusNavigationDirection.Previous);
+            }
+            else if (e.Key == Key.Tab)
+            {
+                IsHoverEnabled = false; // Tắt Hover
+            }
+        }
+
+        private void MoveFocus(FocusNavigationDirection direction)
+        {
+            var focusedElement = Keyboard.FocusedElement;
+            if (focusedElement is UIElement uiElement)
+            {
+                uiElement.MoveFocus(new TraversalRequest(direction));
+            }
+            else if (focusedElement is FrameworkContentElement contentElement)
+            {
+                contentElement.MoveFocus(new TraversalRequest(direction));
+            }
+        }
+
+        // Hàm phát tiếng click
+        private void PlayClickSound()
+        {
+            try
+            {
+                string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
                 _clickSound.Open(new Uri(soundPath));
-                _clickSound.Volume = AppSettings.SfxVolume; // Lấy âm lượng SFX từ cài đặt
+                // Lưu ý: Đảm bảo AppSettings.SfxVolume có tồn tại trong project của bạn
+                _clickSound.Volume = AppSettings.SfxVolume;
                 _clickSound.Stop();
                 _clickSound.Play();
             }
-            catch {
-                // Tránh lỗi nếu thiếu file Assets/click.mp3
+            catch
+            {
+                // Bỏ qua lỗi nếu không tìm thấy file
             }
         }
 
-        // Nút Login
-        private void LoginButton_Click(object sender, RoutedEventArgs e) {
-            PlayClickSound(); // Phát tiếng click
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClickSound();
             NavigationService?.Navigate(new MenuPage());
         }
 
-        // Nút Continue as Guest (Đã sửa tên hàm cho khớp với XAML của bạn)
-        private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e) {
-            PlayClickSound(); // Phát tiếng click
+        private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClickSound();
             NavigationService?.Navigate(new MenuPage());
         }
 
-        // Link quên mật khẩu
-        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e) {
+        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e)
+        {
             PlayClickSound();
-            // Thêm logic xử lý tại đây nếu cần
+            // Code logic xử lý quên mật khẩu...
         }
 
-        // Link đăng ký
-        private void SignUpLink_Click(object sender, RoutedEventArgs e) {
+        private void SignUpLink_Click(object sender, RoutedEventArgs e)
+        {
             PlayClickSound();
-            // Thêm logic xử lý tại đây nếu cần
+            // Code logic xử lý đăng ký...
         }
     }
 }

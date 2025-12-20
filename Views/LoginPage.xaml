@@ -10,6 +10,7 @@
       Background="{StaticResource SpaceBackground}"
       UseLayoutRounding="True"
       SnapsToDevicePixels="True"
+      PreviewKeyDown="Page_PreviewKeyDown"
       Loaded="LoginPage_Loaded">
 
     <!-- Page Resources -->
@@ -37,10 +38,28 @@
                         CornerRadius="12">
                             <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
-
+                        
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="20" ShadowDepth="0" Opacity="0.8"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                    <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                            </MultiDataTrigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -68,7 +87,6 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="12">
-
                             <Grid VerticalAlignment="Center">
                                 <ScrollViewer x:Name="PART_ContentHost"
                                       VerticalAlignment="Center"
@@ -81,13 +99,14 @@
                         </Border>
 
                         <ControlTemplate.Triggers>
-
                             <!-- Hover -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd"
-                                Property="BorderBrush"
-                                Value="#22D3EE"/>
-                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                    <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                            </MultiDataTrigger>
 
                             <!-- Focus -->
                             <Trigger Property="IsKeyboardFocused" Value="True">
@@ -117,6 +136,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="SpaceHyperlink" TargetType="Hyperlink">
             <Setter Property="Foreground" Value="#22D3EE"/>
             <Setter Property="TextDecorations" Value="{x:Null}"/>
@@ -124,10 +144,14 @@
             <Setter Property="Focusable" Value="True"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                        <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
                     <Setter Property="Foreground" Value="#A7F3FF"/>
                     <Setter Property="TextDecorations" Value="Underline"/>
-                </Trigger>
+                </MultiDataTrigger>
                 <Trigger Property="IsKeyboardFocused" Value="True">
                     <Setter Property="Foreground" Value="#A7F3FF"/>
                     <Setter Property="TextDecorations" Value="Underline"/>
@@ -142,7 +166,11 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Padding" Value="8,4"/>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                        <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
                     <Setter Property="BorderBrush" Value="#22D3EE"/>
                     <Setter Property="Background" Value="#2214182A"/>
                     <Setter Property="Effect">
@@ -150,7 +178,7 @@
                             <DropShadowEffect Color="#22D3EE" BlurRadius="16" ShadowDepth="0" Opacity="0.45"/>
                         </Setter.Value>
                     </Setter>
-                </Trigger>
+                </MultiDataTrigger>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
                     <Setter Property="BorderBrush" Value="#22D3EE"/>
                     <Setter Property="Background" Value="#2214182A"/>
