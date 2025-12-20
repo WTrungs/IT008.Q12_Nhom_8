@@ -38,39 +38,37 @@ namespace TetrisApp.Views
         // --- 1. XỬ LÝ PHÍM: TẮT HOVER (Giữ nguyên) ---
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            // Logic nhảy vào Username khi chưa chọn gì
-            var currentFocus = Keyboard.FocusedElement;
-            if (currentFocus == this || currentFocus == null || currentFocus == RootGrid)
+            // Khi nhấn bất kỳ phím điều hướng nào, tắt hiệu ứng Hover để ưu tiên bàn phím
+            if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Tab || e.Key == Key.Left || e.Key == Key.Right)
             {
-                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab)
+                IsHoverEnabled = false;
+            }
+
+            // Logic đặc biệt: Nếu chưa có gì được chọn mà nhấn Down/Tab, nhảy vào Username
+            var currentFocus = Keyboard.FocusedElement;
+            if (currentFocus == this || currentFocus == RootGrid || currentFocus == null)
+            {
+                if (e.Key == Key.Down || e.Key == Key.Tab)
                 {
-                    IsHoverEnabled = false; // Tắt Hover
-                    if (UsernameTextBox != null)
-                    {
-                        UsernameTextBox.Focus();
-                        e.Handled = true;
-                    }
+                    UsernameTextBox.Focus();
+                    e.Handled = true;
                     return;
                 }
             }
 
-            // Logic di chuyển và tắt Hover
+            // Xử lý phím mũi tên để di chuyển như Tab
             if (e.Key == Key.Down)
             {
-                IsHoverEnabled = false; // Tắt Hover
-                e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Next);
+                e.Handled = true;
             }
             else if (e.Key == Key.Up)
             {
-                IsHoverEnabled = false; // Tắt Hover
-                e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Previous);
+                e.Handled = true;
             }
-            else if (e.Key == Key.Tab)
-            {
-                IsHoverEnabled = false; // Tắt Hover
-            }
+
+            // LƯU Ý: Không Handle phím Tab ở đây để WPF tự di chuyển Focus theo TabIndex
         }
 
         private void MoveFocus(FocusNavigationDirection direction)

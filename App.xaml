@@ -81,6 +81,9 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="#2A2A33"/>
             <Setter Property="Background" Value="#1A1D2B"/>
+
+            <EventSetter Event="MouseEnter" Handler="SpaceButton_MouseEnter"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -90,36 +93,31 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="20">
                             <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Margin="0,0,0,0"/>
+                                      VerticalAlignment="Center"/>
                         </Border>
 
                         <ControlTemplate.Triggers>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
-                                    <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
-                                </MultiDataTrigger.Conditions>
+                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect Color="#22D3EE" BlurRadius="50" ShadowDepth="0" Opacity="0.55"/>
                                     </Setter.Value>
                                 </Setter>
-                            </MultiDataTrigger>
+                            </Trigger>
+
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect Color="#22D3EE" BlurRadius="22" ShadowDepth="0" Opacity="0.55"/>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="50" ShadowDepth="0" Opacity="0.8"/>
                                     </Setter.Value>
                                 </Setter>
+                                <Setter Property="Foreground" Value="White"/>
                             </Trigger>
+
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

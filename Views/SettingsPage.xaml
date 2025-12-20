@@ -381,12 +381,10 @@
                                Margin="0,0,0,4"
                                Foreground="#E6ECFF"/>
 
-                    <ComboBox x:Name="TrackCombo"
-                              Style="{StaticResource SpaceComboBox}"
-                              Margin="0,0,22,0">
-                        <ComboBoxItem Content="Track 1"/>
-                        <ComboBoxItem Content="Track 2"/>
-                        <ComboBoxItem Content="Track 3"/>
+                    <ComboBox x:Name="TrackCombo" Style="{StaticResource SpaceComboBox}" Margin="0,0,22,0">
+                        <ComboBoxItem Content="14-Puzzle"/>
+                        <ComboBoxItem Content="47-Fleatopia"/>
+                        <ComboBoxItem Content="202-Driftveil City"/>
                     </ComboBox>
 
                     <!-- Button -->
