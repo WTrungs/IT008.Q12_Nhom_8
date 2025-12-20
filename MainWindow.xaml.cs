@@ -18,6 +18,9 @@ namespace TetrisApp {
         public MainWindow() {
             InitializeComponent();
             MainFrame.Navigate(new LoginPage());
+
+            // Phát nhạc ngay khi mở ứng dụng nếu cài đặt cho phép
+            ((App)Application.Current).UpdateBackgroundMusic();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {

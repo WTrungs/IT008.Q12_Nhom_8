@@ -36,6 +36,7 @@ namespace TetrisApp.Views
         }
 
         // --- 1. XỬ LÝ PHÍM: TẮT HOVER (Giữ nguyên) ---
+<<<<<<< HEAD
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
             // Nhảy vào username nếu đang ở ngoài
             var currentFocus = Keyboard.FocusedElement;
@@ -46,21 +47,53 @@ namespace TetrisApp.Views
                         UsernameTextBox.Focus();
                         e.Handled = true;
                     }
+=======
+        private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Khi nhấn bất kỳ phím điều hướng nào, tắt hiệu ứng Hover để ưu tiên bàn phím
+            if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Tab || e.Key == Key.Left || e.Key == Key.Right)
+            {
+                IsHoverEnabled = false;
+            }
+
+            // Logic đặc biệt: Nếu chưa có gì được chọn mà nhấn Down/Tab, nhảy vào Username
+            var currentFocus = Keyboard.FocusedElement;
+            if (currentFocus == this || currentFocus == RootGrid || currentFocus == null)
+            {
+                if (e.Key == Key.Down || e.Key == Key.Tab)
+                {
+                    UsernameTextBox.Focus();
+                    e.Handled = true;
+>>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                     return;
                 }
             }
 
+<<<<<<< HEAD
             // Di chuyển focus với Up/Down/Tab
             if (e.Key == Key.Down) {
                 IsHoverEnabled = false; // Tắt Hover
                 e.Handled = true;
+=======
+            // Xử lý phím mũi tên để di chuyển như Tab
+            if (e.Key == Key.Down)
+            {
+>>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                 MoveFocus(FocusNavigationDirection.Next);
+                e.Handled = true;
             }
+<<<<<<< HEAD
             else if (e.Key == Key.Up) {
                 IsHoverEnabled = false; // Tắt Hover
                 e.Handled = true;
+=======
+            else if (e.Key == Key.Up)
+            {
+>>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                 MoveFocus(FocusNavigationDirection.Previous);
+                e.Handled = true;
             }
+<<<<<<< HEAD
             else if (e.Key == Key.Tab) {
                 IsHoverEnabled = false; // Tắt Hover
             }
@@ -79,6 +112,10 @@ namespace TetrisApp.Views
                 TryLogin();
                 return;
             }
+=======
+
+            // LƯU Ý: Không Handle phím Tab ở đây để WPF tự di chuyển Focus theo TabIndex
+>>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
         }
 
         private void MoveFocus(FocusNavigationDirection direction)
