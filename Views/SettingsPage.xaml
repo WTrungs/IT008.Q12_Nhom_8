@@ -14,21 +14,18 @@
       Loaded="SettingsPage_Loaded">
 
     <Page.Resources>
+
+        <!--CheckBox style-->
         <Style x:Key="SpaceToggle" TargetType="CheckBox">
-<<<<<<< HEAD
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
 
             <Setter Property="Width" Value="50"/>
             <Setter Property="Height" Value="26"/>
-=======
-            <Setter Property="Width" Value="44"/>
-            <Setter Property="Height" Value="22"/>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
             <Setter Property="Cursor" Value="Hand"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
-<<<<<<< HEAD
                         <Grid Background="Transparent">
                             <Border x:Name="Track" 
                             Background="#2A2F3F" 
@@ -41,17 +38,12 @@
                              Fill="#EAF0FF" 
                              HorizontalAlignment="Left"
                              Margin="3,0,0,0"/>
-=======
-                        <Grid>
-                            <Border x:Name="Track" Background="#2A2F3F" CornerRadius="11" BorderThickness="1"/>
-                            <Ellipse x:Name="Thumb" Width="16" Height="16" Fill="#EAF0FF" Margin="3" HorizontalAlignment="Left"/>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                         </Grid>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Track" Property="Background" Value="#22D3EE"/>
                                 <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/>
-<<<<<<< HEAD
                                 <Setter TargetName="Thumb" Property="Margin" Value="0,0,3,0"/>
 
                                 <Setter TargetName="Track" Property="Effect">
@@ -87,41 +79,22 @@
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Opacity" Value="0.4"/>
                             </Trigger>
-=======
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="Track" Property="BorderBrush" Value="#22D3EE"/>
-                                <Setter TargetName="Track" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#22D3EE" BlurRadius="15" ShadowDepth="0" Opacity="0.6"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Track" Property="Background" Value="#3A4058"/>
-                            </Trigger>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-<<<<<<< HEAD
         
         <!--Slider style-->
-=======
-
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
         <Style x:Key="SpaceSlider" TargetType="Slider">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Minimum" Value="0"/>
             <Setter Property="Maximum" Value="1"/>
-            <Setter Property="IsTabStop" Value="False"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Slider">
-<<<<<<< HEAD
                         <Grid Height="30">
                             <Track x:Name="PART_Track">
                                 <Track.DecreaseRepeatButton>
@@ -129,12 +102,6 @@
                                           Focusable="False"
                                           IsTabStop="False"
                                           Margin="0,0,-1,0">
-=======
-                        <Grid Height="28">
-                            <Track x:Name="PART_Track" VerticalAlignment="Center" IsDirectionReversed="False">
-                                <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Focusable="False">
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                                         <RepeatButton.Template>
                                             <ControlTemplate TargetType="RepeatButton">
                                                 <Border Height="4" Background="#22D3EE" CornerRadius="2">
@@ -146,15 +113,12 @@
                                         </RepeatButton.Template>
                                     </RepeatButton>
                                 </Track.DecreaseRepeatButton>
+
                                 <Track.IncreaseRepeatButton>
-<<<<<<< HEAD
                                     <RepeatButton Command="{x:Static Slider.IncreaseLarge}"
                                           Focusable="False"
                                           IsTabStop="False"
                                           Margin="-1,0,0,0">
-=======
-                                    <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Focusable="False">
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                                         <RepeatButton.Template>
                                             <ControlTemplate TargetType="RepeatButton">
                                                 <Border Height="4" Background="#2A2F3F" CornerRadius="2"/>
@@ -164,7 +128,6 @@
                                 </Track.IncreaseRepeatButton>
 
                                 <Track.Thumb>
-<<<<<<< HEAD
                                     <Thumb Width="14" Height="14" Panel.ZIndex="1">
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
@@ -213,51 +176,42 @@
                                                         </Setter>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
-=======
-                                    <Thumb x:Name="StyleThumb" 
-                                   Width="14" 
-                                   Height="14" 
-                                   Focusable="True" 
-                                   IsTabStop="True">
-                                        <Thumb.Template>
-                                            <ControlTemplate TargetType="Thumb">
-                                                <Ellipse x:Name="ThumbEllipse" 
-                                                 Fill="#EAF0FF" 
-                                                 Stroke="#22D3EE" 
-                                                 StrokeThickness="2"/>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>
                                 </Track.Thumb>
                             </Track>
                         </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger SourceName="StyleThumb" Property="IsFocused" Value="True">
-                                <Setter TargetName="StyleThumb" Property="Width" Value="20"/>
-                                <Setter TargetName="StyleThumb" Property="Height" Value="20"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
+        <!--ComboBox ToggleButton style-->
         <Style x:Key="SpaceComboBoxToggle" TargetType="ToggleButton">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="IsTabStop" Value="false"/>
             <Setter Property="Focusable" Value="false"/>
+            <Setter Property="ClickMode" Value="Press"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Border x:Name="templateRoot" Background="#1A1F2E" BorderThickness="1" BorderBrush="#3A4058" CornerRadius="20">
+                        <Border x:Name="templateRoot"
+                                Background="#1A1F2E"
+                                BorderThickness="1"
+                                BorderBrush="#3A4058"
+                                CornerRadius="20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Path x:Name="arrow" Grid.Column="1" Fill="#EAF0FF" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                <Path x:Name="arrow"
+                                      Grid.Column="1"
+                                      Fill="#EAF0FF"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -267,14 +221,11 @@
                                     <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
                                 </MultiDataTrigger.Conditions>
                                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="#22D3EE"/>
-<<<<<<< HEAD
                                 <Setter TargetName="templateRoot" Property="Background" Value="#252A40"/>
                             </MultiDataTrigger>
 
                             <Trigger Property="IsChecked" Value="true">
                                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="#22D3EE"/>
-=======
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -282,22 +233,59 @@
             </Setter>
         </Style>
 
+        <!--ComboBoxItem style-->
+        <Style TargetType="ComboBoxItem" x:Key="SpaceComboBoxItem">
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Bd"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="20"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#3A4058"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#22D3EE"/>
+                                <Setter Property="Foreground" Value="#05060F"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--ComboBox style-->
         <Style x:Key="SpaceComboBox" TargetType="ComboBox">
             <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="Background" Value="#1A1F2E"/>
+            <Setter Property="BorderBrush" Value="#3A4058"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Height" Value="36"/>
-<<<<<<< HEAD
             <Setter Property="ItemContainerStyle" Value="{StaticResource SpaceComboBoxItem}"/>
 
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
 
-=======
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-<<<<<<< HEAD
                             <ToggleButton Name="ToggleButton"
                                   Style="{StaticResource SpaceComboBoxToggle}"
                                   Focusable="false"
@@ -329,13 +317,6 @@
                                     BorderBrush="#3A4058"
                                     CornerRadius="20"
                                     Margin="0,4,0,0">
-=======
-                            <ToggleButton Name="ToggleButton" Style="{StaticResource SpaceComboBoxToggle}" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Margin="15,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" PopupAnimation="Slide">
-                                <Grid Name="DropDown" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder" Background="#1A1F2E" BorderThickness="1" BorderBrush="#3A4058" CornerRadius="20" Margin="0,4,0,0">
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                                         <ScrollViewer Margin="0,4" SnapsToDevicePixels="True">
                                             <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                         </ScrollViewer>
@@ -346,7 +327,6 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsKeyboardFocused" Value="True">
-<<<<<<< HEAD
                                 <Setter TargetName="ToggleButton" Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect Color="#22D3EE" BlurRadius="25" Opacity="1" ShadowDepth="0"/>
@@ -362,12 +342,6 @@
                                 <Setter TargetName="DropDownBorder" Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect Color="#22D3EE" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
-=======
-                                <Setter TargetName="ToggleButton" Property="BorderBrush" Value="#22D3EE"/>
-                                <Setter TargetName="ToggleButton" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#22D3EE" BlurRadius="15" ShadowDepth="0" Opacity="0.6"/>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
@@ -380,26 +354,43 @@
 
     <Grid>
         <Rectangle Fill="{StaticResource SpaceBackground}"/>
+
+        <!-- Grid makeup -->
         <Canvas IsHitTestVisible="True" Opacity="0.9">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
                     <BlurEffect Radius="100"/>
                 </Ellipse.Effect>
             </Ellipse>
-            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D">
+
+            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Ellipse.Effect>
                     <BlurEffect Radius="100"/>
                 </Ellipse.Effect>
             </Ellipse>
-            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890">
+
+            <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
                 <Ellipse.Effect>
                     <BlurEffect Radius="100"/>
                 </Ellipse.Effect>
             </Ellipse>
         </Canvas>
+
+        <!-- Stars -->
         <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
 
-<<<<<<< HEAD
         <!-- Phan chua settings -->
         <Border Style="{StaticResource GlassCard}"
         Width="480"
@@ -442,37 +433,13 @@
                         <ComboBoxItem Content="Track 1"/>
                         <ComboBoxItem Content="Track 2"/>
                         <ComboBoxItem Content="Track 3"/>
-=======
-        <Border Style="{StaticResource GlassCard}" Width="480" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid Margin="30,0,30,0" Height="437">
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="SETTINGS" Margin="0,0,0,26" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"/>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <TextBlock Text="MUSIC" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                        <CheckBox x:Name="MusicToggle" Style="{StaticResource SpaceToggle}" PreviewKeyDown="MusicToggle_PreviewKeyDown"/>
-                    </StackPanel>
-
-                    <TextBlock Text="VOLUME" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                    <Slider x:Name="MusicVolumeSlider" Style="{StaticResource SpaceSlider}" Margin="0,0,22,14" SmallChange="0.01" LargeChange="0.1"/>
-
-                    <TextBlock Text="SFX VOLUME" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                    <Slider x:Name="SfxVolumeSlider" Style="{StaticResource SpaceSlider}" Margin="0,0,22,18" SmallChange="0.01" LargeChange="0.1"/>
-
-                    <TextBlock Text="SELECT TRACK" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="TrackCombo" Style="{StaticResource SpaceComboBox}" Margin="0,0,22,0" PreviewKeyDown="TrackCombo_PreviewKeyDown">
-                        <ComboBoxItem Content="14-Puzzle"/>
-                        <ComboBoxItem Content="47-Fleatopia"/>
-                        <ComboBoxItem Content="202-Driftveil City"/>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                     </ComboBox>
 
                     <Grid Margin="0,12,22,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-<<<<<<< HEAD
 
                         <Button Grid.Column="0" 
                         Style="{StaticResource SpaceButton}" 
@@ -491,11 +458,8 @@
                         Margin="8,0,1,0" 
                         Click="Accept_Click"
                         TabIndex="5"/>
-=======
-                        <Button Grid.Column="0" Style="{StaticResource SpaceButton}" Content="CANCEL" Margin="0,0,8,0" Click="Cancel_Click"/>
-                        <Button Grid.Column="1" Style="{StaticResource SpaceButton}" Content="ACCEPT" Margin="8,0,0,0" Click="Accept_Click"/>
->>>>>>> f0fd7ea0f927b48b264bc18f7e5a8db3a4abdef8
                     </Grid>
+
                 </StackPanel>
             </Grid>
         </Border>
