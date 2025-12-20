@@ -3,7 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Windows.Media;
-using TetrisApp.Models; // Đảm bảo có AppSettings
+using System.Windows.Input; // Quan trọng: dùng để xử lý phím bấm
+using TetrisApp.Models;
 
 namespace TetrisApp.Views
 {
@@ -15,12 +16,11 @@ namespace TetrisApp.Views
         {
             InitializeComponent();
 
-            // 1. Đổ dữ liệu từ AppSettings ra giao diện
+            // Load Settings
             MusicToggle.IsChecked = AppSettings.IsMusicEnabled;
             MusicVolumeSlider.Value = AppSettings.MusicVolume;
             SfxVolumeSlider.Value = AppSettings.SfxVolume;
 
-            // 2. Tự động chọn đúng bài hát đang lưu trong ComboBox
             foreach (ComboBoxItem item in TrackCombo.Items)
             {
                 if (item.Content.ToString() == AppSettings.SelectedTrack)
@@ -31,13 +31,45 @@ namespace TetrisApp.Views
             }
         }
 
+        // --- XỬ LÝ PHÍM ENTER ---
+
+        // Cho phép nhấn Enter để bật/tắt Music Toggle
+        private void MusicToggle_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var checkbox = sender as CheckBox;
+                if (checkbox != null)
+                {
+                    checkbox.IsChecked = !checkbox.IsChecked;
+                    e.Handled = true; // Ngăn không cho phím Enter làm việc khác
+                }
+            }
+        }
+
+        // Cho phép nhấn Enter để mở danh sách chọn bài hát
+        private void TrackCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var combo = sender as ComboBox;
+                if (combo != null && !combo.IsDropDownOpen)
+                {
+                    combo.IsDropDownOpen = true; // Mở dropdown
+                    e.Handled = true;
+                }
+            }
+        }
+
+        // -----------------------
+
         private void PlayClickSound()
         {
             try
             {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
                 _clickSound.Open(new Uri(soundPath));
-                _clickSound.Volume = AppSettings.SfxVolume; // Sử dụng âm lượng SFX mới nhất
+                _clickSound.Volume = AppSettings.SfxVolume;
                 _clickSound.Stop();
                 _clickSound.Play();
             }
@@ -46,19 +78,19 @@ namespace TetrisApp.Views
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Cập nhật dữ liệu vào AppSettings
             AppSettings.IsMusicEnabled = MusicToggle.IsChecked ?? true;
             AppSettings.MusicVolume = MusicVolumeSlider.Value;
             AppSettings.SfxVolume = SfxVolumeSlider.Value;
 
             if (TrackCombo.SelectedItem is ComboBoxItem selectedItem)
             {
-                // Lưu đúng tên bài hát từ ComboBox (ví dụ: "14-Puzzle")
                 AppSettings.SelectedTrack = selectedItem.Content.ToString();
             }
 
-            // 2. Gọi lệnh phát nhạc từ App
-            ((App)Application.Current).UpdateBackgroundMusic();
+            if (Application.Current is App myApp)
+            {
+                myApp.UpdateBackgroundMusic();
+            }
 
             NavigationService?.Navigate(new MenuPage());
         }
@@ -69,10 +101,24 @@ namespace TetrisApp.Views
             NavigationService?.Navigate(new MenuPage());
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        // Bạn có thể gán sự kiện PreviewKeyDown cho Slider trong XAML:
+        // PreviewKeyDown="Slider_PreviewKeyDown"
+
+        private void Slider_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            PlayClickSound();
-            NavigationService?.Navigate(new MenuPage());
+            var slider = sender as Slider;
+            if (slider == null) return;
+
+            if (e.Key == Key.Left)
+            {
+                slider.Value -= 0.05;
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Right)
+            {
+                slider.Value += 0.05;
+                e.Handled = true;
+            }
         }
     }
 }

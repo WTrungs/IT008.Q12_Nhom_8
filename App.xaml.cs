@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls; // Cần thêm dòng này để hiểu 'Button'
+using System.Windows.Input;    // Cần thêm dòng này để hiểu 'MouseEventArgs'
 using System.Windows.Media;
 using TetrisApp.Models;
 
@@ -18,6 +20,19 @@ namespace TetrisApp
                 _bgmPlayer.Play();
             };
         }
+
+        // --- ĐÂY LÀ HÀM MỚI THÊM VÀO ĐỂ XỬ LÝ HOVER ---
+        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        {
+            // Khi chuột chạm vào bất kỳ nút nào
+            if (sender is Button btn)
+            {
+                // Ép nút đó nhận Focus bàn phím ngay lập tức
+                // Điều này giúp phím Tab sẽ luôn tính từ vị trí chuột đang đứng
+                btn.Focus();
+            }
+        }
+        // ----------------------------------------------
 
         public void UpdateBackgroundMusic()
         {

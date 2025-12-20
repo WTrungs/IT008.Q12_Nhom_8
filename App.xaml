@@ -22,7 +22,7 @@
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="#EAF0FF"/>
         </Style>
-        <!-- Palette -->
+
         <Color x:Key="SpaceBg0">#05060F</Color>
         <Color x:Key="SpaceBg1">#0B1026</Color>
         <Color x:Key="SpacePurple">#7C3AED</Color>
@@ -31,14 +31,12 @@
 
         <SolidColorBrush x:Key="TextMuted" Color="#9AA6C8"/>
 
-        <!-- Background gradient -->
         <LinearGradientBrush x:Key="SpaceBackground" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="{StaticResource SpaceBg0}" Offset="0"/>
             <GradientStop Color="{StaticResource SpaceBg1}" Offset="0.55"/>
             <GradientStop Color="#140A2A" Offset="1"/>
         </LinearGradientBrush>
 
-        <!-- Stars pattern -->
         <DrawingBrush x:Key="StarsBrush" TileMode="Tile"
                   Viewport="0,0,240,240" ViewportUnits="Absolute"
                   Viewbox="0,0,240,240" ViewboxUnits="Absolute">
@@ -62,7 +60,6 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
 
-        <!-- Glass card -->
         <Style x:Key="GlassCard" TargetType="Border">
             <Setter Property="CornerRadius" Value="18"/>
             <Setter Property="Padding" Value="20"/>
@@ -71,7 +68,6 @@
             <Setter Property="Background" Value="#9910152A"/>
         </Style>
 
-        <!-- Outer-space button -->
         <Style x:Key="SpaceButton" TargetType="Button">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Height" Value="50"/>
@@ -82,18 +78,18 @@
             <Setter Property="BorderBrush" Value="#2A2A33"/>
             <Setter Property="Background" Value="#1A1D2B"/>
 
-            <EventSetter Event="MouseEnter" Handler="SpaceButton_MouseEnter"/>
+            <EventSetter Event="MouseEnter" Handler="Button_MouseEnter"/>
 
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Bd"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="20">
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
                             <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                    VerticalAlignment="Center"/>
                         </Border>
 
                         <ControlTemplate.Triggers>
@@ -124,5 +120,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource SpaceButton}"/>
+
     </Application.Resources>
 </Application>
