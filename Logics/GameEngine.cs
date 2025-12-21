@@ -12,17 +12,17 @@ namespace TetrisApp.Views {
 		public string[,] BoardColors { get; set; }
 	}
 
+	public struct Position {
+		public int row, col;
+		public Position(int row = 0, int col = 0) {
+			this.row = row;
+			this.col = col;
+		}
+	}
+
 	public partial class GameEngine {
 		public GameEngine() {
 			Start();
-		}
-
-		public struct Position {
-			public int row, col;
-			public Position(int row = 0, int col = 0) {
-				this.row = row;
-				this.col = col;
-			}
 		}
 
 		public class Cell {

@@ -66,8 +66,8 @@ namespace TetrisApp.Views {
 			for (int r = 0; r < 20; r++) { 
 				for (int c = 0; c < 10; c++) {
 					Border b = new Border {
-						//BorderBrush = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
-						//BorderThickness = new Thickness(0.5),
+						BorderBrush = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
+						BorderThickness = new Thickness(0.5),
 						Background = Brushes.Transparent,
 						//Padding = new Thickness(1.5),
 						CornerRadius = new CornerRadius(3),
@@ -191,6 +191,8 @@ namespace TetrisApp.Views {
 		public void Draw() {
 			for (int r = 0; r < 20; r++) {
 				for (int c = 0; c < 10; c++) {
+					gridCells[19 - r, c].BorderThickness = new Thickness(0);
+					gridCells[19 - r, c].BorderBrush = null;
 					gridCells[r, c].Background = Brushes.Transparent;
 				}
 			}
@@ -211,6 +213,19 @@ namespace TetrisApp.Views {
 						int c = gameEngine.GetCurrentPosition().col + j;
 						if (r >= 0 && r < 20 && c >= 0 && c < 10) {
 							gridCells[19 - r, c].Background = colorBrush;
+						}
+					}
+				}
+			}
+			Position deepestPosition = gameEngine.FindDeepestPosition();
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					if (shape[i, j] != 0) {
+						int r = deepestPosition.row - i;
+						int c = deepestPosition.col + j;
+						if (r >= 0 && r < 20 && c >= 0 && c < 10) {
+							gridCells[19 - r, c].BorderThickness = new Thickness(1.5);
+							gridCells[19 - r, c].BorderBrush = Brushes.Gray;
 						}
 					}
 				}
