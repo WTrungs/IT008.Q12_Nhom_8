@@ -42,27 +42,10 @@ namespace TetrisApp.Views {
 
 		private void GamePage_Loaded(object sender, RoutedEventArgs e) {
 			InitializeGrid();
-			ApplyBoardClip();
 			CompositionTarget.Rendering += OnRender;
 			this.Focusable = true;
 			this.Focus();
 			Keyboard.Focus(this);
-		}
-
-		private void ApplyBoardClip() {
-			void Apply() {
-				double outerR = BoardBorder.CornerRadius.TopLeft;   // 12
-				double t = BoardBorder.BorderThickness.Left;        // 2
-				double innerR = Math.Max(0, outerR - t);            // 10
-
-				BoardClipHost.Clip = new RectangleGeometry(
-					new Rect(0, 0, BoardClipHost.ActualWidth, BoardClipHost.ActualHeight),
-					innerR, innerR);
-			}
-
-			BoardClipHost.SizeChanged += (_, __) => Apply();
-			Dispatcher.BeginInvoke(new Action(Apply),
-				System.Windows.Threading.DispatcherPriority.Loaded);
 		}
 
 		private async void GamePage_Unloaded(object sender, RoutedEventArgs e) {
