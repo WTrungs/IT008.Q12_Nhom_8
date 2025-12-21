@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using TetrisApp.Models; // Đảm bảo namespace này đúng với project của bạn
+using TetrisApp.Models;
 
 namespace TetrisApp.Views
 {
@@ -19,7 +19,6 @@ namespace TetrisApp.Views
             set { SetValue(IsHoverEnabledProperty, value); }
         }
 
-        // QUAN TRỌNG: Đã sửa typeof(LoginPage) -> typeof(SettingsPage) để không bị lỗi
         public static readonly DependencyProperty IsHoverEnabledProperty =
             DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(SettingsPage), new PropertyMetadata(true));
 
@@ -28,18 +27,20 @@ namespace TetrisApp.Views
             InitializeComponent();
         }
 
-        // 2. KHI TRANG LOAD: Focus vào chính trang Page (Clean Start)
-        // Để ban đầu màn hình tối om, không có nút nào bị sáng viền
+        // 2. KHI TRANG LOAD: Focus thẳng vào nút MusicToggle
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
-                Keyboard.Focus(this);
-                this.Focus();
-
-                // Load giá trị hiện tại lên UI (nếu cần)
+                // Load giá trị hiện tại lên UI
                 if (MusicToggle != null) MusicToggle.IsChecked = AppSettings.IsMusicEnabled;
                 if (MusicVolumeSlider != null) MusicVolumeSlider.Value = AppSettings.MusicVolume;
                 if (SfxVolumeSlider != null) SfxVolumeSlider.Value = AppSettings.SfxVolume;
+
+                // Focus ngay vào nút đầu tiên
+                if (MusicToggle != null)
+                {
+                    MusicToggle.Focus();
+                }
             }));
         }
 
@@ -56,10 +57,10 @@ namespace TetrisApp.Views
 
             var currentFocus = Keyboard.FocusedElement;
 
-            // B. LOGIC "ĐÁNH THỨC": Nhảy vào MusicToggle khi chưa chọn gì
-            if (currentFocus == this || currentFocus == null)
+            // B. LOGIC "ĐÁNH THỨC": Nếu lỡ mất focus thì nhấn phím điều hướng sẽ nhảy về MusicToggle
+            if (currentFocus == this || currentFocus == null || currentFocus is Frame)
             {
-                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Right)
+                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Right || e.Key == Key.Enter)
                 {
                     if (MusicToggle != null)
                     {
@@ -70,25 +71,43 @@ namespace TetrisApp.Views
                 }
             }
 
-            // C. LOGIC RIÊNG CHO CHECKBOX (Toggle bằng phím Trái/Phải)
+            // [MỚI] C. LOGIC ENTER: Tự xử lý hành động khi nhấn Enter vào CheckBox hoặc ComboBox
+            if (e.Key == Key.Enter)
+            {
+                // Nếu đang đứng ở nút Music (CheckBox) -> Bật/Tắt
+                if (currentFocus == MusicToggle)
+                {
+                    MusicToggle.IsChecked = !(MusicToggle.IsChecked ?? false);
+                    PlayClickSound();
+                    e.Handled = true;
+                    return;
+                }
+                // Nếu đang đứng ở ô chọn bài hát (ComboBox) -> Mở/Đóng danh sách
+                else if (currentFocus == TrackCombo)
+                {
+                    TrackCombo.IsDropDownOpen = !TrackCombo.IsDropDownOpen;
+                    PlayClickSound();
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            // D. LOGIC RIÊNG CHO CHECKBOX (Toggle bằng phím Trái/Phải)
             if (currentFocus == MusicToggle)
             {
                 if (e.Key == Key.Left)
                 {
-                    MusicToggle.IsChecked = false; // Tắt
+                    MusicToggle.IsChecked = false;
                     e.Handled = true;
                 }
                 else if (e.Key == Key.Right)
                 {
-                    MusicToggle.IsChecked = true;  // Bật
+                    MusicToggle.IsChecked = true;
                     e.Handled = true;
                 }
-                // Nếu bấm Lên/Xuống thì để nó chạy xuống logic D bên dưới
             }
 
-            // D. LOGIC DI CHUYỂN (Chỉ xử lý Lên/Xuống)
-            // Lưu ý: Tuyệt đối KHÔNG xử lý Key.Left/Key.Right ở đây 
-            // để Slider có thể nhận phím và tự tăng giảm âm lượng.
+            // E. LOGIC DI CHUYỂN (Chỉ xử lý Lên/Xuống để tránh xung đột với Slider)
             if (e.Key == Key.Down)
             {
                 e.Handled = true;
@@ -115,13 +134,13 @@ namespace TetrisApp.Views
             }
         }
 
-        // --- CÁC HÀM LOGIC
+        // --- CÁC HÀM LOGIC ---
 
         private void PlayClickSound()
         {
             try
             {
-                string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
+                string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "click.mp3");
                 _clickSound.Open(new Uri(soundPath));
                 _clickSound.Volume = AppSettings.SfxVolume;
                 _clickSound.Stop();
@@ -141,13 +160,12 @@ namespace TetrisApp.Views
 
             if (TrackCombo.SelectedItem is ComboBoxItem selectedItem)
             {
-                // Lấy nội dung text của Item được chọn
                 AppSettings.SelectedTrack = selectedItem.Content.ToString();
             }
 
-            if (Application.Current is App myApp) 
+            if (Application.Current is App myApp)
             {
-                // myApp.UpdateBackgroundMusic(); 
+                myApp.UpdateBackgroundMusic();
             }
 
             NavigationService?.Navigate(new MenuPage());

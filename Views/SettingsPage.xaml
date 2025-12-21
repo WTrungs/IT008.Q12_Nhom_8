@@ -401,7 +401,6 @@
                             Margin="0,0,22,14" 
                             TabIndex="1"/>
 
-                    <!-- SFX Volume -->
                     <TextBlock Text="SFX"
                                FontSize="16"
                                FontWeight="SemiBold"
@@ -411,9 +410,9 @@
 
                     <Slider x:Name="SfxVolumeSlider"
                             Style="{StaticResource SpaceSlider}"
-                            Margin="0,0,22,18"/>
+                            Margin="0,0,22,18"
+                            TabIndex="2"/>
 
-                    <!-- SELECT TRACK -->
                     <TextBlock Text="SELECT TRACK"
                                FontSize="16"
                                FontWeight="SemiBold"
@@ -423,7 +422,8 @@
 
                     <ComboBox x:Name="TrackCombo"
                               Style="{StaticResource SpaceComboBox}"
-                              Margin="0,0,22,0">
+                              Margin="0,0,22,0"
+                              TabIndex="3">
                         <ComboBoxItem Content="Track 1"/>
                         <ComboBoxItem Content="Track 2"/>
                         <ComboBoxItem Content="Track 3"/>
