@@ -42,6 +42,7 @@ namespace TetrisApp.Views {
 
 		private void GamePage_Loaded(object sender, RoutedEventArgs e) {
 			InitializeGrid();
+			ApplyBoardClip();
 			CompositionTarget.Rendering += OnRender;
 			this.Focusable = true;
 			this.Focus();
@@ -191,8 +192,8 @@ namespace TetrisApp.Views {
 		public void Draw() {
 			for (int r = 0; r < 20; r++) {
 				for (int c = 0; c < 10; c++) {
-					gridCells[19 - r, c].BorderThickness = new Thickness(0);
-					gridCells[19 - r, c].BorderBrush = null;
+					gridCells[r, c].BorderThickness = new Thickness(0);
+					gridCells[r, c].BorderBrush = null;
 					gridCells[r, c].Background = Brushes.Transparent;
 				}
 			}
@@ -230,6 +231,18 @@ namespace TetrisApp.Views {
 					}
 				}
 			}
+		}
+
+		private void ApplyBoardClip() {
+			void Apply() {
+				double r = Math.Max(0, BoardBorder.CornerRadius.TopLeft - BoardBorder.BorderThickness.Left);
+				BoardClipHost.Clip = new RectangleGeometry(
+					new Rect(0, 0, BoardClipHost.ActualWidth, BoardClipHost.ActualHeight),
+					r, r);
+			}
+
+			BoardClipHost.SizeChanged += (_, __) => Apply();
+			Apply();
 		}
 
 		private void PlayClickSound() {

@@ -99,7 +99,8 @@
                             BorderBrush="#2A2A33"
                             BorderThickness="1"
                             Background="#0D1020"
-                            Padding="12">
+                            Padding="12"
+							>
 
                         <!-- Viewbox để board có thể phóng to/thu nhỏ theo màn hình nhưng giữ tỉ lệ -->
                         <Viewbox Stretch="Uniform"
@@ -107,15 +108,18 @@
                                  VerticalAlignment="Center">
 
                             <!-- Vùng board: 10*26 = 260, 20*26 = 520 -->
-                            <Border Width="260" Height="520"
+							<Border x:Name="BoardBorder"
+									Width="260" Height="520"
                                     CornerRadius="12"
                                     BorderBrush="#FF5E5E7E"
                                     BorderThickness="2"
                                     Background="{StaticResource GridTileBrush}">
                                 
                                 <!--<Canvas/>-->
-								<UniformGrid x:Name="GameGrid" Rows="20" Columns="10" Background="Transparent"/>
-                            </Border>
+								<Grid x:Name="BoardClipHost">
+									<UniformGrid x:Name="GameGrid" Rows="20" Columns="10" Background="Transparent"/>
+								</Grid>
+							</Border>
                         </Viewbox>
                     </Border>
                 </Grid>
