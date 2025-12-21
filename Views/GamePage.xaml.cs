@@ -72,6 +72,7 @@ namespace TetrisApp.Views {
 						CornerRadius = new CornerRadius(3),
 						VerticalAlignment = VerticalAlignment.Stretch,
 						HorizontalAlignment = HorizontalAlignment.Stretch,
+						Margin = new Thickness(0.5),
 					};
 					gridCells[r, c] = b;
 					GameGrid.Children.Add(b);
