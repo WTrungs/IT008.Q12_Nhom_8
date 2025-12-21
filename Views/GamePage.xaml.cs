@@ -240,15 +240,13 @@ namespace TetrisApp.Views {
 						int r = deepestPosition.row - i;
 						int c = deepestPosition.col + j;
 						if (r >= 0 && r < 20 && c >= 0 && c < 10) {
-							gridCells[19 - r, c].BorderThickness = new Thickness(1.5);
-							gridCells[19 - r, c].BorderBrush = Brushes.Gray;
+							gridCells[19 - r, c].BorderThickness = new Thickness(1);
+							gridCells[19 - r, c].BorderBrush = colorBrush;
 						}
 					}
 				}
 			}
 		}
-
-		
 
 		private void PlayClickSound() {
 			try {
