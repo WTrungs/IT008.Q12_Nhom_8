@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using TetrisApp.Models;
+using TetrisApp.Services;
 
 namespace TetrisApp
 {
@@ -78,6 +79,13 @@ namespace TetrisApp
             {
                 System.Diagnostics.Debug.WriteLine("Lỗi phát nhạc: " + ex.Message);
             }
+        }
+
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            // Khởi tạo Supabase khi bật app
+            await SupabaseService.InitializeAsync();
         }
     }
 }

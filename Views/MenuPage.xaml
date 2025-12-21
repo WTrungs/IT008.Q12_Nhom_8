@@ -11,20 +11,13 @@
       SnapsToDevicePixels="True">
 
     <Page.Resources>
-
-        <!-- Side menu style (hover/click open) -->
-        <Style x:Key="SideMenuStyle"
-               TargetType="Border"
-               BasedOn="{StaticResource GlassCard}">
-
+        <Style x:Key="SideMenuStyle" TargetType="Border" BasedOn="{StaticResource GlassCard}">
             <Setter Property="Width" Value="280"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0,62,0,0"/>
             <Setter Property="Panel.ZIndex" Value="50"/>
-
             <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
-            <!-- Default: hidden to the left -->
             <Setter Property="RenderTransform">
                 <Setter.Value>
                     <TranslateTransform X="-300"/>
@@ -32,7 +25,6 @@
             </Setter>
 
             <Style.Triggers>
-                <!-- Click pin open -->
                 <DataTrigger Binding="{Binding IsChecked, ElementName=HamburgerToggle}" Value="True">
                     <Setter Property="RenderTransform">
                         <Setter.Value>
@@ -42,7 +34,6 @@
                     <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
                 </DataTrigger>
 
-                <!-- Hover on hamburger -->
                 <DataTrigger Binding="{Binding IsMouseOver, ElementName=HamburgerToggle}" Value="True">
                     <Setter Property="RenderTransform">
                         <Setter.Value>
@@ -51,7 +42,6 @@
                     </Setter>
                 </DataTrigger>
 
-                <!-- Hover on drawer itself -->
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="RenderTransform">
                         <Setter.Value>
@@ -62,7 +52,6 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Hamburger button -->
         <Style x:Key="HamburgerButton" TargetType="ToggleButton">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Width" Value="46"/>
@@ -98,7 +87,6 @@
                                 </Setter>
                             </Trigger>
 
-                            <!-- TAB Focus -->
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
@@ -121,7 +109,6 @@
             </Setter>
         </Style>
 
-        <!--Icon button-->
         <Style x:Key="IconButton" TargetType="Button">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Width" Value="34"/>
@@ -133,7 +120,6 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        
                         <Border x:Name="Bd"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -141,9 +127,8 @@
                                 CornerRadius="10">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        
+
                         <ControlTemplate.Triggers>
-                            
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
@@ -152,7 +137,7 @@
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
-                            
+
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
@@ -165,7 +150,6 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
                             </Trigger>
-                            
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -201,15 +185,11 @@
                                    Margin="0,1">
 
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="ScrollBar.PageUpCommand"
-                                                  Opacity="0"
-                                                  Focusable="False"/>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False"/>
                                 </Track.DecreaseRepeatButton>
 
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="ScrollBar.PageDownCommand"
-                                                  Opacity="0"
-                                                  Focusable="False"/>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False"/>
                                 </Track.IncreaseRepeatButton>
 
                                 <Track.Thumb>
@@ -252,12 +232,12 @@
                             <ScrollContentPresenter Grid.Column="0" Margin="0,0,8,0"/>
 
                             <ScrollBar Grid.Column="1"
-                               Orientation="Vertical"
-                               Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                               Maximum="{TemplateBinding ScrollableHeight}"
-                               ViewportSize="{TemplateBinding ViewportHeight}"
-                               Value="{TemplateBinding VerticalOffset}"
-                               Style="{StaticResource SpaceScrollBar}"/>
+                                       Orientation="Vertical"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Value="{TemplateBinding VerticalOffset}"
+                                       Style="{StaticResource SpaceScrollBar}"/>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -270,10 +250,8 @@
           KeyboardNavigation.IsTabStop="False"
           KeyboardNavigation.TabNavigation="Cycle"
           Loaded="MenuPage_Loaded">
-        <!-- Background -->
         <Rectangle Fill="{StaticResource SpaceBackground}"/>
 
-        <!-- NEBULA / GLOW -->
         <Canvas IsHitTestVisible="True" Opacity="0.9">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
@@ -306,17 +284,14 @@
             </Ellipse>
         </Canvas>
 
-        <!-- Stars -->
         <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
 
-        <!-- Content -->
         <Grid Margin="22">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top bar -->
             <DockPanel Grid.Row="0" Margin="0,0,0,14">
                 <ToggleButton x:Name="HamburgerToggle"
                               Style="{StaticResource HamburgerButton}"
@@ -332,13 +307,11 @@
                            DockPanel.Dock="Left"/>
             </DockPanel>
 
-            <!-- Main area -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Left: main menu -->
                 <Border Style="{StaticResource GlassCard}" Width="520" VerticalAlignment="Center">
                     <StackPanel>
                         <TextBlock Text="MENU"
@@ -372,7 +345,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Side drawer -->
                 <Border x:Name="SideMenu"
                         Style="{StaticResource SideMenuStyle}" 
                         Margin="-4,-14,0,0">
@@ -393,7 +365,6 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- AVATAR -->
                                 <Button Grid.Column="0"
                                         Width="44" Height="44"
                                         Padding="0"
@@ -413,13 +384,11 @@
                                                     Background="{TemplateBinding Background}"
                                                     BorderBrush="{TemplateBinding BorderBrush}"
                                                     BorderThickness="{TemplateBinding BorderThickness}">
-                                                <!-- Placeholder: Change to ImageBrush -->
                                                 <TextBlock Text="👤"
                                                    FontSize="18"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    Foreground="{StaticResource TextMuted}"/>
-                                                
                                             </Border>
 
                                             <ControlTemplate.Triggers>
@@ -448,20 +417,18 @@
                                     </Button.Template>
                                 </Button>
 
-                                <!-- NAME -->
                                 <StackPanel Grid.Column="1" Margin="12,0,12,0" VerticalAlignment="Center">
-                                    <TextBlock Text="Guest"
-                                                FontWeight="Bold"
-                                                FontSize="15"/>
+                                    <TextBlock x:Name="UserNameText"
+                                               Text="Guest"
+                                               FontWeight="Bold"
+                                               FontSize="15"/>
                                 </StackPanel>
 
-                                <!-- PENCIL ICON -->
                                 <Button Grid.Column="2"
                                         Style="{StaticResource IconButton}"
                                         ToolTip="Rename"
                                         Click="Rename_Click"
                                         TabIndex="6">
-                                    <!-- Icon -->
                                     <TextBlock Text="✎" FontSize="16" FontWeight="Bold" Margin="0,0,0,1"/>
                                 </Button>
                             </Grid>
@@ -472,14 +439,13 @@
                         <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" TabIndex="9"/>
                     </StackPanel>
                 </Border>
-                <!-- ABOUT POPUP OVERLAY -->
+
                 <Grid x:Name="AboutOverlay"
                       Visibility="Collapsed"
                       Background="#AA000000"
                       Panel.ZIndex="999"
                       MouseDown="AboutOverlay_MouseDown">
 
-                    <!-- Dialog -->
                     <Border Style="{StaticResource GlassCard}"
                             Width="720"
                             Height="520"
@@ -496,7 +462,6 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Title -->
                             <StackPanel Grid.Row="0">
                                 <TextBlock Text="ABOUT"
                                            FontSize="22"
@@ -509,7 +474,6 @@
                                            HorizontalAlignment="Center"/>
                             </StackPanel>
 
-                            <!-- Scrollable Game Description -->
                             <Border Grid.Row="1"
                                     Margin="0,16,0,16"
                                     CornerRadius="14"
@@ -538,11 +502,14 @@
                                         <TextBlock TextWrapping="Wrap"
                                                    Foreground="#EAF0FF"
                                                    LineHeight="22">
-                                        A classic Tetris experience reimagined with an outer-space atmosphere. In this game, you control falling tetromino blocks and place them on a 10×20 board. Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
-
-                                        The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects. The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
-
-                                        This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay. The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend. Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
+                                            A classic Tetris experience reimagined with an outer-space atmosphere.
+In this game, you control falling tetromino blocks and place them on a 10×20 board.
+Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
+The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects.
+The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
+This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay.
+The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend.
+Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
                                         </TextBlock>
 
                                         <TextBlock Text="Features"
@@ -550,7 +517,6 @@
                                                    FontWeight="Bold"
                                                    Margin="0,14,0,8"/>
 
-                                        <!-- Features-->
                                         <StackPanel>
                                             <TextBlock Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" LineHeight="20"
                                                        Text="• Classic Tetris gameplay on a 10×20 board"/>
@@ -569,7 +535,6 @@
                                 </ScrollViewer>
                             </Border>
 
-                            <!-- Team (Fixed at bottom) -->
                             <StackPanel Grid.Row="2">
                                 <Border Height="1" Background="#2A2A33" Margin="0,0,0,12"/>
 
@@ -595,7 +560,6 @@
                                 </Grid>
                             </StackPanel>
 
-                            <!-- Bottom buttons -->
                             <Grid Grid.Row="3" Margin="0,14,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

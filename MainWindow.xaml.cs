@@ -9,8 +9,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TetrisApp.Views;
 using TetrisApp.Models; // [MỚI] Thêm để dùng AppSettings
+using TetrisApp.Views;
+using TetrisApp.Services;
 
 namespace TetrisApp
 {
@@ -124,5 +125,21 @@ namespace TetrisApp
                 CloseOverlay(false);
             }
         }
+
+
+        private async void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClickSound();
+
+            // Giả sử bạn đang ở GamePage, hãy lấy dữ liệu lưu
+            if (MainFrame.Content is GamePage gamePage)
+            {
+                string json = gamePage.Engine.GetSaveDataJson();
+                await SupabaseService.SaveUserData(json); // Lưu lên Cloud
+            }
+
+            Application.Current.Shutdown();
+        }
+
     }
 }

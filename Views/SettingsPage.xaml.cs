@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using TetrisApp.Models;
+using TetrisApp.Services;
 
 namespace TetrisApp.Views
 {
@@ -149,7 +150,7 @@ namespace TetrisApp.Views
             catch { }
         }
 
-        private void Accept_Click(object sender, RoutedEventArgs e)
+        private async void Accept_Click(object sender, RoutedEventArgs e)
         {
             PlayClickSound();
 
@@ -168,6 +169,7 @@ namespace TetrisApp.Views
                 myApp.UpdateBackgroundMusic();
             }
 
+            await SupabaseService.SaveUserData();
             NavigationService?.Navigate(new MenuPage());
         }
 
