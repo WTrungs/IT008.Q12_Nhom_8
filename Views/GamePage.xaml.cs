@@ -49,6 +49,22 @@ namespace TetrisApp.Views {
 			Keyboard.Focus(this);
 		}
 
+		private void ApplyBoardClip() {
+			void Apply() {
+				double outerR = BoardBorder.CornerRadius.TopLeft;   // 12
+				double t = BoardBorder.BorderThickness.Left;        // 2
+				double innerR = Math.Max(0, outerR - t);            // 10
+
+				BoardClipHost.Clip = new RectangleGeometry(
+					new Rect(0, 0, BoardClipHost.ActualWidth, BoardClipHost.ActualHeight),
+					innerR, innerR);
+			}
+
+			BoardClipHost.SizeChanged += (_, __) => Apply();
+			Dispatcher.BeginInvoke(new Action(Apply),
+				System.Windows.Threading.DispatcherPriority.Loaded);
+		}
+
 		private async void GamePage_Unloaded(object sender, RoutedEventArgs e) {
 			CompositionTarget.Rendering -= OnRender;
 			await SaveGameToCloud();
@@ -70,7 +86,6 @@ namespace TetrisApp.Views {
 						BorderBrush = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
 						BorderThickness = new Thickness(0.5),
 						Background = Brushes.Transparent,
-						//Padding = new Thickness(1.5),
 						CornerRadius = new CornerRadius(3),
 						VerticalAlignment = VerticalAlignment.Stretch,
 						HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -233,17 +248,7 @@ namespace TetrisApp.Views {
 			}
 		}
 
-		private void ApplyBoardClip() {
-			void Apply() {
-				double r = Math.Max(0, BoardBorder.CornerRadius.TopLeft - BoardBorder.BorderThickness.Left);
-				BoardClipHost.Clip = new RectangleGeometry(
-					new Rect(0, 0, BoardClipHost.ActualWidth, BoardClipHost.ActualHeight),
-					r, r);
-			}
-
-			BoardClipHost.SizeChanged += (_, __) => Apply();
-			Apply();
-		}
+		
 
 		private void PlayClickSound() {
 			try {

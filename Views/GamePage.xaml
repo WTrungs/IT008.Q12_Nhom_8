@@ -108,19 +108,26 @@
                                  VerticalAlignment="Center">
 
                             <!-- Vùng board: 10*26 = 260, 20*26 = 520 -->
-							<Border x:Name="BoardBorder"
-									Width="260" Height="520"
+							<Grid Width="260" Height="520">
+								<Border x:Name="GridBackground"
+                                    CornerRadius="12"
+                                    Background="{StaticResource GridTileBrush}"/>
+								<Border CornerRadius="12">
+									<Border.Clip>
+										<RectangleGeometry Rect="0,0,260,520" RadiusX="12" RadiusY="12"/>
+									</Border.Clip>
+
+									<Grid x:Name="BoardClipHost">
+										<UniformGrid x:Name="GameGrid" Rows="20" Columns="10" Background="Transparent"/>
+									</Grid>
+								</Border>
+								<Border x:Name="BoardBorder"
                                     CornerRadius="12"
                                     BorderBrush="#FF5E5E7E"
                                     BorderThickness="2"
-                                    Background="{StaticResource GridTileBrush}">
-                                
-                                <!--<Canvas/>-->
-								<Grid x:Name="BoardClipHost">
-									<UniformGrid x:Name="GameGrid" Rows="20" Columns="10" Background="Transparent"/>
-								</Grid>
-							</Border>
-                        </Viewbox>
+                                    IsHitTestVisible="False"/>
+							</Grid>
+						</Viewbox>
                     </Border>
                 </Grid>
             </Border>
