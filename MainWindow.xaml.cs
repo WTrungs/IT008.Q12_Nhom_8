@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System; // [MỚI] Thêm để dùng AppDomain
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,13 +10,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TetrisApp.Views;
+using TetrisApp.Models; // [MỚI] Thêm để dùng AppSettings
 
-namespace TetrisApp {
-    public partial class MainWindow : Window {
+namespace TetrisApp
+{
+    public partial class MainWindow : Window
+    {
         private Action<bool>? _overlayClosedCallback;
         private IInputElement? _previousFocus;
 
-        public MainWindow() {
+        // [MỚI] Trình phát âm thanh cho Overlay
+        private MediaPlayer _clickSound = new MediaPlayer();
+
+        public MainWindow()
+        {
             InitializeComponent();
             MainFrame.Navigate(new LoginPage());
 
@@ -23,15 +31,18 @@ namespace TetrisApp {
             ((App)Application.Current).UpdateBackgroundMusic();
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
             if (OverlayLayer.Visibility == Visibility.Visible) return;
 
-            if (e.Key == Key.Escape) {
+            if (e.Key == Key.Escape)
+            {
                 Application.Current.Shutdown();
             }
         }
 
-        public void ShowOverlay(string title, string message, bool showCancel = false, Action<bool>? onClosed = null) {
+        public void ShowOverlay(string title, string message, bool showCancel = false, Action<bool>? onClosed = null)
+        {
             _overlayClosedCallback = onClosed;
 
             OverlayTitleText.Text = title;
@@ -51,7 +62,8 @@ namespace TetrisApp {
             }));
         }
 
-        private void CloseOverlay(bool result) {
+        private void CloseOverlay(bool result)
+        {
             OverlayLayer.IsHitTestVisible = false;
             OverlayLayer.Visibility = Visibility.Collapsed;
 
@@ -71,13 +83,43 @@ namespace TetrisApp {
             cb?.Invoke(result);
         }
 
-        private void OverlayOkButton_Click(object sender, RoutedEventArgs e) => CloseOverlay(true);
-        private void OverlayCancelButton_Click(object sender, RoutedEventArgs e) => CloseOverlay(false);
+        // [MỚI] Hàm phát tiếng click (copy từ các file kia qua)
+        private void PlayClickSound()
+        {
+            try
+            {
+                string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "click.mp3");
+                _clickSound.Open(new Uri(soundPath));
+                _clickSound.Volume = AppSettings.SfxVolume;
+                _clickSound.Stop();
+                _clickSound.Play();
+            }
+            catch
+            {
+                // Bỏ qua lỗi
+            }
+        }
 
-        private void OverlayLayer_PreviewKeyDown(object sender, KeyEventArgs e) {
+        // [ĐÃ SỬA] Thêm PlayClickSound() vào sự kiện click
+        private void OverlayOkButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClickSound(); // <--- Thêm dòng này
+            CloseOverlay(true);
+        }
+
+        // [ĐÃ SỬA] Thêm PlayClickSound() vào sự kiện click
+        private void OverlayCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClickSound(); // <--- Thêm dòng này
+            CloseOverlay(false);
+        }
+
+        private void OverlayLayer_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
             if (OverlayLayer.Visibility != Visibility.Visible) return;
 
-            if (e.Key == Key.Escape) {
+            if (e.Key == Key.Escape)
+            {
                 e.Handled = true;
                 CloseOverlay(false);
             }

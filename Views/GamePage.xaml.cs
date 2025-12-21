@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using TetrisApp.Views;
 using TetrisApp.Models;
+using TetrisApp.Views;
 
 namespace TetrisApp.Views
 {
@@ -23,12 +24,15 @@ namespace TetrisApp.Views
 
 		private void GamePage_Loaded(object sender, RoutedEventArgs e) {
 			CompositionTarget.Rendering += OnRender;
+			this.Focusable = true;
+			this.Focus();
+			Keyboard.Focus(this);
 		}
 
 		private void GamePage_Unloaded(object sender, RoutedEventArgs e) {
 			CompositionTarget.Rendering -= OnRender;
 		}
-
+		
 		private void OnRender(object? sender, EventArgs e) {
 			RenderingEventArgs renderArgs = (RenderingEventArgs)e;
 			if (lastRenderTime == TimeSpan.Zero) {
@@ -41,8 +45,37 @@ namespace TetrisApp.Views
 			Draw();
 		}
 
-		public void Draw() {
+		private void Page_KeyDown(object sender, KeyEventArgs e) {
+			if (!e.IsRepeat) {
+				switch (e.Key) {
+					case Key.Up:
+						gameEngine.ChangeStateToLeft();
+						break;
+					case Key.Space:
+						gameEngine.HardDrop();
+						break;
+				}
+			}
 
+			switch (e.Key) {
+				case Key.Left:
+					gameEngine.MoveLeft();
+					break;
+				case Key.Right:
+					gameEngine.MoveRight();
+					break;
+				case Key.Down:
+					gameEngine.SoftDrop();
+					break;
+			}
+		}
+
+		private void Page_KeyUp(object sender, KeyEventArgs e) {
+			
+		}
+
+		public void Draw() {
+			
 		}
 
 		private void PlayClickSound()
