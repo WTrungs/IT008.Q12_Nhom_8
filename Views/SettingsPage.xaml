@@ -23,22 +23,6 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
-<<<<<<< HEAD
-                        <Grid>
-
-                            <!-- Track -->
-                            <Border x:Name="Track"
-                                    Background="#2A2F3F"
-                                    CornerRadius="11"/>
-
-                            <!-- Thumb -->
-                            <Ellipse x:Name="Thumb"
-                                     Width="16"
-                                     Height="16"
-                                     Fill="#EAF0FF"
-                                     Margin="3"
-                                     HorizontalAlignment="Left"/>
-=======
                         <Grid Background="Transparent">
                             <Border x:Name="Track" 
                                     Background="#2A2F3F" 
@@ -50,43 +34,20 @@
                                      Fill="#EAF0FF" 
                                      HorizontalAlignment="Left" 
                                      Margin="3,0,0,0"/>
->>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                         </Grid>
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-<<<<<<< HEAD
-                                <Setter TargetName="Track"
-                                        Property="Background"
-                                        Value="#22D3EE"/>
-                                <Setter TargetName="Thumb"
-                                        Property="HorizontalAlignment"
-                                        Value="Right"/>
-                                <Setter TargetName="Track" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#22D3EE"
-                                                          BlurRadius="14"
-                                                          ShadowDepth="0"
-                                                          Opacity="0.5"/>
-=======
                                 <Setter TargetName="Track" Property="Background" Value="#22D3EE"/>
                                 <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/>
                                 <Setter TargetName="Thumb" Property="Margin" Value="0,0,3,0"/>
                                 <Setter TargetName="Track" Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect Color="#22D3EE" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
->>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
 
-<<<<<<< HEAD
-                            <!-- Hover -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Track"
-                                        Property="Background"
-                                        Value="#3A4058"/>
-=======
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Track" Property="BorderBrush" Value="#80FFFFFF"/>
                                 <Setter TargetName="Track" Property="BorderThickness" Value="2"/>
@@ -95,7 +56,6 @@
                                         <DropShadowEffect Color="#22D3EE" BlurRadius="25" ShadowDepth="0" Opacity="1"/>
                                     </Setter.Value>
                                 </Setter>
->>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                             </Trigger>
 
                             <MultiDataTrigger>
@@ -432,13 +392,6 @@
                             Margin="0,0,22,14" 
                             TabIndex="1"/>
 
-                    <TextBlock Text="SFX VOLUME" FontSize="16" FontWeight="SemiBold" Opacity="0.75" Margin="0,0,0,4" Foreground="#E6ECFF"/>
-                    <Slider x:Name="SfxVolumeSlider" 
-                            Style="{StaticResource SpaceSlider}" 
-                            Margin="0,0,22,18" 
-                            TabIndex="2"/>
-
-<<<<<<< HEAD
                     <!-- SFX Volume -->
                     <TextBlock Text="SFX"
                                FontSize="16"
@@ -462,13 +415,6 @@
                     <ComboBox x:Name="TrackCombo"
                               Style="{StaticResource SpaceComboBox}"
                               Margin="0,0,22,0">
-=======
-                    <TextBlock Text="SELECT TRACK" FontSize="16" FontWeight="SemiBold" Opacity="0.75" Margin="0,0,0,4" Foreground="#E6ECFF"/>
-                    <ComboBox x:Name="TrackCombo" 
-                              Style="{StaticResource SpaceComboBox}" 
-                              Margin="0,0,22,0" 
-                              TabIndex="3">
->>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                         <ComboBoxItem Content="Track 1"/>
                         <ComboBoxItem Content="Track 2"/>
                         <ComboBoxItem Content="Track 3"/>
@@ -479,24 +425,6 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-<<<<<<< HEAD
-                        <!-- Cancel -->
-                        <Button Grid.Column="0"
-                                Style="{StaticResource SpaceButton}"
-                                Content="CANCEL"
-                                FontWeight="SemiBold"
-                                Height="45"
-                                Margin="0,0,8,0"
-                                Click="Cancel_Click"/>
-                        <!-- Accept -->
-                        <Button Grid.Column="1"
-                                Style="{StaticResource SpaceButton}"
-                                Content="ACCEPT"
-                                FontWeight="SemiBold"
-                                Height="45"
-                                Margin="8,0,1,0"
-                                Click="Accept_Click"/>
-=======
 
                         <Button Grid.Column="0" 
                                 Style="{StaticResource SpaceButton}" 
@@ -515,7 +443,6 @@
                                 Margin="8,0,1,0" 
                                 Click="Accept_Click"
                                 TabIndex="5"/>
->>>>>>> 94027ee3dff2c1ee4253e7e95230172a4dbc8489
                     </Grid>
                 </StackPanel>
             </Grid>
