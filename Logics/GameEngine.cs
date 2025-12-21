@@ -47,7 +47,7 @@ namespace TetrisApp.Views {
 		int currentLine = 0;
 		Queue<TetrominoKind> kindQueue = new Queue<TetrominoKind>();
 		int tetrominoState = 0;
-		double dropTick = 0.5;
+		double dropTick = 0.75;
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 

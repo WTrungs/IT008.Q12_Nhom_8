@@ -18,7 +18,7 @@ namespace TetrisApp.Views {
 		bool isLeftPressed = false;
 		bool isRightPressed = false;
 		bool isDownPressed = false;
-		const double DAS = 0.18;
+		const double DAS = 0.15;
 		const double ARR = 0.05;
 		double moveTimer = 0;
 		bool isFirstPressed = false;
