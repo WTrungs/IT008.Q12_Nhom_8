@@ -10,8 +10,8 @@
       UseLayoutRounding="True"
       SnapsToDevicePixels="True"
 	  Focusable="True"
-      KeyDown="Page_KeyDown" 
-      KeyUp="Page_KeyUp"
+      PreviewKeyDown="Page_KeyDown" 
+      PreviewKeyUp="Page_KeyUp"
 	  KeyboardNavigation.DirectionalNavigation="None">
 
     <Page.Resources>

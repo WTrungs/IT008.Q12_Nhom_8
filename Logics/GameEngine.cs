@@ -12,7 +12,7 @@ namespace TetrisApp.Views {
 			Start();
 		}
 
-		public class Position {
+		public struct Position {
 			public int row, col;
 			public Position(int row = 0, int col = 0) {
 				this.row = row;
@@ -34,7 +34,7 @@ namespace TetrisApp.Views {
 		int currentLine = 0;
 		Queue<TetrominoKind> kindQueue = new Queue<TetrominoKind>();
 		int tetrominoState = 0;
-		double dropTick = 1.0;
+		double dropTick = 0.5;
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 
@@ -73,8 +73,8 @@ namespace TetrisApp.Views {
 		bool CheckValidPosition(Position pos) {
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					int curRow = currentPosition.row - i;
-					int curCol = currentPosition.col + j;
+					int curRow = pos.row - i;
+					int curCol = pos.col + j;
 					if (tetrominos[GetCurrentKind()][tetrominoState][i, j] == 0) {
 						continue;
 					}
