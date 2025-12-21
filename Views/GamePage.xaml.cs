@@ -13,10 +13,15 @@ namespace TetrisApp.Views {
 	public partial class GamePage : Page {
 		private MediaPlayer _clickSound = new MediaPlayer();
 		public GameEngine gameEngine = new GameEngine();
-
 		public GameEngine Engine => gameEngine;
-
 		TimeSpan lastRenderTime = TimeSpan.Zero;
+		bool isLeftPressed = false;
+		bool isRightPressed = false;
+		bool isDownPressed = false;
+		const double DAS = 0.18;
+		const double ARR = 0.05;
+		double moveTimer = 0;
+		bool isFirstPressed = false;
 
 		public GamePage() {
 			InitializeComponent();
@@ -62,7 +67,30 @@ namespace TetrisApp.Views {
 			lastRenderTime = renderArgs.RenderingTime;
 			Time.UpdateDeltaTime(deltaTime);
 			gameEngine.Update();
+			ListenKeyboardInput();
 			Draw();
+		}
+
+		private void ResetDASTimer() {
+			moveTimer = 0;
+			isFirstPressed = true;
+		}
+
+		private void ListenKeyboardInput() {
+			if (isLeftPressed || isRightPressed || isDownPressed) {
+				moveTimer += Time.deltaTime;
+				double threshold = isFirstPressed ? DAS : ARR;
+				if (moveTimer >= threshold) {
+					if (isLeftPressed)
+						gameEngine.MoveLeft();
+					else if (isRightPressed)
+						gameEngine.MoveRight();
+					if (isDownPressed)
+						gameEngine.SoftDrop();
+					moveTimer = 0;
+					isFirstPressed = false;
+				}
+			}
 		}
 
 		private void Page_KeyDown(object sender, KeyEventArgs e) {
@@ -80,23 +108,47 @@ namespace TetrisApp.Views {
 			}
 			switch (e.Key) {
 				case Key.Left:
+					isLeftPressed = true;
+					isRightPressed = false;
+					ResetDASTimer();
 					gameEngine.MoveLeft();
-					e.Handled = true;
 					break;
+
 				case Key.Right:
+					isRightPressed = true;
+					isLeftPressed = false;
+					ResetDASTimer();
 					gameEngine.MoveRight();
-					e.Handled = true;
 					break;
+
 				case Key.Down:
+					isDownPressed = true;
+					ResetDASTimer();
 					gameEngine.SoftDrop();
-					e.Handled = true;
 					break;
 			}
-
+			e.Handled = true;
 		}
 
 		private void Page_KeyUp(object sender, KeyEventArgs e) {
-
+			switch (e.Key) {
+				case Key.Left:
+					isLeftPressed = false;
+					e.Handled = true;
+					break;
+				case Key.Right:
+					isRightPressed = false;
+					e.Handled = true;
+					break;
+				case Key.Down:
+					isDownPressed = false;
+					e.Handled = true;
+					break;
+			}
+			if (!isLeftPressed && !isRightPressed && !isDownPressed) {
+				isFirstPressed = true;
+				moveTimer = 0;
+			}
 		}
 
 		public void Draw() {
@@ -110,7 +162,6 @@ namespace TetrisApp.Views {
 			}
 			var currentKind = gameEngine.GetCurrentKind();
 			int[,] shape = gameEngine.tetrominos[currentKind][gameEngine.GetTetrominoState()];
-
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					if (shape[i, j] != 0) {
