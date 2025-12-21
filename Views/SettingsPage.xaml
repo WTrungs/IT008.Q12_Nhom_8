@@ -93,9 +93,9 @@
                             <Track x:Name="PART_Track">
                                 <Track.DecreaseRepeatButton>
                                     <RepeatButton Command="{x:Static Slider.DecreaseLarge}"
-                                          Focusable="False"
-                                          IsTabStop="False"
-                                          Margin="0,0,-1,0">
+                                                  Focusable="False"
+                                                  IsTabStop="False"
+                                                  Margin="0,0,-1,0">
                                         <RepeatButton.Template>
                                             <ControlTemplate TargetType="RepeatButton">
                                                 <Border Height="4" Background="#22D3EE" CornerRadius="2">
@@ -110,9 +110,9 @@
 
                                 <Track.IncreaseRepeatButton>
                                     <RepeatButton Command="{x:Static Slider.IncreaseLarge}"
-                                          Focusable="False"
-                                          IsTabStop="False"
-                                          Margin="-1,0,0,0">
+                                                  Focusable="False"
+                                                  IsTabStop="False"
+                                                  Margin="-1,0,0,0">
                                         <RepeatButton.Template>
                                             <ControlTemplate TargetType="RepeatButton">
                                                 <Border Height="4" Background="#2A2F3F" CornerRadius="2"/>
@@ -379,14 +379,23 @@
                     <TextBlock Text="SETTINGS" Margin="0,0,0,26" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"/>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,20">
-                        <TextBlock Text="MUSIC" FontSize="16" FontWeight="SemiBold" Opacity="0.75" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <TextBlock Text="MUSIC" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Opacity="0.75" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,12,0"/>
                         <CheckBox x:Name="MusicToggle" 
                                   Style="{StaticResource SpaceToggle}" 
                                   IsChecked="True" 
                                   TabIndex="0"/>
                     </StackPanel>
 
-                    <TextBlock Text="VOLUME" FontSize="16" FontWeight="SemiBold" Opacity="0.75" Margin="0,0,0,4" Foreground="#E6ECFF"/>
+                    <TextBlock Text="VOLUME" 
+                               FontSize="16" 
+                               FontWeight="SemiBold" 
+                               Opacity="0.75" Margin="0,0,0,4" 
+                               Foreground="#E6ECFF"/>
                     <Slider x:Name="MusicVolumeSlider" 
                             Style="{StaticResource SpaceSlider}" 
                             Margin="0,0,22,14" 

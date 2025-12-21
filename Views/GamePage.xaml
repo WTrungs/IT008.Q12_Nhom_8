@@ -71,12 +71,12 @@
 
         <Grid Margin="22">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="340"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="449.6"/>
             </Grid.ColumnDefinitions>
 
             <!-- LEFT: Gameplay -->
-            <Border Style="{StaticResource GlassCard}">
+            <Border Style="{StaticResource GlassCard}" Margin="0,0,4,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -157,25 +157,68 @@
                     <!-- Hold / Next -->
                     <Grid Margin="0,0,0,14">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="98*"/>
+                            <ColumnDefinition Width="98*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1" Margin="0,0,10,0">
+                        <Border Padding="12" 
+                                CornerRadius="12" 
+                                Background="#6610152A" 
+                                BorderBrush="#2A2A33" 
+                                BorderThickness="1" 
+                                Margin="2,1,1,-1" 
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform AngleY="-0.512"/>
+                                    <RotateTransform/>
+                                    <TranslateTransform Y="-0.591"/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
                             <StackPanel>
-                                <TextBlock Text="HOLD" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <Border Height="105" Margin="0,8,0,0" CornerRadius="12"
-                                        BorderBrush="#2A2A33" BorderThickness="1"
-                                        Background="{StaticResource GridTileBrush}" Width="105"/>
+                                <TextBlock Text="HOLD" 
+                                           Foreground="{StaticResource TextMuted}" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="Bold"/>
+                                <Border Height="131.25"
+                                        Width="131.25"
+                                        Margin="0,8,0,0"
+                                        CornerRadius="12"
+                                        BorderBrush="#2A2A33"
+                                        BorderThickness="1"
+                                        Background="#0D1020"/>
                             </StackPanel>
                         </Border>
+                        <Border Grid.Column="1"
+                                Padding="12"
+                                CornerRadius="12"
+                                Background="#6610152A"
+                                BorderBrush="#2A2A33"
+                                BorderThickness="1"
+                                Margin="1,1,2,-1"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform AngleY="-0.512"/>
+                                    <RotateTransform/>
+                                    <TranslateTransform Y="-0.591"/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
 
-                        <Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1" Grid.Column="1" Margin="0,0,-1,0">
                             <StackPanel>
-                                <TextBlock Text="NEXT" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <Border Height="105" Margin="0,8,0,0" CornerRadius="12"
-                                        BorderBrush="#2A2A33" BorderThickness="1"
-                                        Background="{StaticResource GridTileBrush}" Width="105"/>
+                                <TextBlock Text="NEXT"
+                                           Foreground="{StaticResource TextMuted}"
+                                           HorizontalAlignment="Center"
+                                           FontWeight="Bold"/>
+                                <Border Height="131.25"
+                                        Width="131.25"
+                                        Margin="0,8,0,0"
+                                        CornerRadius="12"
+                                        BorderBrush="#2A2A33"
+                                        BorderThickness="1"
+                                        Background="#0D1020"/>
                             </StackPanel>
                         </Border>
                     </Grid>
