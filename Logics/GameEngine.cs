@@ -23,6 +23,14 @@ namespace TetrisApp.Views {
 		public class Cell {
 			public bool isFilled = false;
 			public string color = "null";
+			public Cell() {
+				isFilled = false;
+				color = "null";
+			}
+			public Cell(Cell other) {
+				isFilled = other.isFilled;
+				color = other.color;
+			}
 		}
 
 		const int boardRow = 30;
@@ -110,6 +118,7 @@ namespace TetrisApp.Views {
 
 		void MakeNewTurn() {
 			FillBlockToBoard();
+			DeleteFilledLine();
 			ResetKindQueue();
 			Position plannedPosition = FindNewPosition();
 			if (DoNotHaveValidBlock(plannedPosition)) {
@@ -197,6 +206,39 @@ namespace TetrisApp.Views {
 		}
 
 		void DeleteFilledLine() {
+			List<int> deletedLine = new List<int>();
+			Cell[,] newBoard = new Cell[boardRow, boardColumn];
+			for (int i = 0; i < boardRow; i++) {
+				for (int j = 0; j < boardColumn; j++) {
+					newBoard[i, j] = new Cell();
+				}
+			}
+			int bottom = 0;
+			for (int i = 0; i < 20; i++) {
+				bool isFulled = true;
+				for (int j = 0; j < 10; j++) {
+					if (!boardGame[i, j].isFilled) {
+						isFulled = false;
+						break;
+					}
+				}
+				if (isFulled) {
+					deletedLine.Add(i);
+				}
+				else {
+					for (int j = 0; j < 10; j++) {
+						newBoard[bottom, j] = new Cell(boardGame[i, j]);
+					}
+					++bottom;
+				}
+			}
+			foreach (int i in deletedLine) {
+				MakeEraseLineAnimation(i);
+			}
+			boardGame = newBoard;
+		}
+
+		void MakeEraseLineAnimation(int line) {
 
 		}
 
@@ -212,7 +254,27 @@ namespace TetrisApp.Views {
 			int oldState = tetrominoState;
 			tetrominoState = (tetrominoState - 1 + 4) % 4;
 			if (!CheckValidPosition(currentPosition)) {
-				tetrominoState = oldState;
+				if (currentPosition.col < 0) {
+					Position temp = new Position(currentPosition.row, 0);
+					if (CheckValidPosition(temp)) {
+						currentPosition = temp;
+					}
+					else {
+						tetrominoState = oldState;
+					}
+				}
+				else if (currentPosition.col > 6) {
+					Position temp = new Position(currentPosition.row, 6);
+					if (CheckValidPosition(temp)) {
+						currentPosition = temp;
+					}
+					else {
+						tetrominoState = oldState;
+					}
+				}
+				else {
+					tetrominoState = oldState;
+				}
 			}
 		}
 

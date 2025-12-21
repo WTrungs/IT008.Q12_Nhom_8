@@ -108,6 +108,7 @@ namespace TetrisApp.Views
 
 		private void DrawCell(int row, int col, string colorCode) {
 			var brush = new BrushConverter().ConvertFrom(colorCode) as SolidColorBrush;
+
 			Rectangle rect = new Rectangle {
 				Width = 25,
 				Height = 25,
