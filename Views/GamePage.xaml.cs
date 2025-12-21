@@ -51,9 +51,11 @@ namespace TetrisApp.Views
 				switch (e.Key) {
 					case Key.Up:
 						gameEngine.ChangeStateToLeft();
+						e.Handled = true;
 						break;
 					case Key.Space:
 						gameEngine.HardDrop();
+						e.Handled = true;
 						break;
 				}
 			}
@@ -61,12 +63,15 @@ namespace TetrisApp.Views
 			switch (e.Key) {
 				case Key.Left:
 					gameEngine.MoveLeft();
+					e.Handled = true;
 					break;
 				case Key.Right:
 					gameEngine.MoveRight();
+					e.Handled = true;
 					break;
 				case Key.Down:
 					gameEngine.SoftDrop();
+					e.Handled = true;
 					break;
 			}
 		}
