@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Newtonsoft.Json;
+using TetrisApp.Views;
 
 namespace TetrisApp.Views {
 	public class GameStateData {
@@ -105,6 +106,14 @@ namespace TetrisApp.Views {
 				}
 			}
 			catch { }
+		}
+
+		public int GetCurrentLine() {
+			return currentLine;
+		}
+
+		public int GetCurrentScore() {
+			return currentScore;
 		}
 
 		public void Update() {
@@ -285,7 +294,16 @@ namespace TetrisApp.Views {
 			foreach (int i in deletedLine) {
 				MakeEraseLineAnimation(i);
 			}
+			AddScore(deletedLine.Count);
 			boardGame = newBoard;
+		}
+
+		public void AddScore(int lines) {
+			currentLine += lines;
+			if (lines == 0) {
+				return;
+			}
+			currentScore += 1000 + (int)((lines - 1) * 0.3 * 1000);
 		}
 
 		void MakeEraseLineAnimation(int line) {

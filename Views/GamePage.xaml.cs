@@ -66,10 +66,13 @@ namespace TetrisApp.Views {
 			for (int r = 0; r < 20; r++) { 
 				for (int c = 0; c < 10; c++) {
 					Border b = new Border {
-						Margin = new Thickness(1), 
+						//BorderBrush = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
+						//BorderThickness = new Thickness(0.5),
 						Background = Brushes.Transparent,
+						//Padding = new Thickness(1.5),
 						CornerRadius = new CornerRadius(3),
-						SnapsToDevicePixels = true
+						VerticalAlignment = VerticalAlignment.Stretch,
+						HorizontalAlignment = HorizontalAlignment.Stretch,
 					};
 					gridCells[r, c] = b;
 					GameGrid.Children.Add(b);
@@ -88,6 +91,12 @@ namespace TetrisApp.Views {
 			gameEngine.Update();
 			ListenKeyboardInput();
 			Draw();
+			UpdateScore();
+		}
+
+		private void UpdateScore() {
+			LinesText.Text = gameEngine.GetCurrentLine().ToString();
+			ScoreText.Text = gameEngine.GetCurrentScore().ToString();
 		}
 
 		private void ResetDASTimer() {

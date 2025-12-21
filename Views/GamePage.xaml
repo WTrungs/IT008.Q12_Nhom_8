@@ -7,8 +7,6 @@
       d:DesignWidth="1000" d:DesignHeight="650"
       Title="GamePage"
       Background="{StaticResource SpaceBackground}"
-      UseLayoutRounding="True"
-      SnapsToDevicePixels="True"
 	  Focusable="True"
       PreviewKeyDown="Page_KeyDown" 
       PreviewKeyUp="Page_KeyUp"
