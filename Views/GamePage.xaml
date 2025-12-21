@@ -8,7 +8,10 @@
       Title="GamePage"
       Background="{StaticResource SpaceBackground}"
       UseLayoutRounding="True"
-      SnapsToDevicePixels="True">
+      SnapsToDevicePixels="True"
+	  Focusable="True"
+      KeyDown="Page_KeyDown" 
+      KeyUp="Page_KeyUp">
 
     <Page.Resources>
         <!-- Grid Tile Brush -->

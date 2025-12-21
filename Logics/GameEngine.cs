@@ -89,15 +89,50 @@ namespace TetrisApp.Views {
 					currentPosition = newPos;
 				}
 				else {
-					FillBlockToBoard();
-					ResetKindQueue();
-					Position plannedPosition = FindNewPosition();
-					if (DoNotHaveValidBlock(plannedPosition)) {
-						LoseGame();
-					}
-					currentPosition = plannedPosition;
+					//vị trí hiện tại không thể xuống thêm được nữa
+					//điền ô tại vị trí này vào bảng
+					MakeNewTurn();
 				}
 				currentTime = dropTick;
+			}
+		}
+
+		void MakeNewTurn() {
+			FillBlockToBoard();
+			ResetKindQueue();
+			Position plannedPosition = FindNewPosition();
+			if (DoNotHaveValidBlock(plannedPosition)) {
+				LoseGame();
+			}
+			currentPosition = plannedPosition;
+			currentTime = dropTick;
+		}
+
+		Position FindDeepestPosition() {
+			Position curPos = currentPosition;
+			Position newPos = curPos;
+			newPos.row--;
+			while (CheckValidPosition(newPos)) {
+				curPos = newPos;
+				newPos.row--;
+			}
+			return curPos;
+		}
+
+		public void HardDrop() {
+			currentPosition = FindDeepestPosition();
+			MakeNewTurn();
+		}
+
+		public void SoftDrop() {
+			Position newPos = currentPosition;
+			--newPos.row;
+			if (CheckValidPosition(newPos)) {
+				currentPosition = newPos;
+				currentTime = dropTick;
+			}
+			else {
+				MakeNewTurn();
 			}
 		}
 
@@ -141,6 +176,7 @@ namespace TetrisApp.Views {
 					if (tetrominos[currentKind()][tetrominoState][i, j] == 0) {
 						continue;
 					}
+					boardGame[curRow, curCol].isFilled = true;
 					boardGame[curRow, curCol].color = tetrominoColor[currentKind()];
 				}
 			}
@@ -158,12 +194,28 @@ namespace TetrisApp.Views {
 
 		}
 
-		int ChangeStateToLeft() {
-			return (tetrominoState - 1 + 4) % 4;
+		public void ChangeStateToLeft() {
+			int oldState = tetrominoState;
+			tetrominoState = (tetrominoState - 1 + 4) % 4;
+			if (!CheckValidPosition(currentPosition)) {
+				tetrominoState = oldState;
+			}
 		}
 
-		int ChangeStateToRight() {
-			return (tetrominoState + 1 + 4) % 4;
+		public void MoveLeft() {
+			Position newPos = currentPosition;
+			--newPos.col;
+			if (CheckValidPosition(newPos)) {
+				currentPosition = newPos;
+			}
+		}
+
+		public void MoveRight() {
+			Position newPos = currentPosition;
+			++newPos.col;
+			if (CheckValidPosition(newPos)) {
+				currentPosition = newPos;
+			}
 		}
 	}
 }
