@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Newtonsoft.Json;
+using TetrisApp.Views;
 
 namespace TetrisApp.Views {
 	public class GameStateData {
@@ -11,17 +12,17 @@ namespace TetrisApp.Views {
 		public string[,] BoardColors { get; set; }
 	}
 
+	public struct Position {
+		public int row, col;
+		public Position(int row = 0, int col = 0) {
+			this.row = row;
+			this.col = col;
+		}
+	}
+
 	public partial class GameEngine {
 		public GameEngine() {
 			Start();
-		}
-
-		public struct Position {
-			public int row, col;
-			public Position(int row = 0, int col = 0) {
-				this.row = row;
-				this.col = col;
-			}
 		}
 
 		public class Cell {
@@ -105,6 +106,14 @@ namespace TetrisApp.Views {
 				}
 			}
 			catch { }
+		}
+
+		public int GetCurrentLine() {
+			return currentLine;
+		}
+
+		public int GetCurrentScore() {
+			return currentScore;
 		}
 
 		public void Update() {
@@ -285,7 +294,16 @@ namespace TetrisApp.Views {
 			foreach (int i in deletedLine) {
 				MakeEraseLineAnimation(i);
 			}
+			AddScore(deletedLine.Count);
 			boardGame = newBoard;
+		}
+
+		public void AddScore(int lines) {
+			currentLine += lines;
+			if (lines == 0) {
+				return;
+			}
+			currentScore += 1000 + (int)((lines - 1) * 0.3 * 1000);
 		}
 
 		void MakeEraseLineAnimation(int line) {
