@@ -28,7 +28,7 @@ namespace TetrisApp.Views {
 		const int boardRow = 30;
 		const int boardColumn = 10;
 		Position startPosition = new Position(23, 3);
-		Position currentPosition = new Position();
+		Position currentPosition = new Position(23, 3);
 		int currentScore = 0;
 		int currentLevel = 0;
 		int currentLine = 0;
@@ -42,6 +42,11 @@ namespace TetrisApp.Views {
 			for (int i = 0; i < 2; i++) {
 				kindQueue.Enqueue(GetRandomTetrominoKind());
 			}
+			for (int i = 0; i < boardRow; i++) {
+				for (int j = 0; j < boardColumn; j++) {
+					boardGame[i, j] = new Cell();
+				}
+			}
 		}
 
 		public void Update() {
@@ -49,13 +54,20 @@ namespace TetrisApp.Views {
 		}
 
 		bool CheckBlockInBoard(Position pos) {
-			if (pos.row < 0 || pos.row >= 20) return false;
-			if (pos.col < 0 || pos.col >= 10) return false;
+			if (pos.row < 0 || pos.col < 0 || pos.col >= 10) return false;
 			return true;
 		}
 
-		TetrominoKind currentKind() {
+		public TetrominoKind GetCurrentKind() {
 			return kindQueue.Peek();
+		}
+
+		public int GetTetrominoState() {
+			return tetrominoState;
+		}
+
+		public Position GetCurrentPosition() {
+			return currentPosition;
 		}
 
 		bool CheckValidPosition(Position pos) {
@@ -63,7 +75,7 @@ namespace TetrisApp.Views {
 				for (int j = 0; j < 4; j++) {
 					int curRow = currentPosition.row - i;
 					int curCol = currentPosition.col + j;
-					if (tetrominos[currentKind()][tetrominoState][i, j] == 0) {
+					if (tetrominos[GetCurrentKind()][tetrominoState][i, j] == 0) {
 						continue;
 					}
 					Position curPos = new Position(curRow, curCol);
@@ -77,7 +89,8 @@ namespace TetrisApp.Views {
 		}
 
 		TetrominoKind GetRandomTetrominoKind() {
-			return (TetrominoKind)Random.Shared.Next(0, Enum.GetValues<TetrominoKind>().Length);
+			Random rand = new Random();
+			return (TetrominoKind)rand.Next(0, 7);
 		}
 
 		void RunTickEvent() {
@@ -89,8 +102,6 @@ namespace TetrisApp.Views {
 					currentPosition = newPos;
 				}
 				else {
-					//vị trí hiện tại không thể xuống thêm được nữa
-					//điền ô tại vị trí này vào bảng
 					MakeNewTurn();
 				}
 				currentTime = dropTick;
@@ -146,7 +157,7 @@ namespace TetrisApp.Views {
 				for (int j = 0; j < 4; j++) {
 					int curRow = currentPosition.row - i;
 					int curCol = currentPosition.col + j;
-					if (tetrominos[currentKind()][tetrominoState][i, j] == 0) {
+					if (tetrominos[GetCurrentKind()][tetrominoState][i, j] == 0) {
 						continue;
 					}
 					Position curPos = new Position(curRow, curCol);
@@ -173,11 +184,14 @@ namespace TetrisApp.Views {
 				for (int j = 0; j < 4; j++) {
 					int curRow = currentPosition.row - i;
 					int curCol = currentPosition.col + j;
-					if (tetrominos[currentKind()][tetrominoState][i, j] == 0) {
+					if (tetrominos[GetCurrentKind()][tetrominoState][i, j] == 0) {
+						continue;
+					}
+					if (!CheckBlockInBoard(new Position(curRow, curCol))) {
 						continue;
 					}
 					boardGame[curRow, curCol].isFilled = true;
-					boardGame[curRow, curCol].color = tetrominoColor[currentKind()];
+					boardGame[curRow, curCol].color = tetrominoColor[GetCurrentKind()];
 				}
 			}
 		}
