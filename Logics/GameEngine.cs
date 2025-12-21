@@ -27,8 +27,8 @@ namespace TetrisApp.Views {
 
 		const int boardRow = 30;
 		const int boardColumn = 10;
-		Position startPosition = new Position(23, 3);
-		Position currentPosition = new Position(23, 3);
+		Position startPosition = new Position(20, 3);
+		Position currentPosition = new Position(20, 3);
 		int currentScore = 0;
 		int currentLevel = 0;
 		int currentLine = 0;
