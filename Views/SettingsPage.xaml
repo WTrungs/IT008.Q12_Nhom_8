@@ -127,15 +127,18 @@
                                             <ControlTemplate TargetType="Thumb">
                                                 <Grid Background="Transparent">
                                                     <Ellipse x:Name="ThumbShape"
-                                                     Width="14" Height="14"
-                                                     Fill="#EAF0FF"
-                                                     Stroke="#22D3EE"
-                                                     StrokeThickness="0"/>
+                                                             Width="14" Height="14"
+                                                             Fill="#EAF0FF"
+                                                             Stroke="#22D3EE"
+                                                             StrokeThickness="0"/>
                                                 </Grid>
 
                                                 <ControlTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource AncestorType=Slider}}" Value="True">
-                                                        <Setter TargetName="ThumbShape" Property="Fill" Value="#22D3EE"/>
+
+                                                    <!-- FOCUS: chỉ viền + glow, KHÔNG đổi Fill -->
+                                                    <DataTrigger Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource AncestorType=Slider}}"
+                                                                 Value="True">
+                                                        <Setter TargetName="ThumbShape" Property="StrokeThickness" Value="2"/>
                                                         <Setter TargetName="ThumbShape" Property="Effect">
                                                             <Setter.Value>
                                                                 <DropShadowEffect Color="#22D3EE" BlurRadius="20" Opacity="1" ShadowDepth="0"/>
@@ -148,12 +151,15 @@
                                                         </Setter>
                                                     </DataTrigger>
 
+                                                    <!-- HOVER (khi hover được bật): chỉ viền + glow nhẹ, KHÔNG đổi Fill -->
                                                     <MultiDataTrigger>
                                                         <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Slider}}" Value="True"/>
-                                                            <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}" Value="True"/>
+                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Slider}}"
+                                                                       Value="True"/>
+                                                            <Condition Binding="{Binding IsHoverEnabled, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                                       Value="True"/>
                                                         </MultiDataTrigger.Conditions>
-                                                        <Setter TargetName="ThumbShape" Property="Fill" Value="#A0E0FF"/>
+                                                        <Setter TargetName="ThumbShape" Property="StrokeThickness" Value="2"/>
                                                         <Setter TargetName="ThumbShape" Property="Effect">
                                                             <Setter.Value>
                                                                 <DropShadowEffect Color="#22D3EE" BlurRadius="15" Opacity="0.8" ShadowDepth="0"/>
@@ -161,14 +167,17 @@
                                                         </Setter>
                                                     </MultiDataTrigger>
 
+                                                    <!-- DRAGGING: lúc kéo mới đổi Fill sang xanh -->
                                                     <Trigger Property="IsDragging" Value="True">
-                                                        <Setter TargetName="ThumbShape" Property="Fill" Value="White"/>
+                                                        <Setter TargetName="ThumbShape" Property="Fill" Value="#22D3EE"/>
+                                                        <Setter TargetName="ThumbShape" Property="StrokeThickness" Value="2"/>
                                                         <Setter TargetName="ThumbShape" Property="Effect">
                                                             <Setter.Value>
-                                                                <DropShadowEffect Color="#FFFFFF" BlurRadius="25" Opacity="1" ShadowDepth="0"/>
+                                                                <DropShadowEffect Color="#22D3EE" BlurRadius="25" Opacity="1" ShadowDepth="0"/>
                                                             </Setter.Value>
                                                         </Setter>
                                                     </Trigger>
+
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Thumb.Template>
@@ -333,7 +342,7 @@
         </Style>
     </Page.Resources>
 
-    <Grid>
+    <Grid x:Name="RootGrid" Focusable="True" KeyboardNavigation.IsTabStop="False">
         <Rectangle Fill="{StaticResource SpaceBackground}"/>
 
         <Canvas IsHitTestVisible="True" Opacity="0.9">
@@ -388,7 +397,9 @@
                         <CheckBox x:Name="MusicToggle" 
                                   Style="{StaticResource SpaceToggle}" 
                                   IsChecked="True" 
-                                  TabIndex="0"/>
+                                  TabIndex="0"
+                                  Checked="SettingControl_Changed"
+                                  Unchecked="SettingControl_Changed"/>
                     </StackPanel>
 
                     <TextBlock Text="VOLUME" 
@@ -399,7 +410,8 @@
                     <Slider x:Name="MusicVolumeSlider" 
                             Style="{StaticResource SpaceSlider}" 
                             Margin="0,0,22,14" 
-                            TabIndex="1"/>
+                            TabIndex="1"
+                            ValueChanged="SettingControl_Changed"/>
 
                     <TextBlock Text="SFX"
                                FontSize="16"
@@ -411,7 +423,8 @@
                     <Slider x:Name="SfxVolumeSlider"
                             Style="{StaticResource SpaceSlider}"
                             Margin="0,0,22,18"
-                            TabIndex="2"/>
+                            TabIndex="2"
+                            ValueChanged="SettingControl_Changed"/>
 
                     <TextBlock Text="SELECT TRACK"
                                FontSize="16"
@@ -423,7 +436,9 @@
                     <ComboBox x:Name="TrackCombo"
                               Style="{StaticResource SpaceComboBox}"
                               Margin="0,0,22,0"
-                              TabIndex="3">
+                              TabIndex="3"
+                              SelectionChanged="SettingControl_Changed"
+                              PreviewKeyDown="TrackCombo_PreviewKeyDown">
                         <ComboBoxItem Content="Track 1"/>
                         <ComboBoxItem Content="Track 2"/>
                         <ComboBoxItem Content="Track 3"/>
@@ -435,7 +450,8 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0" 
+                        <Button x:Name="CancelButton"
+                                Grid.Column="0" 
                                 Style="{StaticResource SpaceButton}" 
                                 Content="CANCEL" 
                                 FontWeight="SemiBold" 
@@ -444,7 +460,8 @@
                                 Click="Cancel_Click"
                                 TabIndex="4"/>
 
-                        <Button Grid.Column="1" 
+                        <Button x:Name="AcceptButton"
+                                Grid.Column="1" 
                                 Style="{StaticResource SpaceButton}" 
                                 Content="ACCEPT" 
                                 FontWeight="SemiBold" 
