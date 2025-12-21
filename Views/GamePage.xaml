@@ -116,7 +116,7 @@
                                     Background="{StaticResource GridTileBrush}">
                                 
                                 <!--<Canvas/>-->
-								<Canvas x:Name="GameCanvas"/>
+								<UniformGrid x:Name="GameGrid" Rows="20" Columns="10" Background="Transparent"/>
                             </Border>
                         </Viewbox>
                     </Border>

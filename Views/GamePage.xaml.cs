@@ -22,6 +22,8 @@ namespace TetrisApp.Views {
 		const double ARR = 0.05;
 		double moveTimer = 0;
 		bool isFirstPressed = false;
+		private Border[,] gridCells = new Border[20, 10];
+		private Dictionary<string, SolidColorBrush> brushCache = new Dictionary<string, SolidColorBrush>();
 
 		public GamePage() {
 			InitializeComponent();
@@ -39,6 +41,7 @@ namespace TetrisApp.Views {
 		}
 
 		private void GamePage_Loaded(object sender, RoutedEventArgs e) {
+			InitializeGrid();
 			CompositionTarget.Rendering += OnRender;
 			this.Focusable = true;
 			this.Focus();
@@ -56,6 +59,22 @@ namespace TetrisApp.Views {
 				await SupabaseService.SaveUserData(json);
 			}
 			catch { }
+		}
+
+		private void InitializeGrid() {
+			GameGrid.Children.Clear();
+			for (int r = 0; r < 20; r++) { 
+				for (int c = 0; c < 10; c++) {
+					Border b = new Border {
+						Margin = new Thickness(1), 
+						Background = Brushes.Transparent,
+						CornerRadius = new CornerRadius(3),
+						SnapsToDevicePixels = true
+					};
+					gridCells[r, c] = b;
+					GameGrid.Children.Add(b);
+				}
+			}
 		}
 
 		private void OnRender(object? sender, EventArgs e) {
@@ -151,42 +170,42 @@ namespace TetrisApp.Views {
 			}
 		}
 
+		private SolidColorBrush GetBrush(string colorCode) {
+			if (!brushCache.ContainsKey(colorCode)) {
+				var brush = (new BrushConverter().ConvertFrom(colorCode) as SolidColorBrush) ?? Brushes.Gray;
+				brush.Freeze();
+				brushCache[colorCode] = brush;
+			}
+			return brushCache[colorCode];
+		}
+
 		public void Draw() {
-			GameCanvas.Children.Clear();
+			for (int r = 0; r < 20; r++) {
+				for (int c = 0; c < 10; c++) {
+					gridCells[r, c].Background = Brushes.Transparent;
+				}
+			}
 			for (int r = 0; r < 20; r++) {
 				for (int c = 0; c < 10; c++) {
 					if (gameEngine.boardGame[r, c] != null && gameEngine.boardGame[r, c].isFilled) {
-						DrawCell(r, c, gameEngine.boardGame[r, c].color);
+						gridCells[19 - r, c].Background = GetBrush(gameEngine.boardGame[r, c].color);
 					}
 				}
 			}
 			var currentKind = gameEngine.GetCurrentKind();
 			int[,] shape = gameEngine.tetrominos[currentKind][gameEngine.GetTetrominoState()];
+			var colorBrush = GetBrush(gameEngine.tetrominoColor[currentKind]);
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					if (shape[i, j] != 0) {
 						int r = gameEngine.GetCurrentPosition().row - i;
 						int c = gameEngine.GetCurrentPosition().col + j;
 						if (r >= 0 && r < 20 && c >= 0 && c < 10) {
-							DrawCell(r, c, gameEngine.tetrominoColor[currentKind]);
+							gridCells[19 - r, c].Background = colorBrush;
 						}
 					}
 				}
 			}
-		}
-
-		private void DrawCell(int row, int col, string colorCode) {
-			var brush = new BrushConverter().ConvertFrom(colorCode) as SolidColorBrush;
-			Rectangle rect = new Rectangle {
-				Width = 25,
-				Height = 25,
-				Fill = brush ?? Brushes.Gray,
-				RadiusX = 4,
-				RadiusY = 4
-			};
-			Canvas.SetTop(rect, (19 - row) * 26);
-			Canvas.SetLeft(rect, col * 26);
-			GameCanvas.Children.Add(rect);
 		}
 
 		private void PlayClickSound() {

@@ -178,7 +178,7 @@ namespace TetrisApp.Views {
 			currentTime = dropTick;
 		}
 
-		Position FindDeepestPosition() {
+		public Position FindDeepestPosition() {
 			Position curPos = currentPosition;
 			Position newPos = curPos;
 			newPos.row--;
