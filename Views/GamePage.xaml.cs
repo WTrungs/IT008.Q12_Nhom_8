@@ -12,12 +12,13 @@ using TetrisApp.Services;
 namespace TetrisApp.Views {
 	public partial class GamePage : Page {
 		private MediaPlayer _clickSound = new MediaPlayer();
-		public GameEngine gameEngine = new GameEngine();
+		public GameEngine gameEngine;
 		public GameEngine Engine => gameEngine;
 		TimeSpan lastRenderTime = TimeSpan.Zero;
 
 		public GamePage() {
 			InitializeComponent();
+			gameEngine = new GameEngine(this);
 			this.Loaded += GamePage_Loaded;
 			this.Unloaded += GamePage_Unloaded;
 		}
@@ -42,6 +43,11 @@ namespace TetrisApp.Views {
 		private async void GamePage_Unloaded(object sender, RoutedEventArgs e) {
 			CompositionTarget.Rendering -= OnRender;
 			await SaveGameToCloud();
+		}
+
+		public void NavigateToGameLose() {
+			GameOverPage gameOverPage = new GameOverPage(gameEngine);
+			this.NavigationService.Navigate(gameOverPage);
 		}
 
 		private async System.Threading.Tasks.Task SaveGameToCloud() {

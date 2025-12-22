@@ -14,19 +14,23 @@ namespace TetrisApp.Views {
 	}
 
 	public partial class GameEngine {
-        public bool IsPaused { get; private set; } = false; 
-
-        public GameEngine()
-        {
+        public GameEngine() {
             Start();
         }
 
-        public void TogglePause()
+		public GameEngine(GamePage gamePage) {
+			this.gamePage = gamePage;
+			Start();
+		}
+
+		public void TogglePause()
         { 
             IsPaused = !IsPaused;
         }
 
-        public class Cell {
+		public bool IsPaused { get; private set; } = false;
+
+		public class Cell {
 			public bool isFilled = false;
 			public string color = "null";
 			public Cell() {
@@ -51,6 +55,8 @@ namespace TetrisApp.Views {
 		double dropTick = 1;
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
+		GamePage gamePage;
+		bool isLose = false;
 
         public void Start()
         {
@@ -100,6 +106,9 @@ namespace TetrisApp.Views {
 		}
 
 		public void Update() {
+			if (isLose) {
+				return;
+			}
 			dropTick = CalculateDropTick();
 			RunTickEvent();
 		}
@@ -207,21 +216,37 @@ namespace TetrisApp.Views {
 		bool DoNotHaveValidBlock(Position pos) {
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					int curRow = currentPosition.row - i;
-					int curCol = currentPosition.col + j;
+					int curRow = pos.row - i;
+					int curCol = pos.col + j;
 					if (tetrominos[GetCurrentKind()][tetrominoState][i, j] == 0) {
 						continue;
 					}
 					Position curPos = new Position(curRow, curCol);
-					if (!CheckBlockInBoard(curPos)) return true;
+					if (!(curRow < 0 || curCol < 0 || curCol >= 10 || curRow >= 20) && boardGame[curRow, curCol].isFilled == false) return false;
 				}
 			}
-			return false;
+			return true;
+		}
+
+		bool CheckIfNotFilled(Position pos) {
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					int curRow = pos.row - i;
+					int curCol = pos.col + j;
+					if (tetrominos[GetCurrentKind()][tetrominoState][i, j] == 0) {
+						continue;
+					}
+					if (boardGame[curRow, curCol].isFilled == true) {
+						return false;
+					}
+				}
+			}
+			return true;
 		}
 
 		Position FindNewPosition() {
 			Position result = startPosition;
-			while (!CheckValidPosition(result)) {
+			while (!CheckIfNotFilled(result)) {
 				++result.row;
 			}
 			return result;
@@ -292,7 +317,8 @@ namespace TetrisApp.Views {
 		}
 
 		void LoseGame() {
-
+			isLose = true;
+			gamePage.NavigateToGameLose();
 		}
 
 		public void ChangeStateToLeft() {

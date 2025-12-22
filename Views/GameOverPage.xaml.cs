@@ -13,16 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TetrisApp.Views
-{
-    /// <summary>
-    /// Interaction logic for GameOverPage.xaml
-    /// </summary>
-    public partial class GameOverPage : Page
-    {
-        public GameOverPage()
-        {
-            InitializeComponent();
-        }
-    }
+namespace TetrisApp.Views {
+	/// <summary>
+	/// Interaction logic for GameOverPage.xaml
+	/// </summary>
+	public partial class GameOverPage : Page {
+		GameEngine gameEngine;
+
+		public GameOverPage(GameEngine gameEngine) {
+			InitializeComponent();
+			this.gameEngine = gameEngine;
+			FinalScoreText.Text = gameEngine.GetCurrentScore().ToString();
+		}
+	}
 }
