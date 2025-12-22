@@ -16,6 +16,7 @@ namespace TetrisApp.Views {
 		public MediaPlayer clearLineSound;
 		public MediaPlayer landingSound;
 		public MediaPlayer holdSound;
+		public MediaPlayer rotateSound;
 
 		public void InitializeSounds() {
 			Initialize(ref hardDropSound, "Assets/hard-drop.wav", 1);
@@ -23,6 +24,7 @@ namespace TetrisApp.Views {
 			Initialize(ref clearLineSound, "Assets/clear-line.wav", 1);
 			Initialize(ref landingSound, "Assets/landing.wav", 1);
 			Initialize(ref holdSound, "Assets/hold.wav", 1);
+			Initialize(ref rotateSound, "Assets/rotate.wav", 1);
 		}
 
 		public void Initialize(ref MediaPlayer sound, string path, double volume) {

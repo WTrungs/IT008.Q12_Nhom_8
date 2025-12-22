@@ -17,6 +17,7 @@
     <None Remove="Assets\hold.wav" />
     <None Remove="Assets\landing.wav" />
     <None Remove="Assets\move.wav" />
+    <None Remove="Assets\rotate.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\move.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\rotate.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

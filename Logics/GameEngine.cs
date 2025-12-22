@@ -361,6 +361,7 @@ namespace TetrisApp.Views {
 		public void ChangeStateToLeft() {
 			int oldState = tetrominoState;
 			tetrominoState = (tetrominoState - 1 + 4) % 4;
+			gamePage.PlaySound(gamePage.rotateSound);
 			if (!CheckValidPosition(currentPosition)) {
 				if (currentPosition.col < 0) {
 					Position temp = new Position(currentPosition.row, 0);
