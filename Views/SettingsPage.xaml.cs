@@ -150,7 +150,7 @@ namespace TetrisApp.Views {
             }
 
             // Nếu đang ở TrackCombo và dropdown đang mở (track-mode) thì để TrackCombo tự xử lý Tab/Up/Down/Enter
-            if (currentFocus == TrackCombo && TrackCombo != null && TrackCombo.IsDropDownOpen) {
+            if (TrackCombo != null && TrackCombo.IsDropDownOpen) {
                 return;
             }
             if (e.Key == Key.Down) {
