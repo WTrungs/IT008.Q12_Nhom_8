@@ -7,8 +7,10 @@ using System.Windows.Threading;
 using TetrisApp.Models;
 using TetrisApp.Services;
 
-namespace TetrisApp.Views {
-    public partial class LoginPage : Page {
+namespace TetrisApp.Views
+{
+    public partial class LoginPage : Page
+    {
         private readonly MediaPlayer _clickSound = new MediaPlayer();
         private string _currentMode = "Login";
         private bool _suppressEnterUntilUserInteracts = true;
@@ -21,133 +23,160 @@ namespace TetrisApp.Views {
 
         public static readonly DependencyProperty IsHoverEnabledProperty =
             DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(LoginPage), new PropertyMetadata(true));
-        public LoginPage() {
-            InitializeComponent();
 
+        public LoginPage()
+        {
+            InitializeComponent();
             // Khi user bấm phím / click lần đầu thì mới cho Enter hoạt động
             PreviewMouseDown += (_, __) => _suppressEnterUntilUserInteracts = false;
             PreviewKeyDown += (_, __) => _suppressEnterUntilUserInteracts = false;
         }
 
-        private void LoginPage_Loaded(object sender, RoutedEventArgs e) {
+        private void LoginPage_Loaded(object sender, RoutedEventArgs e)
+        {
             ResetUI();
-
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
-                FocusPark?.Focus();   // park focus ở đây (không nằm trong tab order)
-                Keyboard.ClearFocus(); // optional, nếu m thấy nó vẫn highlight cái gì đó thì giữ dòng này
-                FocusPark?.Focus();    // focus lại sau khi clear
+                FocusPark?.Focus();
+                Keyboard.ClearFocus();
+                FocusPark?.Focus();
             }));
         }
 
-        private void ResetUI() {
+        private void ResetUI()
+        {
             _currentMode = "Login";
             TitleText.Text = "LOGIN";
             LoginButton.Content = "LOGIN";
+
+            // TRẠNG THÁI MẶC ĐỊNH: Chữ là "CONTINUE AS GUEST"
+            ContinueAsGuestButton.Content = "CONTINUE AS GUEST";
+
+            if (PasswordLabel != null) PasswordLabel.Text = "PASSWORD";
+
             ForgotPasswordLink.Visibility = Visibility.Visible;
             SignUpPanel.Visibility = Visibility.Visible;
-            BackToLoginLink.Visibility = Visibility.Collapsed;
+
             UsernameTextBox.Text = "";
             PasswordBox.Password = "";
         }
 
-        private void SignUpLink_Click(object sender, RoutedEventArgs e) {
+        private void SignUpLink_Click(object sender, RoutedEventArgs e)
+        {
             PlayClickSound();
-
             _currentMode = "Register";
             TitleText.Text = "REGISTER";
             LoginButton.Content = "CREATE ACCOUNT";
+            ContinueAsGuestButton.Content = "BACK TO LOGIN";
+
             ForgotPasswordLink.Visibility = Visibility.Collapsed;
             SignUpPanel.Visibility = Visibility.Collapsed;
-            BackToLoginLink.Visibility = Visibility.Visible;
 
-            // Không auto-focus; để user Tab/Click theo “focus từ từ”
+            UsernameTextBox.Text = "";
+            PasswordBox.Password = "";
+
             Keyboard.ClearFocus();
             Focus();
         }
 
-        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e) {
+        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e)
+        {
             PlayClickSound();
-
             _currentMode = "Reset";
             TitleText.Text = "RESET PASSWORD";
             LoginButton.Content = "UPDATE PASSWORD";
+            if (PasswordLabel != null) PasswordLabel.Text = "NEW PASSWORD";
+
+            ContinueAsGuestButton.Content = "BACK TO LOGIN";
+
             ForgotPasswordLink.Visibility = Visibility.Collapsed;
             SignUpPanel.Visibility = Visibility.Collapsed;
-            BackToLoginLink.Visibility = Visibility.Visible;
 
-            // Không auto-focus
+            UsernameTextBox.Text = "";
+            PasswordBox.Password = "";
+
             Keyboard.ClearFocus();
             Focus();
         }
 
-        private void BackToLoginLink_Click(object sender, RoutedEventArgs e) {
+        private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e)
+        {
             PlayClickSound();
-            ResetUI();
 
-            // Không auto-focus
-            Keyboard.ClearFocus();
-            Focus();
+            if (_currentMode == "Login")
+            {
+                SupabaseService.Logout();
+                NavigationService?.Navigate(new MenuPage());
+            }
+            else
+            {
+                ResetUI();
+                Keyboard.ClearFocus();
+                Focus();
+            }
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e) {
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
             PlayClickSound();
 
             string user = UsernameTextBox.Text.Trim();
             string pass = PasswordBox.Password;
 
-            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass)) {
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
+            {
                 ShowError("Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
 
-            if (_currentMode == "Register") {
+            if (_currentMode == "Register")
+            {
                 string result = await SupabaseService.Register(user, pass);
-                if (result == "OK") {
+                if (result == "OK")
+                {
                     ShowError("Đăng ký thành công! Đang vào game...");
                     if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                     NavigationService?.Navigate(new MenuPage());
                 }
                 else ShowError(result);
             }
-            else if (_currentMode == "Reset") {
+            else if (_currentMode == "Reset")
+            {
                 bool success = await SupabaseService.ResetPassword(user, pass);
-                if (success) {
+                if (success)
+                {
                     ShowError("Đổi mật khẩu thành công! Hãy đăng nhập lại.");
                     ResetUI();
-
                     Keyboard.ClearFocus();
                     Focus();
                 }
                 else ShowError("Không tìm thấy tên tài khoản này!");
             }
-            else {
+            else
+            {
                 bool success = await SupabaseService.Login(user, pass);
-                if (success) {
+                if (success)
+                {
                     if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                     NavigationService?.Navigate(new MenuPage());
                 }
-                else {
+                else
+                {
                     ShowError("Sai tên đăng nhập hoặc mật khẩu!");
                     PasswordBox.Clear();
-
-                    // Trường hợp lỗi login thì focus password để nhập lại cho nhanh
                     PasswordBox.Focus();
                 }
             }
         }
 
-        private void ShowError(string msg) {
+        private void ShowError(string msg)
+        {
             ((MainWindow)Application.Current.MainWindow).ShowOverlay("Thông báo", msg);
         }
 
-        private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e) {
-            PlayClickSound();
-            SupabaseService.Logout();
-            NavigationService?.Navigate(new MenuPage());
-        }
-
-        private void PlayClickSound() {
-            try {
+        private void PlayClickSound()
+        {
+            try
+            {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
                 _clickSound.Open(new Uri(soundPath));
                 _clickSound.Volume = AppSettings.SfxVolume;
@@ -159,14 +188,15 @@ namespace TetrisApp.Views {
 
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            // 1. Tắt hiệu ứng chuột ngay khi nhấn phím bất kỳ
+            // 1. Tắt Hover ngay lập tức khi đụng vào phím
             IsHoverEnabled = false;
 
-            // 2. Logic "Đánh thức": Nếu chưa chọn gì -> Nhảy vào Username
             var currentFocus = Keyboard.FocusedElement;
+
+            // 2. Logic "Đánh thức" (khi mới vào chưa chọn gì)
             if (currentFocus == this || currentFocus == null || currentFocus is Grid)
             {
-                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Enter)
+                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Left || e.Key == Key.Right)
                 {
                     UsernameTextBox.Focus();
                     e.Handled = true;
@@ -174,7 +204,20 @@ namespace TetrisApp.Views {
                 }
             }
 
-            // 3. Điều hướng bằng Mũi tên (Thay cho Tab)
+            // --- PHẦN QUAN TRỌNG: XỬ LÝ PHÍM TRÁI / PHẢI ---
+            if (e.Key == Key.Left || e.Key == Key.Right)
+            {
+                // Nếu đang ở ô nhập liệu (TextBox/PasswordBox) -> Cho phép dùng để di chuyển con trỏ sửa chữ
+                if (currentFocus is TextBox || currentFocus is PasswordBox)
+                {
+                    return; // Không làm gì cả, để mặc định cho Windows xử lý
+                }
+
+                // Nếu đang ở bất kỳ đâu khác (Nút Login, Guest, Link...) -> CHẶN LUÔN
+                e.Handled = true;
+                return;
+            }
+
             if (e.Key == Key.Down)
             {
                 e.Handled = true;
@@ -185,32 +228,25 @@ namespace TetrisApp.Views {
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Previous);
             }
-            // 4. Xử lý phím Enter thông minh
             else if (e.Key == Key.Enter)
             {
                 e.Handled = true;
 
-                // Nếu đang ở Username -> Xuống Password
                 if (currentFocus == UsernameTextBox)
                 {
                     PasswordBox.Focus();
                 }
-                // Nếu đang ở Password -> Thực hiện Login
                 else if (currentFocus == PasswordBox)
                 {
-                    LoginButton_Click(null, null);
+                    LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 }
-                // Nếu đang ở nút Login/Guest -> Click nút đó (Mặc định Button tự xử lý, nhưng gọi explicit cho chắc)
                 else if (currentFocus is Button btn)
                 {
-                    // AutomationPeer hoặc gọi Click handler, ở đây gọi Login cho tiện nếu là nút Login
-                    if (btn == LoginButton) LoginButton_Click(null, null);
-                    else if (btn == ContinueAsGuestButton) ContinueAsGuestButton_Click(null, null);
+                    btn.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 }
             }
         }
 
-        // Hàm bổ trợ di chuyển Focus
         private void MoveFocus(FocusNavigationDirection direction)
         {
             var focusedElement = Keyboard.FocusedElement as UIElement;
