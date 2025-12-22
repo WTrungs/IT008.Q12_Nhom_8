@@ -93,9 +93,106 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="GlowCyanLinkHost" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#22D3EE"/>
+            <Setter Property="TextDecorations" Value="{x:Null}"/>
+            <Setter Property="Effect" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#E6ECFF"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#22D3EE" BlurRadius="14" Opacity="0.6" ShadowDepth="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Foreground" Value="#E6ECFF"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#22D3EE" BlurRadius="16" Opacity="0.75" ShadowDepth="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="GlowRedLinkHost" TargetType="TextBlock" BasedOn="{StaticResource GlowCyanLinkHost}">
+            <Setter Property="Foreground" Value="#FF6B6B"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FFECEC"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#FF6B6B" BlurRadius="14" Opacity="0.6" ShadowDepth="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Foreground" Value="#FFECEC"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#FF6B6B" BlurRadius="16" Opacity="0.75" ShadowDepth="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LinkButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="#22D3EE"/>
+            <!-- mặc định xanh -->
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock Text="{TemplateBinding Content}"
+                           Foreground="{TemplateBinding Foreground}"
+                           TextDecorations="{x:Null}"
+                           SnapsToDevicePixels="True"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FF6B6B"/>
+                </Trigger>
+
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="Foreground" Value="#FF6B6B"/>
+                </Trigger>
+
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Foreground" Value="#FF6B6B"/>
+                </Trigger>
+
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="#66788F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Page.Resources>
 
-    <Grid Background="{StaticResource SpaceBackground}">
+    <Grid x:Name="RootGrid" 
+          Background="{StaticResource SpaceBackground}"
+          KeyboardNavigation.TabNavigation="Cycle"
+          KeyboardNavigation.ControlTabNavigation="Cycle">
+
+        <Border x:Name="FocusPark"
+                Focusable="True"
+                KeyboardNavigation.IsTabStop="False"
+                Width="0" Height="0" />
+
         <Canvas IsHitTestVisible="True" Opacity="0.9">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
@@ -134,49 +231,64 @@
         <Border Style="{StaticResource GlassCard}" 
                 Width="420" VerticalAlignment="Center" HorizontalAlignment="Center"
                 Padding="40">
-            <Grid x:Name="RootGrid">
+            <Grid x:Name="LoginGrid">
                 <StackPanel>
                     <TextBlock x:Name="TitleText" Text="LOGIN" FontSize="32" FontWeight="Bold" 
                                HorizontalAlignment="Center" Margin="0,0,0,30" 
                                Foreground="#E6ECFF"/>
 
                     <TextBlock Text="USERNAME" Style="{StaticResource LabelText}"/>
-                    <TextBox x:Name="UsernameTextBox" Style="{StaticResource SpaceTextBox}"/>
+                    <TextBox x:Name="UsernameTextBox"
+                             Style="{StaticResource SpaceTextBox}"
+                             KeyboardNavigation.TabIndex="0"/>
 
                     <TextBlock Text="PASSWORD" Style="{StaticResource LabelText}" Margin="0,15,0,5"/>
-                    <PasswordBox x:Name="PasswordBox" Style="{StaticResource SpacePasswordBox}"/>
+                    <PasswordBox x:Name="PasswordBox"
+                                 Style="{StaticResource SpacePasswordBox}"
+                                 KeyboardNavigation.TabIndex="1"/>
 
                     <Grid Margin="0,5,0,25">
-                        <TextBlock x:Name="ForgotPasswordLink" HorizontalAlignment="Right">
-                            <Hyperlink Click="ForgotPasswordLink_Click" Foreground="#22D3EE" TextDecorations="None">
-                                Forgot Password?
-                            </Hyperlink>
-                        </TextBlock>
+                        <Button x:Name="ForgotPasswordLink"
+                                Style="{StaticResource LinkButton}"
+                                Content="Forgot Password?"
+                                Click="ForgotPasswordLink_Click"
+                                KeyboardNavigation.TabIndex="2"/>
 
-                        <TextBlock x:Name="BackToLoginLink" HorizontalAlignment="Right" Visibility="Collapsed">
-                            <Hyperlink Click="BackToLoginLink_Click" Foreground="#FF6B6B" TextDecorations="None">
-                                &lt; Back to Login
-                            </Hyperlink>
-                        </TextBlock>
+                        <Button x:Name="BackToLoginLink"
+                                Style="{StaticResource LinkButton}"
+                                Content="&lt; Back to Login"
+                                Click="BackToLoginLink_Click"
+                                Visibility="Collapsed"
+                                KeyboardNavigation.TabIndex="2"/>
                     </Grid>
-
-                    <Button x:Name="LoginButton" Style="{StaticResource SpaceButton}" 
-                            Content="LOGIN" FontSize="16" FontWeight="Bold"
-                            Click="LoginButton_Click"/>
+                    
+                    <Button x:Name="LoginButton"
+                            Style="{StaticResource SpaceButton}"
+                            Content="LOGIN"
+                            FontSize="16" FontWeight="Bold"
+                            Click="LoginButton_Click"
+                            Margin="0,0,0,-17"
+                            KeyboardNavigation.TabIndex="3"/>
 
                     <StackPanel x:Name="SignUpPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <TextBlock Text="New Player? " Foreground="#8899AC"/>
-                        <TextBlock>
-                            <Hyperlink x:Name="SignUpLink" Click="SignUpLink_Click" Foreground="#22D3EE" TextDecorations="None">
-                                Create Account
-                            </Hyperlink>
-                        </TextBlock>
+                        <Button x:Name="SignUpLink"
+                            Style="{StaticResource LinkButton}"
+                            Content="Create Account"
+                            Click="SignUpLink_Click"
+                            HorizontalAlignment="Left"
+                            KeyboardNavigation.TabIndex="4"/>
                     </StackPanel>
 
-                    <Button x:Name="ContinueAsGuestButton" Style="{StaticResource SpaceButton}" 
-                            Content="CONTINUE AS GUEST" Margin="0,15,0,0" 
-                            Background="#33FFFFFF" FontSize="14" Opacity="0.8"
-                            Click="ContinueAsGuestButton_Click"/>
+                    <Button x:Name="ContinueAsGuestButton"
+                            Style="{StaticResource SpaceButton}"
+                            Content="CONTINUE AS GUEST"
+                            Margin="0,15,0,0"
+                            FontSize="16" FontWeight="SemiBold"
+                            Foreground="White"
+                            Click="ContinueAsGuestButton_Click"
+                            KeyboardNavigation.TabIndex="5"/>
+
                 </StackPanel>
             </Grid>
         </Border>
