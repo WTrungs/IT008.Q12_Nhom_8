@@ -16,6 +16,7 @@ namespace TetrisApp.Views
     {
         private GameEngine gameEngine;
         private MediaPlayer _clickSound = new MediaPlayer();
+        private MediaPlayer gameOverSound;
 
         // View Model cho từng dòng trong bảng xếp hạng
         public class LeaderboardItem
@@ -30,13 +31,27 @@ namespace TetrisApp.Views
         public GameOverPage(GameEngine gameEngine)
         {
             InitializeComponent();
-            this.gameEngine = gameEngine;
+			InitializeSound();
+			this.gameEngine = gameEngine;
             FinalScoreText.Text = gameEngine.GetCurrentScore().ToString("N0");
+        }
+
+        private void InitializeSound() {
+            gameOverSound = new MediaPlayer();
+			gameOverSound.Open(new Uri("Assets/game-over.mp3", UriKind.Relative));
+			gameOverSound.Play();
+			gameOverSound.Stop();
+		}
+
+        private void PlayGameOverSound() {
+            gameOverSound.Volume = 5;
+            gameOverSound.Play();
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            int currentScore = gameEngine.GetCurrentScore();
+			PlayGameOverSound();
+			int currentScore = gameEngine.GetCurrentScore();
 
             // 1. Xử lý lưu điểm cao nếu đã đăng nhập
             if (SupabaseService.CurrentUser != null)
