@@ -436,7 +436,7 @@
 
                         <Button Style="{StaticResource SpaceButton}" Content="Settings" Click="SettingsButton_Click" Margin="0,0,0,10" TabIndex="7"/>
                         <Button Style="{StaticResource SpaceButton}" Content="About" Click="AboutButton_Click" Margin="0,0,0,10" TabIndex="8"/>
-                        <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" TabIndex="9"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" TabIndex="9" BorderBrush="#FB7185"/>
                     </StackPanel>
                 </Border>
 
@@ -444,7 +444,9 @@
                       Visibility="Collapsed"
                       Background="#AA000000"
                       Panel.ZIndex="999"
-                      MouseDown="AboutOverlay_MouseDown">
+                      MouseDown="AboutOverlay_MouseDown"
+                      Focusable="True"
+                      KeyboardNavigation.IsTabStop="False">
 
                     <Border Style="{StaticResource GlassCard}"
                             Width="720"
@@ -483,7 +485,8 @@
                                     Padding="12"
                                     MaxHeight="260">
 
-                                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                <ScrollViewer x:Name="AboutScroll"
+                                              VerticalScrollBarVisibility="Auto"
                                               HorizontalScrollBarVisibility="Disabled"
                                               CanContentScroll="False"
                                               Padding="0,0,6,0">
@@ -502,14 +505,13 @@
                                         <TextBlock TextWrapping="Wrap"
                                                    Foreground="#EAF0FF"
                                                    LineHeight="22">
-                                            A classic Tetris experience reimagined with an outer-space atmosphere.
-In this game, you control falling tetromino blocks and place them on a 10×20 board.
-Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
-The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects.
-The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
-This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay.
-The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend.
-Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
+                                            A classic Tetris experience reimagined with an outer-space atmosphere. In this game, you control falling tetromino blocks and place them on a 10×20 board.
+                                            Your goal is to complete horizontal lines to score points, increase your level, and survive as the game speed gradually rises.
+                                            The project focuses on a clean, modern interface with a “glass” look, neon accents, and cosmic background effects.
+                                            The gameplay is designed to feel responsive and satisfying, with clear visual feedback for score, level progression, next pieces, and hold mechanics.
+                                            This version is built as a WPF desktop application. The front-end provides multiple screens such as Login, Menu, Settings, and Gameplay.
+                                            The system is structured so that the game logic can be implemented independently, allowing the UI to remain consistent and easy to extend.
+                                            Future improvements may include sound packs, theme switching, and a richer profile system (avatar, username, and save data).
                                         </TextBlock>
 
                                         <TextBlock Text="Features"
@@ -570,13 +572,13 @@ Future improvements may include sound packs, theme switching, and a richer profi
                                            Foreground="{StaticResource TextMuted}"
                                            VerticalAlignment="Center"/>
 
-                                <Button Grid.Column="1"
+                                <Button x:Name="CloseAboutButton"
+                                        Grid.Column="1"
                                         Style="{StaticResource SpaceButton}"
                                         Width="140"
                                         Content="Close"
                                         Click="CloseAbout_Click"/>
                             </Grid>
-
                         </Grid>
                     </Border>
                 </Grid>
