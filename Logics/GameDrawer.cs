@@ -104,5 +104,10 @@ namespace TetrisApp.Views {
 				}
 			}
 		}
+
+		private void DrawHoldTetromino() {
+			if (!gameEngine.GetIsHolded()) return;
+			
+		}
 	}
 }

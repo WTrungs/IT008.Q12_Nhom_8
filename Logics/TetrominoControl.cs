@@ -66,6 +66,10 @@ namespace TetrisApp.Views {
 						e.Handled = true;
 						break;
 				}
+				if (e.Key == Key.C || e.Key == Key.LeftShift || e.Key == Key.RightShift) {
+					gameEngine.ChangeHold();
+					e.Handled = true;
+				}
 			}
 			switch (e.Key) {
 				case Key.Left:

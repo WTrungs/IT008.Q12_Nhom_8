@@ -49,23 +49,27 @@ namespace TetrisApp.Views {
 		int currentScore = 0;
 		int currentLevel = 1;
 		int currentLine = 0;
-		Queue<TetrominoKind> kindQueue = new Queue<TetrominoKind>();
+		TetrominoKind[] kindArray = new TetrominoKind[2];
 		int tetrominoState = 0;
 		double dropTick = 1;
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 		GamePage gamePage;
 		bool isLose = false;
+		bool isHolded = false;
+		bool isHoldedInThisTurn = false;
+		TetrominoKind holdTetromino = TetrominoKind.O;
 
 		public void Start() {
 			currentScore = 0;
 			currentLevel = 0;
 			currentLine = 0;
+			isHolded = false;
 			currentTime = dropTick;
 			currentPosition = startPosition;
-			kindQueue.Clear();
+			holdTetromino = TetrominoKind.O;
 			for (int i = 0; i < 2; i++) {
-				kindQueue.Enqueue(GetRandomTetrominoKind());
+				kindArray[i] = GetRandomTetrominoKind();
 			}
 			for (int i = 0; i < boardRow; i++) {
 				for (int j = 0; j < boardColumn; j++) {
@@ -93,6 +97,43 @@ namespace TetrisApp.Views {
 			return currentLevel;
 		}
 
+		public bool GetIsHolded() {
+			return isHolded;
+		}
+
+		public void ChangeHold() { // 1 lượt chỉ được đổi hold 1 lần
+			if (isHoldedInThisTurn) {
+				//không cho hold
+				return;
+			}
+			if (!isHolded) {
+				holdTetromino = kindArray[0];
+				kindArray[0] = kindArray[1];
+				if (CheckValidPosition(currentPosition)) {
+					isHolded = true;
+					isHoldedInThisTurn = true;
+					kindArray[1] = GetRandomTetrominoKind();
+				}
+				else {
+					kindArray[0] = holdTetromino;
+				}
+			}
+			else {
+				//swap 2 cái tetromino
+				TetrominoKind temp = holdTetromino;
+				holdTetromino = kindArray[0];
+				kindArray[0] = temp;
+				if (CheckValidPosition(currentPosition)) {
+					isHoldedInThisTurn = true;
+				}
+				else {
+					temp = holdTetromino;
+					holdTetromino = kindArray[0];
+					kindArray[0] = temp;
+				}
+			}
+		}
+
 		public void Update() {
 			if (isLose) {
 				return;
@@ -107,7 +148,7 @@ namespace TetrisApp.Views {
 		}
 
 		public TetrominoKind GetCurrentKind() {
-			return kindQueue.Peek();
+			return kindArray[0];
 		}
 
 		public int GetTetrominoState() {
@@ -157,6 +198,7 @@ namespace TetrisApp.Views {
 		}
 
 		void MakeNewTurn() {
+			isHoldedInThisTurn = false;
 			FillBlockToBoard();
 			DeleteFilledLine();
 			ResetKindQueue();
@@ -197,8 +239,8 @@ namespace TetrisApp.Views {
 		}
 
 		void ResetKindQueue() {
-			kindQueue.Dequeue();
-			kindQueue.Enqueue(GetRandomTetrominoKind());
+			kindArray[0] = kindArray[1];
+			kindArray[1] = GetRandomTetrominoKind();
 		}
 
 		bool DoNotHaveValidBlock(Position pos) {
