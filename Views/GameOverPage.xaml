@@ -8,7 +8,8 @@
       Title="Game Over"
       Background="{StaticResource SpaceBackground}"
       UseLayoutRounding="True"
-      SnapsToDevicePixels="True">
+      SnapsToDevicePixels="True"
+      Loaded="Page_Loaded">
 
     <Page.Resources>
         <Style x:Key="RankItemContainer" TargetType="ListViewItem">
@@ -103,7 +104,7 @@
                                    HorizontalAlignment="Center" 
                                    FontWeight="SemiBold"/>
                         <TextBlock x:Name="FinalScoreText" 
-                                   Text="12,450" 
+                                   Text="0" 
                                    FontSize="48" 
                                    FontWeight="Bold" 
                                    Foreground="#22D3EE" 
@@ -133,66 +134,36 @@
                                        Margin="10,5,10,10"
                                        Opacity="0.7"/>
 
-                            <ListView Grid.Row="1" 
+                            <ListView x:Name="LeaderboardList"
+                                      Grid.Row="1" 
                                       Background="Transparent" 
                                       BorderThickness="0"
                                       ItemContainerStyle="{StaticResource RankItemContainer}"
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
-                                <ListView.Items>
-                                    <ListViewItem>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="40"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Text="1" FontWeight="Bold" Foreground="#F59E0B"/>
-                                            <TextBlock Grid.Column="1" Text="ProPlayerOne" FontWeight="SemiBold"/>
-                                            <TextBlock Grid.Column="2" Text="99,999" Foreground="#F59E0B"/>
-                                        </Grid>
-                                    </ListViewItem>
 
-                                    <ListViewItem>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="14" Foreground="#8899AC"/>
-                                            <TextBlock Grid.Column="1" Text="AlienHunter"/>
-                                            <TextBlock Grid.Column="2" Text="15,200"/>
-                                        </Grid>
-                                    </ListViewItem>
+                                            <TextBlock Text="{Binding RankText}" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="{Binding RankColorBrush}"/>
 
-                                    <ListViewItem IsSelected="True">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="16" FontWeight="Bold"/>
-                                            <TextBlock Grid.Column="1" Text="YOU (Guest)" FontWeight="Bold"/>
-                                            <TextBlock Grid.Column="2" Text="12,450" FontWeight="Bold"/>
-                                        </Grid>
-                                    </ListViewItem>
+                                            <TextBlock Grid.Column="1" 
+                                                       Text="{Binding Username}" 
+                                                       FontWeight="SemiBold"/>
 
-                                    <ListViewItem>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="17" Foreground="#8899AC"/>
-                                            <TextBlock Grid.Column="1" Text="AsteroidMiner"/>
-                                            <TextBlock Grid.Column="2" Text="11,000"/>
+                                            <TextBlock Grid.Column="2" 
+                                                       Text="{Binding ScoreText}" 
+                                                       Foreground="{Binding RankColorBrush}"/>
                                         </Grid>
-                                    </ListViewItem>
-
-                                </ListView.Items>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </Grid>
                     </Border>
@@ -209,7 +180,8 @@
                                 Content="MENU"
                                 BorderBrush="#3A4058"
                                 Background="Transparent"
-                                Height="45"/>
+                                Height="45"
+                                Click="MenuButton_Click"/>
 
                         <Button x:Name="PlayAgainButton"
                                 Grid.Column="2"
@@ -217,7 +189,8 @@
                                 Content="PLAY AGAIN"
                                 FontWeight="Bold"
                                 BorderBrush="#22D3EE"
-                                Height="45">
+                                Height="45"
+                                Click="PlayAgainButton_Click">
                             <Button.Effect>
                                 <DropShadowEffect Color="#22D3EE" BlurRadius="15" Opacity="0.3" ShadowDepth="0"/>
                             </Button.Effect>

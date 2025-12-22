@@ -1,5 +1,4 @@
-﻿
-using Supabase.Postgrest.Attributes;
+﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 using System;
 
@@ -31,5 +30,9 @@ namespace TetrisApp.Models
 
         [Column("game_save_data")]
         public string GameSaveData { get; set; }
+
+        // [MỚI] Thêm cột Highscore
+        [Column("highscore")]
+        public int Highscore { get; set; }
     }
 }
