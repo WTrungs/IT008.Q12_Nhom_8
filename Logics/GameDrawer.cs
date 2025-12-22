@@ -3,11 +3,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TetrisApp.Models;
-using TetrisApp.Views;
 using TetrisApp.Services;
+using TetrisApp.Views;
 
 namespace TetrisApp.Views {
 	public partial class GamePage : Page {
@@ -30,6 +31,7 @@ namespace TetrisApp.Views {
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						Margin = new Thickness(0.5),
 					};
+					b.Effect = null;
 					gridCells[r, c] = b;
 					GameGrid.Children.Add(b);
 				}
@@ -61,6 +63,7 @@ namespace TetrisApp.Views {
 					gridCells[r, c].BorderThickness = new Thickness(0);
 					gridCells[r, c].BorderBrush = null;
 					gridCells[r, c].Background = Brushes.Transparent;
+					gridCells[r, c].Effect = null;
 				}
 			}
 		}
@@ -91,6 +94,7 @@ namespace TetrisApp.Views {
 
 		private void DrawGhostTetromino() {
 			Position deepestPosition = gameEngine.FindDeepestPosition();
+			Color color = (Color)ColorConverter.ConvertFromString(gameEngine.tetrominoColor[currentKind]);
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					if (shape[i, j] != 0) {
@@ -99,6 +103,13 @@ namespace TetrisApp.Views {
 						if (r >= 0 && r < 20 && c >= 0 && c < 10) {
 							gridCells[19 - r, c].BorderThickness = new Thickness(1);
 							gridCells[19 - r, c].BorderBrush = colorBrush;
+							gridCells[19 - r, c].Effect = new DropShadowEffect {
+								Color = color,
+								BlurRadius = 10,     // Độ tỏa của ánh sáng
+								ShadowDepth = 0,     // Bắt buộc bằng 0 để tỏa đều 4 hướng
+								Opacity = 1,         // Độ đậm
+								RenderingBias = RenderingBias.Quality // Tối ưu hiển thị
+							};
 						}
 					}
 				}
