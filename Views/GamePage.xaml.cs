@@ -73,6 +73,7 @@ namespace TetrisApp.Views {
 		private void UpdateScore() {
 			LinesText.Text = gameEngine.GetCurrentLine().ToString();
 			ScoreText.Text = gameEngine.GetCurrentScore().ToString();
+			LevelText.Text = gameEngine.GetCurrentLevel().ToString();
 		}
 
 		private void PlayClickSound() {
