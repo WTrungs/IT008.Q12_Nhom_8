@@ -12,6 +12,11 @@
     <None Remove="Assets\Audio\DriftveilCity.mp3" />
     <None Remove="Assets\Audio\Fleatopia.mp3" />
     <None Remove="Assets\Audio\Puzzle.mp3" />
+    <None Remove="Assets\clear-line.wav" />
+    <None Remove="Assets\hard-drop.wav" />
+    <None Remove="Assets\hold.wav" />
+    <None Remove="Assets\landing.wav" />
+    <None Remove="Assets\move.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +27,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Audio\Puzzle.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\clear-line.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\hard-drop.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\hold.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\landing.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\move.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

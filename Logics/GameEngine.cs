@@ -112,6 +112,7 @@ namespace TetrisApp.Views {
 				if (CheckValidPosition(currentPosition)) {
 					isHolded = true;
 					isHoldedInThisTurn = true;
+					gamePage.PlaySound(gamePage.holdSound);
 					kindArray[1] = GetRandomTetrominoKind();
 				}
 				else {
@@ -125,6 +126,7 @@ namespace TetrisApp.Views {
 				kindArray[0] = temp;
 				if (CheckValidPosition(currentPosition)) {
 					isHoldedInThisTurn = true;
+					gamePage.PlaySound(gamePage.holdSound);
 				}
 				else {
 					temp = holdTetromino;
@@ -200,7 +202,7 @@ namespace TetrisApp.Views {
 		void MakeNewTurn() {
 			isHoldedInThisTurn = false;
 			FillBlockToBoard();
-			gamePage.PlayDropSound();
+			gamePage.PlaySound(gamePage.landingSound);
 			DeleteFilledLine();
 			ResetKindQueue();
 			Position plannedPosition = FindNewPosition();
@@ -224,6 +226,7 @@ namespace TetrisApp.Views {
 
 		public void HardDrop() {
 			currentPosition = FindDeepestPosition();
+			gamePage.PlaySound(gamePage.hardDropSound);
 			MakeNewTurn();
 		}
 
@@ -332,6 +335,7 @@ namespace TetrisApp.Views {
 					MakeEraseLineAnimation(i);
 				}
 			}
+			if (deletedLine.Count > 0) gamePage.PlaySound(gamePage.clearLineSound);
 			AddScore(deletedLine.Count);
 			boardGame = newBoard;
 		}
@@ -387,7 +391,7 @@ namespace TetrisApp.Views {
 			--newPos.col;
 			if (CheckValidPosition(newPos)) {
 				currentPosition = newPos;
-				gamePage.PlayMoveSound();
+				gamePage.PlaySound(gamePage.moveSound);
 			}
 		}
 
@@ -396,7 +400,7 @@ namespace TetrisApp.Views {
 			++newPos.col;
 			if (CheckValidPosition(newPos)) {
 				currentPosition = newPos;
-				gamePage.PlayMoveSound();
+				gamePage.PlaySound(gamePage.moveSound);
 			}
 		}
 

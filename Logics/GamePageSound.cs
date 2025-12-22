@@ -11,32 +11,32 @@ using TetrisApp.Services;
 
 namespace TetrisApp.Views {
 	public partial class GamePage : Page {
-		private MediaPlayer dropSound;
-		private MediaPlayer moveSound;
+		public MediaPlayer hardDropSound;
+		public MediaPlayer moveSound;
+		public MediaPlayer clearLineSound;
+		public MediaPlayer landingSound;
+		public MediaPlayer holdSound;
 
 		public void InitializeSounds() {
-			dropSound = new MediaPlayer();
-			dropSound.Open(new Uri("Assets/click.mp3", UriKind.Relative));
-			dropSound.Play();
-			dropSound.Stop();
-			dropSound.Volume = 1;
-			moveSound = new MediaPlayer();
-			moveSound.Open(new Uri("Assets/hover.mp3", UriKind.Relative));
-			moveSound.Play();
-			moveSound.Stop();
-			moveSound.Volume = 1;
+			Initialize(ref hardDropSound, "Assets/hard-drop.wav", 1);
+			Initialize(ref moveSound, "Assets/move.wav", 1);
+			Initialize(ref clearLineSound, "Assets/clear-line.wav", 1);
+			Initialize(ref landingSound, "Assets/landing.wav", 1);
+			Initialize(ref holdSound, "Assets/hold.wav", 1);
 		}
 
-		public void PlayDropSound() {
-			dropSound.Stop();
-			dropSound.Position = TimeSpan.Zero;
-			dropSound.Play();
+		public void Initialize(ref MediaPlayer sound, string path, double volume) {
+			sound = new MediaPlayer();
+			sound.Open(new Uri(path, UriKind.Relative));
+			sound.Play();
+			sound.Stop();
+			sound.Volume = volume;
 		}
 
-		public void PlayMoveSound() {
-			moveSound.Stop();
-			moveSound.Position = TimeSpan.Zero;
-			moveSound.Play();
+		public void PlaySound(MediaPlayer sound) {
+			sound.Stop();
+			sound.Position = TimeSpan.Zero;
+			sound.Play();
 		}
 	}
 }
