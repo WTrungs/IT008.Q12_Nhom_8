@@ -13,13 +13,13 @@ namespace TetrisApp.Views {
 
 	public partial class GameEngine {
 		public Dictionary<TetrominoKind, string> tetrominoColor = new() {
-			[TetrominoKind.I] = "#06b6d4",
-			[TetrominoKind.L] = "#f59e0b",
-			[TetrominoKind.J] = "#3b82f6",
-			[TetrominoKind.O] = "#f97316",
-			[TetrominoKind.S] = "#22c55e",
-			[TetrominoKind.T] = "#a855f7",
-			[TetrominoKind.Z] = "#ef4444",
+			[TetrominoKind.I] = "#33d9f1",
+			[TetrominoKind.L] = "#f4ae32",
+			[TetrominoKind.J] = "#f4ae32",
+			[TetrominoKind.O] = "#f3e221",
+			[TetrominoKind.S] = "#23ee51",
+			[TetrominoKind.T] = "#c100eb",
+			[TetrominoKind.Z] = "#e80707",
 		};
 
 		public Dictionary<TetrominoKind, int[][,]> tetrominos = new() {
