@@ -1,69 +1,89 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TetrisApp.Models;
 
+namespace TetrisApp.Views {
+    public partial class Difficulty : Page {
+        private readonly MediaPlayer _clickSound = new MediaPlayer();
 
-namespace TetrisApp.Views
-{
-    public partial class Difficulty : Page
-    {
-        // Khai báo trình phát nhạc dùng chung cho trang này
-        private MediaPlayer _clickSound = new MediaPlayer();
-
-        public Difficulty()
-        {
+        public Difficulty() {
             InitializeComponent();
+            Loaded += Difficulty_Loaded;
         }
 
-        // Hàm dùng chung để phát tiếng click khi bấm nút
-        private void PlayClickSound()
-        {
-            try
-            {
-                // Đường dẫn đến file âm thanh trong thư mục Assets
-                string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
+        private void Difficulty_Loaded(object sender, RoutedEventArgs e) {
+            Dispatcher.BeginInvoke(new Action(() => {
+                FocusManager.SetFocusedElement(this, null);
+                Keyboard.Focus(RootGrid);
+            }), DispatcherPriority.Input);
+        }
+
+        private void Difficulty_PreviewKeyDown(object sender, KeyEventArgs e) {
+            bool IsOnAnyButton = Keyboard.FocusedElement == EasyButton || Keyboard.FocusedElement == MediumButton || Keyboard.FocusedElement == HardButton;
+
+            if (e.Key == Key.Tab && !IsOnAnyButton) {
+                e.Handled = true;
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                    HardButton.Focus();
+                else
+                    EasyButton.Focus();
+                return;
+            }
+
+            if ((e.Key == Key.Down || e.Key == Key.Up) && !IsOnAnyButton) {
+                e.Handled = true;
+                EasyButton.Focus();
+                return;
+            }
+
+            if (e.Key == Key.Down) {
+                e.Handled = true;
+                MoveFocus(FocusNavigationDirection.Next);
+                return;
+            }
+
+            if (e.Key == Key.Up) {
+                e.Handled = true;
+                MoveFocus(FocusNavigationDirection.Previous);
+                return;
+            }
+        }
+
+        private static void MoveFocus(FocusNavigationDirection direction) {
+            if (Keyboard.FocusedElement is UIElement element)
+                element.MoveFocus(new TraversalRequest(direction));
+        }
+
+        private void PlayClickSound() {
+            try {
+                string soundPath = System.IO.Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
 
                 _clickSound.Open(new Uri(soundPath));
-                _clickSound.Volume = AppSettings.SfxVolume; // Sử dụng âm lượng SFX từ cài đặt
-                _clickSound.Stop(); // Đảm bảo phát lại từ đầu nếu bấm nhanh
+                _clickSound.Volume = AppSettings.SfxVolume;
+                _clickSound.Stop();
                 _clickSound.Play();
             }
-            catch
-            {
-                // Tránh lỗi nếu file Assets/click.mp3 không tồn tại
-            }
+            catch { }
         }
 
-        private void EasyButton_Click(object sender, RoutedEventArgs e)
-        {
-            PlayClickSound(); // Phát âm thanh click
-            // Chuyển sang GamePage với tham số độ khó là "Easy"
+        private void EasyButton_Click(object sender, RoutedEventArgs e) {
+            PlayClickSound();
             NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Easy");
         }
 
-        private void MediumButton_Click(object sender, RoutedEventArgs e)
-        {
-            PlayClickSound(); // Phát âm thanh click
-            // Chuyển sang GamePage với tham số độ khó là "Medium"
+        private void MediumButton_Click(object sender, RoutedEventArgs e) {
+            PlayClickSound();
             NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Medium");
         }
 
-        private void HardButton_Click(object sender, RoutedEventArgs e)
-        {
-            PlayClickSound(); // Phát âm thanh click
-            // Chuyển sang GamePage với tham số độ khó là "Hard"
+        private void HardButton_Click(object sender, RoutedEventArgs e) {
+            PlayClickSound();
             NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Hard");
         }
     }
