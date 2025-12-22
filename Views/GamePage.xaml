@@ -110,9 +110,9 @@
                             <!-- Vùng board: 10*26 = 260, 20*26 = 520 -->
 							<Grid Width="260" Height="520">
 								<Border x:Name="GridBackground"
-                                    CornerRadius="12"
+                                    CornerRadius="10"
                                     Background="{StaticResource GridTileBrush}"/>
-								<Border CornerRadius="12">
+								<Border CornerRadius="10">
 									<Border.Clip>
 										<RectangleGeometry Rect="0,0,260,520" RadiusX="12" RadiusY="12"/>
 									</Border.Clip>
@@ -122,7 +122,7 @@
 									</Grid>
 								</Border>
 								<Border x:Name="BoardBorder"
-                                    CornerRadius="12"
+                                    CornerRadius="10"
                                     BorderBrush="#FF5E5E7E"
                                     BorderThickness="2"
                                     IsHitTestVisible="False"/>
