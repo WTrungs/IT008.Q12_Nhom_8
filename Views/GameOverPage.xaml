@@ -1,0 +1,230 @@
+﻿<Page x:Class="TetrisApp.Views.GameOverPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="1000"
+      Title="Game Over"
+      Background="{StaticResource SpaceBackground}"
+      UseLayoutRounding="True"
+      SnapsToDevicePixels="True">
+
+    <Page.Resources>
+        <Style x:Key="RankItemContainer" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#EAF0FF"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="Bd" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#3322D3EE"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Rectangle Fill="{StaticResource SpaceBackground}"/>
+
+        <Canvas IsHitTestVisible="False" Opacity="0.8">
+            <Ellipse Width="800" Height="800" Canvas.Left="-200" Canvas.Top="-300" Fill="#44FB7185">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="120"/>
+                </Ellipse.Effect>
+            </Ellipse>
+            <Ellipse Width="600" Height="600" Canvas.Right="-100" Canvas.Bottom="-150" Fill="#44557C3A">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+            </Ellipse>
+        </Canvas>
+
+        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.4"/>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" 
+                    Style="{StaticResource GlassCard}" 
+                    Width="500" 
+                    VerticalAlignment="Center" 
+                    Margin="0,20"
+                    Padding="0">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,30,0,10">
+                        <TextBlock Text="GAME OVER" 
+                                   FontSize="36" 
+                                   FontWeight="Black" 
+                                   Foreground="#FF6B6B" 
+                                   HorizontalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#FF6B6B" BlurRadius="20" ShadowDepth="0"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                        <TextBlock Text="YOUR SCORE" 
+                                   FontSize="14" 
+                                   Foreground="{StaticResource TextMuted}" 
+                                   HorizontalAlignment="Center" 
+                                   FontWeight="SemiBold"/>
+                        <TextBlock x:Name="FinalScoreText" 
+                                   Text="12,450" 
+                                   FontSize="48" 
+                                   FontWeight="Bold" 
+                                   Foreground="#22D3EE" 
+                                   HorizontalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#22D3EE" BlurRadius="30" ShadowDepth="0" Opacity="0.4"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <Border Grid.Row="2" 
+                            Background="#4005060F" 
+                            Margin="20,0" 
+                            CornerRadius="12" 
+                            Padding="10">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="GLOBAL RANKING" 
+                                       FontSize="12" 
+                                       FontWeight="Bold" 
+                                       Foreground="{StaticResource TextMuted}" 
+                                       Margin="10,5,10,10"
+                                       Opacity="0.7"/>
+
+                            <ListView Grid.Row="1" 
+                                      Background="Transparent" 
+                                      BorderThickness="0"
+                                      ItemContainerStyle="{StaticResource RankItemContainer}"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                                <ListView.Items>
+                                    <ListViewItem>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="1" FontWeight="Bold" Foreground="#F59E0B"/>
+                                            <TextBlock Grid.Column="1" Text="ProPlayerOne" FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Column="2" Text="99,999" Foreground="#F59E0B"/>
+                                        </Grid>
+                                    </ListViewItem>
+
+                                    <ListViewItem>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="14" Foreground="#8899AC"/>
+                                            <TextBlock Grid.Column="1" Text="AlienHunter"/>
+                                            <TextBlock Grid.Column="2" Text="15,200"/>
+                                        </Grid>
+                                    </ListViewItem>
+
+                                    <ListViewItem IsSelected="True">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="16" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="1" Text="YOU (Guest)" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="12,450" FontWeight="Bold"/>
+                                        </Grid>
+                                    </ListViewItem>
+
+                                    <ListViewItem>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="17" Foreground="#8899AC"/>
+                                            <TextBlock Grid.Column="1" Text="AsteroidMiner"/>
+                                            <TextBlock Grid.Column="2" Text="11,000"/>
+                                        </Grid>
+                                    </ListViewItem>
+
+                                </ListView.Items>
+                            </ListView>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="3" Margin="20,25,20,30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="MenuButton"
+                                Style="{StaticResource SpaceButton}"
+                                Content="MENU"
+                                BorderBrush="#3A4058"
+                                Background="Transparent"
+                                Height="45"/>
+
+                        <Button x:Name="PlayAgainButton"
+                                Grid.Column="2"
+                                Style="{StaticResource SpaceButton}"
+                                Content="PLAY AGAIN"
+                                FontWeight="Bold"
+                                BorderBrush="#22D3EE"
+                                Height="45">
+                            <Button.Effect>
+                                <DropShadowEffect Color="#22D3EE" BlurRadius="15" Opacity="0.3" ShadowDepth="0"/>
+                            </Button.Effect>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>
