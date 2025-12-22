@@ -299,7 +299,7 @@ namespace TetrisApp.Views {
 			if (lines == 0) {
 				return;
 			}
-			currentScore += 1000 + (int)((lines - 1) * 1.3 * 1000);
+			currentScore += 1000 + (int)((lines - 1) * 1.5 * 1000);
 		}
 
 		void MakeEraseLineAnimation(int line) {

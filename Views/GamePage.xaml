@@ -242,7 +242,7 @@
                         <StackPanel>
                             <TextBlock Text="CONTROLS" Foreground="{StaticResource TextMuted}" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <TextBlock Margin="0,8,0,0"
-                                       Text="← → : Change&#10;↑ : Rotate&#10;↓ : Soft Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;P : Pause"/>
+                                       Text="← → : Change&#10;↑ : Rotate&#10;↓ : Soft Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;Esc : Pause"/>
                         </StackPanel>
                     </Border>
 
