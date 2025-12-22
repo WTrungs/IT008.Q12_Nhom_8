@@ -27,7 +27,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="12,0"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Height" Value="45"/>
+            <Setter Property="Height" Value="36"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="CaretBrush" Value="#22D3EE"/>
             <Setter Property="Template">
@@ -36,7 +36,7 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8">
+                                CornerRadius="20">
                             <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -64,7 +64,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="12,0"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Height" Value="45"/>
+            <Setter Property="Height" Value="36"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="CaretBrush" Value="#22D3EE"/>
             <Setter Property="Template">
@@ -73,7 +73,7 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8">
+                                CornerRadius="20">
                             <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -96,18 +96,40 @@
     </Page.Resources>
 
     <Grid Background="{StaticResource SpaceBackground}">
-        <Canvas IsHitTestVisible="False">
-            <Ellipse Width="800" Height="800" Canvas.Left="-200" Canvas.Top="-200" Fill="#2A0044">
+        <Canvas IsHitTestVisible="True" Opacity="0.9">
+            <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="150"/>
+                    <BlurEffect Radius="60"/>
                 </Ellipse.Effect>
             </Ellipse>
-            <Ellipse Width="600" Height="600" Canvas.Right="-100" Canvas.Bottom="-100" Fill="#003366">
+
+            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="120"/>
+                    <BlurEffect Radius="60"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="60"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="70"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="80"/>
                 </Ellipse.Effect>
             </Ellipse>
         </Canvas>
+
+        <!-- STARS -->
+        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.30" IsHitTestVisible="False"/>
 
         <Border Style="{StaticResource GlassCard}" 
                 Width="420" VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -139,7 +161,7 @@
                     </Grid>
 
                     <Button x:Name="LoginButton" Style="{StaticResource SpaceButton}" 
-                            Content="LOGIN" Height="50" FontSize="16" FontWeight="Bold"
+                            Content="LOGIN" FontSize="16" FontWeight="Bold"
                             Click="LoginButton_Click"/>
 
                     <StackPanel x:Name="SignUpPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
@@ -152,7 +174,7 @@
                     </StackPanel>
 
                     <Button x:Name="ContinueAsGuestButton" Style="{StaticResource SpaceButton}" 
-                            Content="CONTINUE AS GUEST" Height="40" Margin="0,15,0,0" 
+                            Content="CONTINUE AS GUEST" Margin="0,15,0,0" 
                             Background="#33FFFFFF" FontSize="14" Opacity="0.8"
                             Click="ContinueAsGuestButton_Click"/>
                 </StackPanel>
