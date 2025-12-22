@@ -28,10 +28,17 @@ namespace TetrisApp {
             ((App)Application.Current).UpdateBackgroundMusic();
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Nếu Overlay thoát game đang hiện thì return để logic Overlay xử lý
             if (OverlayLayer.Visibility == Visibility.Visible) return;
 
-            if (e.Key == Key.Escape) {
+            if (e.Key == Key.Escape)
+            {
+                if (MainFrame.Content is TetrisApp.Views.GamePage)
+                {
+                    return;
+                }
                 Application.Current.Shutdown();
             }
         }

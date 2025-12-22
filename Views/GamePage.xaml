@@ -254,5 +254,44 @@
                 </StackPanel>
             </Border>
         </Grid>
+        
+        <!-- Pause game -->
+        <Grid>
+            <Grid x:Name="PauseOverlay" Visibility="Collapsed" Background="#B3000000">
+                <Border Background="{StaticResource SpaceBackground}" 
+                    BorderBrush="#2A2A33" BorderThickness="1" 
+                    CornerRadius="16" 
+                    Padding="40"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center">
+
+                    <StackPanel MinWidth="200">
+                        <TextBlock Text="PAUSED" 
+                               Foreground="White" 
+                               FontSize="32" 
+                               FontWeight="Bold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,20"/>
+
+                        <Button Content="RESUME" 
+                            Height="40"
+                            Margin="0,0,0,10"
+                            Click="ResumeButton_Click"
+                            Style="{StaticResource SpaceButton}"/>
+
+                        <Button Content="RESTART" 
+                                Height="40" 
+                                Margin="0,0,0,10"
+                                Click="RestartButton_Click" 
+                                Style="{StaticResource SpaceButton}"/>
+
+                        <Button Content="QUIT TO MENU" 
+                            Height="40"
+                            Click="QuitButton_Click"
+                            Style="{StaticResource SpaceButton}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

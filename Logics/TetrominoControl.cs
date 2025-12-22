@@ -42,7 +42,20 @@ namespace TetrisApp.Views {
 		}
 
 		private void Page_KeyDown(object sender, KeyEventArgs e) {
-			if (!e.IsRepeat) {
+            if (e.Key == Key.Escape)
+            {
+                // Gọi hàm TogglePause bên GamePage (như đã hướng dẫn ở bước trước)
+                TogglePause();
+
+                // QUAN TRỌNG: Đánh dấu là đã xử lý phím này rồi.
+                // Nếu thiếu dòng này, sự kiện sẽ trôi ra ngoài MainWindow và tắt app.
+                e.Handled = true;
+
+                return;
+            }
+            if (gameEngine.IsPaused) return;
+
+            if (!e.IsRepeat) {
 				switch (e.Key) {
 					case Key.Up:
 						gameEngine.ChangeStateToLeft();

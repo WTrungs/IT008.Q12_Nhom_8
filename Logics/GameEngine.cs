@@ -14,11 +14,19 @@ namespace TetrisApp.Views {
 	}
 
 	public partial class GameEngine {
-		public GameEngine() {
-			Start();
-		}
+        public bool IsPaused { get; private set; } = false; 
 
-		public class Cell {
+        public GameEngine()
+        {
+            Start();
+        }
+
+        public void TogglePause()
+        { 
+            IsPaused = !IsPaused;
+        }
+
+        public class Cell {
 			public bool isFilled = false;
 			public string color = "null";
 			public Cell() {
@@ -44,18 +52,35 @@ namespace TetrisApp.Views {
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 
-		public void Start() {
-			for (int i = 0; i < 2; i++) {
-				kindQueue.Enqueue(GetRandomTetrominoKind());
-			}
-			for (int i = 0; i < boardRow; i++) {
-				for (int j = 0; j < boardColumn; j++) {
-					boardGame[i, j] = new Cell();
-				}
-			}
-		}
+        public void Start()
+        {
+            // 1. Reset các chỉ số
+            currentScore = 0;
+            currentLevel = 0;
+            currentLine = 0;
+            currentTime = dropTick; // Reset thời gian rơi
 
-		public int GetCurrentLine() {
+            // 2. Reset vị trí gạch về ban đầu
+            currentPosition = startPosition;
+
+            // 3. Làm sạch hàng đợi gạch cũ và tạo mới
+            kindQueue.Clear();
+            for (int i = 0; i < 2; i++)
+            {
+                kindQueue.Enqueue(GetRandomTetrominoKind());
+            }
+
+            // 4. Xóa sạch bàn cờ
+            for (int i = 0; i < boardRow; i++)
+            {
+                for (int j = 0; j < boardColumn; j++)
+                {
+                    boardGame[i, j] = new Cell();
+                }
+            }
+        }
+
+        public int GetCurrentLine() {
 			return currentLine;
 		}
 
