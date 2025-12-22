@@ -58,22 +58,15 @@ namespace TetrisApp.Views {
 		bool isLose = false;
 
 		public void Start() {
-			// 1. Reset các chỉ số
 			currentScore = 0;
 			currentLevel = 0;
 			currentLine = 0;
-			currentTime = dropTick; // Reset thời gian rơi
-
-			// 2. Reset vị trí gạch về ban đầu
+			currentTime = dropTick;
 			currentPosition = startPosition;
-
-			// 3. Làm sạch hàng đợi gạch cũ và tạo mới
 			kindQueue.Clear();
 			for (int i = 0; i < 2; i++) {
 				kindQueue.Enqueue(GetRandomTetrominoKind());
 			}
-
-			// 4. Xóa sạch bàn cờ
 			for (int i = 0; i < boardRow; i++) {
 				for (int j = 0; j < boardColumn; j++) {
 					boardGame[i, j] = new Cell();
