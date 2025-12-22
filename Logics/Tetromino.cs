@@ -7,11 +7,11 @@ using System.Windows.Media;
 using TetrisApp.Models;
 
 namespace TetrisApp.Views {
-	public partial class GameEngine {
-		public enum TetrominoKind {
-			O, I, S, Z, L, J, T,
-		}
+	public enum TetrominoKind {
+		O, I, S, Z, L, J, T,
+	}
 
+	public partial class GameEngine {
 		public Dictionary<TetrominoKind, string> tetrominoColor = new() {
 			[TetrominoKind.I] = "#06b6d4",
 			[TetrominoKind.L] = "#f59e0b",

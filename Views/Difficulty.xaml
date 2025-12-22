@@ -6,20 +6,22 @@
       xmlns:local="clr-namespace:TetrisApp.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Difficulty">
+      Title="Difficulty"
+      PreviewKeyDown="Difficulty_PreviewKeyDown">
 
-    <Grid>
+    <Grid x:Name="RootGrid" Focusable="True">
         <!-- NỀN -->
         <Rectangle Fill="{StaticResource SpaceBackground}"/>
+
         <!-- NEBULA / GLOW -->
-        <Canvas IsHitTestVisible="True" Opacity="0.9">
+        <Canvas IsHitTestVisible="False" Opacity="0.9" Focusable="False">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
                     <BlurEffect Radius="60"/>
                 </Ellipse.Effect>
             </Ellipse>
 
-            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D">
                 <Ellipse.Effect>
                     <BlurEffect Radius="60"/>
                 </Ellipse.Effect>
@@ -31,26 +33,57 @@
                 </Ellipse.Effect>
             </Ellipse>
 
-            <Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Ellipse Width="700" Height="700" Canvas.Left="890" Canvas.Top="325" Fill="#5522D3EE">
                 <Ellipse.Effect>
                     <BlurEffect Radius="70"/>
                 </Ellipse.Effect>
             </Ellipse>
 
-            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
+            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Top="356" Fill="#44FB7185">
                 <Ellipse.Effect>
                     <BlurEffect Radius="80"/>
                 </Ellipse.Effect>
             </Ellipse>
         </Canvas>
 
-        <StackPanel Width="420" VerticalAlignment="Center">
-            <TextBlock Text="Difficulty" FontSize="44" FontWeight="Bold" FontStretch="Expanded" HorizontalAlignment="Center"/>
+        <StackPanel x:Name="DifficultyPanel"
+                    Width="420"
+                    VerticalAlignment="Center"
+                    KeyboardNavigation.TabNavigation="Cycle"
+                    KeyboardNavigation.DirectionalNavigation="Cycle">
 
-            <Button Style="{StaticResource SpaceButton}" Content="Easy" Height="50" Margin="0,20,0,0" Click="EasyButton_Click"/>
-            <Button Style="{StaticResource SpaceButton}" Content="Medium" Height="50" Margin="0,10,0,0" Click="MediumButton_Click"/>
-            <Button Style="{StaticResource SpaceButton}" Content="Hard" Height="50" Margin="0,10,0,0" Click="HardButton_Click"/>
+            <TextBlock Text="Difficulty"
+                       FontSize="44"
+                       FontWeight="Bold"
+                       FontStretch="Expanded"
+                       HorizontalAlignment="Center"/>
+
+            <Button x:Name="EasyButton"
+                    Style="{StaticResource SpaceButton}"
+                    Content="Easy"
+                    Height="50"
+                    Margin="0,20,0,0"
+                    Click="EasyButton_Click"
+                    TabIndex="0"
+                    IsTabStop="True"/>
+
+            <Button x:Name="MediumButton"
+                    Style="{StaticResource SpaceButton}"
+                    Content="Medium"
+                    Height="50"
+                    Margin="0,10,0,0"
+                    Click="MediumButton_Click"
+                    TabIndex="1"
+                    IsTabStop="True"/>
+
+            <Button x:Name="HardButton"
+                    Style="{StaticResource SpaceButton}"
+                    Content="Hard"
+                    Height="50"
+                    Margin="0,10,0,0"
+                    Click="HardButton_Click"
+                    TabIndex="2"
+                    IsTabStop="True"/>
         </StackPanel>
-
     </Grid>
-</Page>
+</Page> 
