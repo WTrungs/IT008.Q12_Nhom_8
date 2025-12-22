@@ -200,6 +200,7 @@ namespace TetrisApp.Views {
 		void MakeNewTurn() {
 			isHoldedInThisTurn = false;
 			FillBlockToBoard();
+			gamePage.PlayDropSound();
 			DeleteFilledLine();
 			ResetKindQueue();
 			Position plannedPosition = FindNewPosition();
@@ -386,6 +387,7 @@ namespace TetrisApp.Views {
 			--newPos.col;
 			if (CheckValidPosition(newPos)) {
 				currentPosition = newPos;
+				gamePage.PlayMoveSound();
 			}
 		}
 
@@ -394,6 +396,7 @@ namespace TetrisApp.Views {
 			++newPos.col;
 			if (CheckValidPosition(newPos)) {
 				currentPosition = newPos;
+				gamePage.PlayMoveSound();
 			}
 		}
 
