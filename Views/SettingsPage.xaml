@@ -439,9 +439,9 @@
                               TabIndex="3"
                               SelectionChanged="SettingControl_Changed"
                               PreviewKeyDown="TrackCombo_PreviewKeyDown">
-                        <ComboBoxItem Content="Track 1"/>
-                        <ComboBoxItem Content="Track 2"/>
-                        <ComboBoxItem Content="Track 3"/>
+                        <ComboBoxItem Content="Puzzle" Tag="Puzzle"/>
+                        <ComboBoxItem Content="Driftveil City" Tag="DriftveilCity"/>
+                        <ComboBoxItem Content="Fleatopia" Tag="Fleatopia"/>
                     </ComboBox>
 
                     <Grid Margin="0,12,22,0">

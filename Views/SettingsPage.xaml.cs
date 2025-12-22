@@ -62,7 +62,7 @@ namespace TetrisApp.Views {
             }));
         }
 
-        // ===== LIVE APPLY (feel thay đổi liền) =====
+        // ===== LIVE APPLY =====
         // XAML đang gắn cho CheckBox + ComboBox
         private void SettingControl_Changed(object sender, RoutedEventArgs e) {
             if (_isApplying) return;
@@ -74,15 +74,28 @@ namespace TetrisApp.Views {
             if (_isApplying) return;
             ApplyLiveFromUI();
         }
+        private void TrackCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (_isApplying) return;
+            ApplyLiveFromUI();
+        }
+        private void SettingControl_RoutedChanged(object sender, RoutedEventArgs e) {
+            if (_isApplying) return;
+            ApplyLiveFromUI();
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (_isApplying) return;
+            ApplyLiveFromUI();
+        }
 
         private void ApplyLiveFromUI() {
-            // Update runtime ngay (feel liền) — nhưng chưa SaveUserData cho tới khi Accept
             AppSettings.IsMusicEnabled = MusicToggle?.IsChecked ?? true;
             AppSettings.MusicVolume = MusicVolumeSlider?.Value ?? 1.0;
             AppSettings.SfxVolume = SfxVolumeSlider?.Value ?? 1.0;
 
-            if (TrackCombo?.SelectedItem is ComboBoxItem selectedItem)
-                AppSettings.SelectedTrack = selectedItem.Content?.ToString() ?? "";
+            if (TrackCombo?.SelectedItem is ComboBoxItem item) {
+                AppSettings.SelectedTrack = item.Tag?.ToString()?.Trim() ?? "";
+            }
 
             if (Application.Current is App myApp) {
                 myApp.UpdateBackgroundMusic();
@@ -92,9 +105,7 @@ namespace TetrisApp.Views {
         // ===== TAB/ENTER LOGIC =====
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
             // Tắt hover khi dùng keyboard điều hướng
-            if (e.Key == Key.Down || e.Key == Key.Up ||
-                e.Key == Key.Left || e.Key == Key.Right ||
-                e.Key == Key.Tab) {
+            if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Tab) {
                 IsHoverEnabled = false;
             }
 
@@ -110,27 +121,12 @@ namespace TetrisApp.Views {
             }
 
             // Enter
-            if (e.Key == Key.Enter) {
-                if (currentFocus == MusicToggle && MusicToggle != null) {
-                    MusicToggle.IsChecked = !(MusicToggle.IsChecked ?? false);
-                    PlayClickSound();
-                    ApplyLiveFromUI();
-                    e.Handled = true;
-                    return;
-                }
-
-                if (currentFocus == TrackCombo && TrackCombo != null) {
-                    TrackCombo.IsDropDownOpen = !TrackCombo.IsDropDownOpen;
-                    _isTrackTabMode = TrackCombo.IsDropDownOpen; // bật track-mode khi Enter mở
-
-                    if (_isTrackTabMode && TrackCombo.SelectedIndex < 0 && TrackCombo.Items.Count > 0)
-                        TrackCombo.SelectedIndex = 0;
-
-                    PlayClickSound();
-                    ApplyLiveFromUI();
-                    e.Handled = true;
-                    return;
-                }
+            if (e.Key == Key.Enter && currentFocus == MusicToggle && MusicToggle != null) {
+                MusicToggle.IsChecked = !(MusicToggle.IsChecked ?? false);
+                PlayClickSound();
+                ApplyLiveFromUI();
+                e.Handled = true;
+                return;
             }
 
             // Toggle checkbox bằng trái/phải
@@ -245,7 +241,7 @@ namespace TetrisApp.Views {
             // feel liền
             ApplyLiveFromUI();
 
-            // giữ focus ở combo (khỏi bị nhảy)
+            // giữ focus ở combo 
             TrackCombo.Focus();
         }
 
@@ -273,7 +269,6 @@ namespace TetrisApp.Views {
         private async void Accept_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            // Lưu cái đang chỉnh (đã apply live rồi, nhưng accept mới gọi save)
             ApplyLiveFromUI();
 
             await SupabaseService.SaveUserData();
@@ -309,15 +304,15 @@ namespace TetrisApp.Views {
         }
 
         // ===== helpers =====
-        private void SetTrackSelectionByName(string trackName) {
+        private void SetTrackSelectionByName(string trackKey) {
             if (TrackCombo == null) return;
 
             int found = -1;
 
             for (int i = 0; i < TrackCombo.Items.Count; i++) {
                 if (TrackCombo.Items[i] is ComboBoxItem cbi) {
-                    string name = cbi.Content?.ToString() ?? "";
-                    if (string.Equals(name, trackName, StringComparison.OrdinalIgnoreCase)) {
+                    string key = cbi.Tag?.ToString() ?? "";
+                    if (string.Equals(key, trackKey, StringComparison.OrdinalIgnoreCase)) {
                         found = i;
                         break;
                     }

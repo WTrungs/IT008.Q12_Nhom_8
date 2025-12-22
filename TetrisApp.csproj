@@ -9,6 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Audio\DriftveilCity.mp3" />
+    <None Remove="Assets\Audio\Fleatopia.mp3" />
+    <None Remove="Assets\Audio\Puzzle.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Audio\DriftveilCity.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Audio\Fleatopia.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Audio\Puzzle.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Supabase" Version="1.1.1" />
   </ItemGroup>

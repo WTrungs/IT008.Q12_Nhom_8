@@ -112,7 +112,7 @@ namespace TetrisApp {
             if (OverlayLayer.Visibility != Visibility.Visible) return;
 
             // KHÓA phím mũi tên
-            if (e.Key == Key.Up || e.Key == Key.Down) {
+            if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Left || e.Key == Key.Right) {
                 e.Handled = true;
                 return;
             }
