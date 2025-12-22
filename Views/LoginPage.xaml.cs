@@ -13,6 +13,14 @@ namespace TetrisApp.Views {
         private string _currentMode = "Login";
         private bool _suppressEnterUntilUserInteracts = true;
 
+        public bool IsHoverEnabled
+        {
+            get { return (bool)GetValue(IsHoverEnabledProperty); }
+            set { SetValue(IsHoverEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsHoverEnabledProperty =
+            DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(LoginPage), new PropertyMetadata(true));
         public LoginPage() {
             InitializeComponent();
 
@@ -149,27 +157,66 @@ namespace TetrisApp.Views {
             catch { }
         }
 
-        private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (e.Key != Key.Enter) return;
+        private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // 1. Tắt hiệu ứng chuột ngay khi nhấn phím bất kỳ
+            IsHoverEnabled = false;
 
-            // Nếu vừa load xong mà user chưa tương tác gì, Enter không làm gì cả
-            if (_suppressEnterUntilUserInteracts) {
+            // 2. Logic "Đánh thức": Nếu chưa chọn gì -> Nhảy vào Username
+            var currentFocus = Keyboard.FocusedElement;
+            if (currentFocus == this || currentFocus == null || currentFocus is Grid)
+            {
+                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Enter)
+                {
+                    UsernameTextBox.Focus();
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            // 3. Điều hướng bằng Mũi tên (Thay cho Tab)
+            if (e.Key == Key.Down)
+            {
                 e.Handled = true;
-                return;
+                MoveFocus(FocusNavigationDirection.Next);
             }
+            else if (e.Key == Key.Up)
+            {
+                e.Handled = true;
+                MoveFocus(FocusNavigationDirection.Previous);
+            }
+            // 4. Xử lý phím Enter thông minh
+            else if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
 
-            e.Handled = true;
+                // Nếu đang ở Username -> Xuống Password
+                if (currentFocus == UsernameTextBox)
+                {
+                    PasswordBox.Focus();
+                }
+                // Nếu đang ở Password -> Thực hiện Login
+                else if (currentFocus == PasswordBox)
+                {
+                    LoginButton_Click(null, null);
+                }
+                // Nếu đang ở nút Login/Guest -> Click nút đó (Mặc định Button tự xử lý, nhưng gọi explicit cho chắc)
+                else if (currentFocus is Button btn)
+                {
+                    // AutomationPeer hoặc gọi Click handler, ở đây gọi Login cho tiện nếu là nút Login
+                    if (btn == LoginButton) LoginButton_Click(null, null);
+                    else if (btn == ContinueAsGuestButton) ContinueAsGuestButton_Click(null, null);
+                }
+            }
+        }
 
-            // Enter theo logic cũ nhưng an toàn hơn
-            if (Keyboard.FocusedElement == UsernameTextBox) {
-                PasswordBox.Focus();
-            }
-            else if (Keyboard.FocusedElement == PasswordBox) {
-                LoginButton_Click(null, null);
-            }
-            else {
-                // Nếu focus đang ở link/button khác, Enter = click Login
-                LoginButton_Click(null, null);
+        // Hàm bổ trợ di chuyển Focus
+        private void MoveFocus(FocusNavigationDirection direction)
+        {
+            var focusedElement = Keyboard.FocusedElement as UIElement;
+            if (focusedElement != null)
+            {
+                focusedElement.MoveFocus(new TraversalRequest(direction));
             }
         }
     }
