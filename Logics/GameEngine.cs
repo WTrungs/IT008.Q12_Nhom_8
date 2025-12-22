@@ -36,11 +36,11 @@ namespace TetrisApp.Views {
 		Position startPosition = new Position(20, 3);
 		Position currentPosition = new Position(20, 3);
 		int currentScore = 0;
-		int currentLevel = 0;
+		int currentLevel = 1;
 		int currentLine = 0;
 		Queue<TetrominoKind> kindQueue = new Queue<TetrominoKind>();
 		int tetrominoState = 0;
-		double dropTick = 0.75;
+		double dropTick = 1;
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 
@@ -55,6 +55,13 @@ namespace TetrisApp.Views {
 			}
 		}
 
+		double CalculateDropTick() {
+			if (currentLevel > 30) {
+				return 0.01;
+			}
+			return 0.8 / (Math.Pow(2, (currentLevel - 1) / 5.0));
+		}
+
 		public int GetCurrentLine() {
 			return currentLine;
 		}
@@ -63,7 +70,12 @@ namespace TetrisApp.Views {
 			return currentScore;
 		}
 
+		public int GetCurrentLevel() {
+			return currentLevel;
+		}
+
 		public void Update() {
+			dropTick = CalculateDropTick();
 			RunTickEvent();
 		}
 
@@ -190,10 +202,6 @@ namespace TetrisApp.Views {
 			return result;
 		}
 
-		bool IsOutOfBoard() {
-			return false;
-		}
-
 		void FillBlockToBoard() {
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
@@ -247,6 +255,7 @@ namespace TetrisApp.Views {
 
 		public void AddScore(int lines) {
 			currentLine += lines;
+			currentLevel = currentLine / 10 + 1;
 			if (lines == 0) {
 				return;
 			}
@@ -255,10 +264,6 @@ namespace TetrisApp.Views {
 
 		void MakeEraseLineAnimation(int line) {
 
-		}
-
-		bool CheckIfLoseGame() {
-			return false;
 		}
 
 		void LoseGame() {
