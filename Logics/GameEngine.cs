@@ -14,19 +14,18 @@ namespace TetrisApp.Views {
 	}
 
 	public partial class GameEngine {
-        public GameEngine() {
-            Start();
-        }
+		public GameEngine() {
+			Start();
+		}
 
 		public GameEngine(GamePage gamePage) {
 			this.gamePage = gamePage;
 			Start();
 		}
 
-		public void TogglePause()
-        { 
-            IsPaused = !IsPaused;
-        }
+		public void TogglePause() {
+			IsPaused = !IsPaused;
+		}
 
 		public bool IsPaused { get; private set; } = false;
 
@@ -58,33 +57,29 @@ namespace TetrisApp.Views {
 		GamePage gamePage;
 		bool isLose = false;
 
-        public void Start()
-        {
-            // 1. Reset các chỉ số
-            currentScore = 0;
-            currentLevel = 0;
-            currentLine = 0;
-            currentTime = dropTick; // Reset thời gian rơi
+		public void Start() {
+			// 1. Reset các chỉ số
+			currentScore = 0;
+			currentLevel = 0;
+			currentLine = 0;
+			currentTime = dropTick; // Reset thời gian rơi
 
-            // 2. Reset vị trí gạch về ban đầu
-            currentPosition = startPosition;
+			// 2. Reset vị trí gạch về ban đầu
+			currentPosition = startPosition;
 
-            // 3. Làm sạch hàng đợi gạch cũ và tạo mới
-            kindQueue.Clear();
-            for (int i = 0; i < 2; i++)
-            {
-                kindQueue.Enqueue(GetRandomTetrominoKind());
-            }
+			// 3. Làm sạch hàng đợi gạch cũ và tạo mới
+			kindQueue.Clear();
+			for (int i = 0; i < 2; i++) {
+				kindQueue.Enqueue(GetRandomTetrominoKind());
+			}
 
-            // 4. Xóa sạch bàn cờ
-            for (int i = 0; i < boardRow; i++)
-            {
-                for (int j = 0; j < boardColumn; j++)
-                {
-                    boardGame[i, j] = new Cell();
-                }
-            }
-        }
+			// 4. Xóa sạch bàn cờ
+			for (int i = 0; i < boardRow; i++) {
+				for (int j = 0; j < boardColumn; j++) {
+					boardGame[i, j] = new Cell();
+				}
+			}
+		}
 
 		double CalculateDropTick() {
 			if (currentLevel > 30) {
@@ -278,7 +273,7 @@ namespace TetrisApp.Views {
 				}
 			}
 			int bottom = 0;
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < boardRow; i++) {
 				bool isFulled = true;
 				for (int j = 0; j < 10; j++) {
 					if (!boardGame[i, j].isFilled) {
@@ -297,7 +292,9 @@ namespace TetrisApp.Views {
 				}
 			}
 			foreach (int i in deletedLine) {
-				MakeEraseLineAnimation(i);
+				if (i >= 0 && i < boardRow) {
+					MakeEraseLineAnimation(i);
+				}
 			}
 			AddScore(deletedLine.Count);
 			boardGame = newBoard;
