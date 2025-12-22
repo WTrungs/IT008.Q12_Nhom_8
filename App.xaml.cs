@@ -6,68 +6,43 @@ using System.Windows.Media;
 using TetrisApp.Models;
 using TetrisApp.Services;
 
-namespace TetrisApp
-{
-    public partial class App : Application
-    {
-        // Trình phát nhạc nền dùng chung
+namespace TetrisApp {
+    public partial class App : Application {
         private static MediaPlayer _bgmPlayer = new MediaPlayer();
 
-        // [MỚI] Trình phát âm thanh Hover dùng chung
         private static MediaPlayer _hoverSound = new MediaPlayer();
 
-        public App()
-        {
-            // Tự động lặp lại bài hát khi phát hết
+        public App() {
             _bgmPlayer.MediaEnded += (s, e) => {
                 _bgmPlayer.Position = TimeSpan.Zero;
                 _bgmPlayer.Play();
             };
         }
 
-        // --- HÀM XỬ LÝ HOVER ---
-        private void Button_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                // 1. Logic cũ: Ép focus để hỗ trợ bàn phím
-                btn.Focus();
-
-                // 2. [MỚI] Phát tiếng Hover
-                PlayHoverSound();
-            }
+        private void Button_MouseEnter(object sender, MouseEventArgs e) {
+            PlayHoverSound();
         }
 
-        // [MỚI] Hàm phát tiếng hover tách riêng cho gọn
-        private void PlayHoverSound()
-        {
-            try
-            {
-                // Nếu muốn tiếng y hệt click, bạn đổi "hover.mp3" thành "click.mp3"
-                // Nhưng dự án bạn đã có sẵn file hover.mp3 nên dùng nó sẽ hay hơn
+        private void PlayHoverSound() {
+            try {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "hover.mp3");
 
                 _hoverSound.Open(new Uri(soundPath));
-                _hoverSound.Volume = AppSettings.SfxVolume; // Lấy âm lượng từ cài đặt
+                _hoverSound.Volume = AppSettings.SfxVolume;
                 _hoverSound.Stop();
                 _hoverSound.Play();
             }
-            catch (Exception)
-            {
-                // Bỏ qua lỗi nếu không tìm thấy file
+            catch (Exception) {
             }
         }
 
-        public void UpdateBackgroundMusic()
-        {
-            if (!AppSettings.IsMusicEnabled)
-            {
+        public void UpdateBackgroundMusic() {
+            if (!AppSettings.IsMusicEnabled) {
                 _bgmPlayer.Stop();
                 return;
             }
 
-            try
-            {
+            try {
                 string trackFile = AppSettings.SelectedTrack + ".mp3";
                 string trackPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Audio", trackFile);
 
@@ -75,16 +50,13 @@ namespace TetrisApp
                 _bgmPlayer.Volume = AppSettings.MusicVolume;
                 _bgmPlayer.Play();
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine("Lỗi phát nhạc: " + ex.Message);
             }
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
-        {
+        protected override async void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
-            // Khởi tạo Supabase khi bật app
             await SupabaseService.InitializeAsync();
         }
     }

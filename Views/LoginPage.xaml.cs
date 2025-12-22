@@ -7,16 +7,13 @@ using System.Windows.Threading;
 using TetrisApp.Models;
 using TetrisApp.Services;
 
-namespace TetrisApp.Views
-{
-    public partial class LoginPage : Page
-    {
+namespace TetrisApp.Views {
+    public partial class LoginPage : Page {
         private readonly MediaPlayer _clickSound = new MediaPlayer();
         private string _currentMode = "Login";
         private bool _suppressEnterUntilUserInteracts = true;
 
-        public bool IsHoverEnabled
-        {
+        public bool IsHoverEnabled {
             get { return (bool)GetValue(IsHoverEnabledProperty); }
             set { SetValue(IsHoverEnabledProperty, value); }
         }
@@ -24,16 +21,14 @@ namespace TetrisApp.Views
         public static readonly DependencyProperty IsHoverEnabledProperty =
             DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(LoginPage), new PropertyMetadata(true));
 
-        public LoginPage()
-        {
+        public LoginPage() {
             InitializeComponent();
             // Khi user bấm phím / click lần đầu thì mới cho Enter hoạt động
             PreviewMouseDown += (_, __) => _suppressEnterUntilUserInteracts = false;
             PreviewKeyDown += (_, __) => _suppressEnterUntilUserInteracts = false;
         }
 
-        private void LoginPage_Loaded(object sender, RoutedEventArgs e)
-        {
+        private void LoginPage_Loaded(object sender, RoutedEventArgs e) {
             ResetUI();
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
                 FocusPark?.Focus();
@@ -42,8 +37,7 @@ namespace TetrisApp.Views
             }));
         }
 
-        private void ResetUI()
-        {
+        private void ResetUI() {
             _currentMode = "Login";
             TitleText.Text = "LOGIN";
             LoginButton.Content = "LOGIN";
@@ -60,8 +54,7 @@ namespace TetrisApp.Views
             PasswordBox.Password = "";
         }
 
-        private void SignUpLink_Click(object sender, RoutedEventArgs e)
-        {
+        private void SignUpLink_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             _currentMode = "Register";
             TitleText.Text = "REGISTER";
@@ -75,11 +68,10 @@ namespace TetrisApp.Views
             PasswordBox.Password = "";
 
             Keyboard.ClearFocus();
-            Focus();
+            FocusPark?.Focus();
         }
 
-        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e)
-        {
+        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             _currentMode = "Reset";
             TitleText.Text = "RESET PASSWORD";
@@ -95,55 +87,46 @@ namespace TetrisApp.Views
             PasswordBox.Password = "";
 
             Keyboard.ClearFocus();
-            Focus();
+            FocusPark?.Focus();
         }
 
-        private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            if (_currentMode == "Login")
-            {
+            if (_currentMode == "Login") {
                 SupabaseService.Logout();
                 NavigationService?.Navigate(new MenuPage());
             }
-            else
-            {
+            else {
                 ResetUI();
                 Keyboard.ClearFocus();
-                Focus();
+                FocusPark?.Focus();
             }
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
+        private async void LoginButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
             string user = UsernameTextBox.Text.Trim();
             string pass = PasswordBox.Password;
 
-            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
-            {
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass)) {
                 ShowError("Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
 
-            if (_currentMode == "Register")
-            {
+            if (_currentMode == "Register") {
                 string result = await SupabaseService.Register(user, pass);
-                if (result == "OK")
-                {
+                if (result == "OK") {
                     ShowError("Đăng ký thành công! Đang vào game...");
                     if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                     NavigationService?.Navigate(new MenuPage());
                 }
                 else ShowError(result);
             }
-            else if (_currentMode == "Reset")
-            {
+            else if (_currentMode == "Reset") {
                 bool success = await SupabaseService.ResetPassword(user, pass);
-                if (success)
-                {
+                if (success) {
                     ShowError("Đổi mật khẩu thành công! Hãy đăng nhập lại.");
                     ResetUI();
                     Keyboard.ClearFocus();
@@ -151,16 +134,13 @@ namespace TetrisApp.Views
                 }
                 else ShowError("Không tìm thấy tên tài khoản này!");
             }
-            else
-            {
+            else {
                 bool success = await SupabaseService.Login(user, pass);
-                if (success)
-                {
+                if (success) {
                     if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                     NavigationService?.Navigate(new MenuPage());
                 }
-                else
-                {
+                else {
                     ShowError("Sai tên đăng nhập hoặc mật khẩu!");
                     PasswordBox.Clear();
                     PasswordBox.Focus();
@@ -168,15 +148,12 @@ namespace TetrisApp.Views
             }
         }
 
-        private void ShowError(string msg)
-        {
+        private void ShowError(string msg) {
             ((MainWindow)Application.Current.MainWindow).ShowOverlay("Thông báo", msg);
         }
 
-        private void PlayClickSound()
-        {
-            try
-            {
+        private void PlayClickSound() {
+            try {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/click.mp3");
                 _clickSound.Open(new Uri(soundPath));
                 _clickSound.Volume = AppSettings.SfxVolume;
@@ -186,30 +163,33 @@ namespace TetrisApp.Views
             catch { }
         }
 
-        private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
+        private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
             // 1. Tắt Hover ngay lập tức khi đụng vào phím
             IsHoverEnabled = false;
 
             var currentFocus = Keyboard.FocusedElement;
 
             // 2. Logic "Đánh thức" (khi mới vào chưa chọn gì)
-            if (currentFocus == this || currentFocus == null || currentFocus is Grid)
-            {
-                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Left || e.Key == Key.Right)
-                {
-                    UsernameTextBox.Focus();
+            bool IsIdleFocus = currentFocus == null || currentFocus == this || currentFocus == FocusPark || currentFocus is Grid;
+
+            if (IsIdleFocus) {
+                if (e.Key == Key.Tab) {
                     e.Handled = true;
+                    UsernameTextBox.Focus();
+                    return;
+                }
+
+                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Enter) {
+                    e.Handled = true;
+                    UsernameTextBox.Focus();
                     return;
                 }
             }
 
             // --- PHẦN QUAN TRỌNG: XỬ LÝ PHÍM TRÁI / PHẢI ---
-            if (e.Key == Key.Left || e.Key == Key.Right)
-            {
+            if (e.Key == Key.Left || e.Key == Key.Right) {
                 // Nếu đang ở ô nhập liệu (TextBox/PasswordBox) -> Cho phép dùng để di chuyển con trỏ sửa chữ
-                if (currentFocus is TextBox || currentFocus is PasswordBox)
-                {
+                if (currentFocus is TextBox || currentFocus is PasswordBox) {
                     return; // Không làm gì cả, để mặc định cho Windows xử lý
                 }
 
@@ -218,40 +198,32 @@ namespace TetrisApp.Views
                 return;
             }
 
-            if (e.Key == Key.Down)
-            {
+            if (e.Key == Key.Down) {
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Next);
             }
-            else if (e.Key == Key.Up)
-            {
+            else if (e.Key == Key.Up) {
                 e.Handled = true;
                 MoveFocus(FocusNavigationDirection.Previous);
             }
-            else if (e.Key == Key.Enter)
-            {
+            else if (e.Key == Key.Enter) {
                 e.Handled = true;
 
-                if (currentFocus == UsernameTextBox)
-                {
+                if (currentFocus == UsernameTextBox) {
                     PasswordBox.Focus();
                 }
-                else if (currentFocus == PasswordBox)
-                {
+                else if (currentFocus == PasswordBox) {
                     LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 }
-                else if (currentFocus is Button btn)
-                {
+                else if (currentFocus is Button btn) {
                     btn.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 }
             }
         }
 
-        private void MoveFocus(FocusNavigationDirection direction)
-        {
+        private void MoveFocus(FocusNavigationDirection direction) {
             var focusedElement = Keyboard.FocusedElement as UIElement;
-            if (focusedElement != null)
-            {
+            if (focusedElement != null) {
                 focusedElement.MoveFocus(new TraversalRequest(direction));
             }
         }
