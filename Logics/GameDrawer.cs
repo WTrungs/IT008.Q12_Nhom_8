@@ -18,7 +18,6 @@ namespace TetrisApp.Views {
 		TetrominoKind currentKind;
 		int[,] shape;
 		SolidColorBrush colorBrush;
-		DoubleAnimation flashAnimation;
 
 		private void InitializeDrawer() {
 			GameGrid.Children.Clear();
@@ -38,12 +37,6 @@ namespace TetrisApp.Views {
 					GameGrid.Children.Add(b);
 				}
 			}
-			flashAnimation = new DoubleAnimation {
-				From = 1.0,
-				To = 0.5,
-				Duration = TimeSpan.FromSeconds(0.15),
-				AutoReverse = true,
-			};
 		}
 
 		private SolidColorBrush GetBrush(string colorCode) {
@@ -55,9 +48,18 @@ namespace TetrisApp.Views {
 			return brushCache[colorCode];
 		}
 
-		public void ApplyFlashAnimation(int row, int col) {
+		public void ApplyFlashColorAnimation(int row, int col) {
 			Border cell = gridCells[19 - row, col];
-			cell.BeginAnimation(Border.OpacityProperty, flashAnimation);
+			Color originalColor = (Color)ColorConverter.ConvertFromString(gameEngine.boardGame[row, col].color);
+			SolidColorBrush animatedColor = new SolidColorBrush(Colors.White);
+			cell.Background = animatedColor;
+			ColorAnimation colorAnimation = new ColorAnimation {
+				From = Colors.White,
+				To = originalColor,
+				Duration = TimeSpan.FromMilliseconds(500),
+				EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+			};
+			animatedColor.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
 		}
 
 		public void Draw() {
@@ -77,8 +79,10 @@ namespace TetrisApp.Views {
 				for (int c = 0; c < 10; c++) {
 					gridCells[r, c].BorderThickness = new Thickness(0);
 					gridCells[r, c].BorderBrush = null;
-					gridCells[r, c].Background = Brushes.Transparent;
-					gridCells[r, c].Effect = null;
+					if (gameEngine.boardGame[19 - r, c] == null || !gameEngine.boardGame[19 - r, c].isFilled) {
+						gridCells[r, c].Background = Brushes.Transparent;
+						gridCells[r, c].Effect = null;
+					}
 				}
 			}
 		}
@@ -87,7 +91,12 @@ namespace TetrisApp.Views {
 			for (int r = 0; r < 20; r++) {
 				for (int c = 0; c < 10; c++) {
 					if (gameEngine.boardGame[r, c] != null && gameEngine.boardGame[r, c].isFilled) {
-						gridCells[19 - r, c].Background = GetBrush(gameEngine.boardGame[r, c].color);
+						var cell = gridCells[19 - r, c];
+						if (cell.Background is SolidColorBrush currentBrush &&
+							currentBrush.GetAnimationBaseValue(SolidColorBrush.ColorProperty) != DependencyProperty.UnsetValue) {
+							continue;
+						}
+						cell.Background = GetBrush(gameEngine.boardGame[r, c].color);
 					}
 				}
 			}
