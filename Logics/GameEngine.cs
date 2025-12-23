@@ -309,7 +309,9 @@ namespace TetrisApp.Views {
 					}
 					boardGame[curRow, curCol].isFilled = true;
 					boardGame[curRow, curCol].color = tetrominoColor[GetCurrentKind()];
-					gamePage.ApplyFlashColorAnimation(curRow, curCol);
+					if (0 <= curRow && curRow < 20 && 0 <= curCol && curCol < 10) {
+						gamePage.ApplyFlashColorAnimation(curRow, curCol);
+					}
 				}
 			}
 		}
