@@ -1,4 +1,4 @@
-﻿using System; 
+﻿using System;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,15 +28,12 @@ namespace TetrisApp {
             ((App)Application.Current).UpdateBackgroundMusic();
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
             // Nếu Overlay thoát game đang hiện thì return để logic Overlay xử lý
             if (OverlayLayer.Visibility == Visibility.Visible) return;
 
-            if (e.Key == Key.Escape)
-            {
-                if (MainFrame.Content is TetrisApp.Views.GamePage)
-                {
+            if (e.Key == Key.Escape) {
+                if (MainFrame.Content is TetrisApp.Views.GamePage) {
                     return;
                 }
                 Application.Current.Shutdown();
@@ -98,13 +95,13 @@ namespace TetrisApp {
 
         // [ĐÃ SỬA] Thêm PlayClickSound() vào sự kiện click
         private void OverlayOkButton_Click(object sender, RoutedEventArgs e) {
-            PlayClickSound(); 
+            PlayClickSound();
             CloseOverlay(true);
         }
 
         // [ĐÃ SỬA] Thêm PlayClickSound() vào sự kiện click
         private void OverlayCancelButton_Click(object sender, RoutedEventArgs e) {
-            PlayClickSound(); 
+            PlayClickSound();
             CloseOverlay(false);
         }
 

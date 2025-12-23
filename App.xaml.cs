@@ -8,21 +8,15 @@ using TetrisApp.Services;
 
 namespace TetrisApp {
     public partial class App : Application {
-        private static readonly MediaPlayer _bgmPlayer = new MediaPlayer();
-        private static readonly MediaPlayer _hoverSound = new MediaPlayer();
+        private static readonly MediaPlayer bgmPlayer = new MediaPlayer();
+        private static readonly MediaPlayer hoverSound = new MediaPlayer();
 
-        private static string? _currentBgmPath;
+        private static string? currentBgmPath;
 
         public App() {
-            _bgmPlayer.MediaFailed += (_, ev) =>
-                System.Diagnostics.Debug.WriteLine("BGM MediaFailed: " + ev.ErrorException?.Message);
-
-            _bgmPlayer.MediaOpened += (_, __) =>
-                System.Diagnostics.Debug.WriteLine("BGM MediaOpened OK");
-
-            _bgmPlayer.MediaEnded += (_, __) => {
-                _bgmPlayer.Position = TimeSpan.Zero;
-                _bgmPlayer.Play();
+            bgmPlayer.MediaEnded += (_, __) => {
+                bgmPlayer.Position = TimeSpan.Zero;
+                bgmPlayer.Play();
             };
         }
 
@@ -35,10 +29,10 @@ namespace TetrisApp {
                 string soundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "hover.mp3");
                 if (!File.Exists(soundPath)) return;
 
-                _hoverSound.Open(new Uri(soundPath, UriKind.Absolute));
-                _hoverSound.Volume = AppSettings.SfxVolume;
-                _hoverSound.Stop();
-                _hoverSound.Play();
+                hoverSound.Open(new Uri(soundPath, UriKind.Absolute));
+                hoverSound.Volume = AppSettings.SfxVolume;
+                hoverSound.Stop();
+                hoverSound.Play();
             }
             catch { }
         }
@@ -50,34 +44,32 @@ namespace TetrisApp {
 
         public void UpdateBackgroundMusic() {
             if (!AppSettings.IsMusicEnabled) {
-                _bgmPlayer.Stop();
+                bgmPlayer.Stop();
                 return;
             }
 
             try {
-                _bgmPlayer.Volume = Math.Max(0, Math.Min(1, AppSettings.MusicVolume));
+                bgmPlayer.Volume = Math.Max(0, Math.Min(1, AppSettings.MusicVolume));
 
                 string trackPath = GetTrackPathFromSettings();
 
-                System.Diagnostics.Debug.WriteLine("BGM path = " + trackPath);
-                System.Diagnostics.Debug.WriteLine("Exists = " + File.Exists(trackPath));
                 if (!File.Exists(trackPath)) {
                     System.Diagnostics.Debug.WriteLine($"Can not find music file: {trackPath}");
-                    _bgmPlayer.Stop();
+                    bgmPlayer.Stop();
                     return;
                 }
 
-                bool isNewTrack = !string.Equals(_currentBgmPath, trackPath, StringComparison.OrdinalIgnoreCase);
+                bool isNewTrack = !string.Equals(currentBgmPath, trackPath, StringComparison.OrdinalIgnoreCase);
 
                 if (isNewTrack) {
-                    _currentBgmPath = trackPath;
-                    _bgmPlayer.Open(new Uri(trackPath, UriKind.Absolute));
-                    _bgmPlayer.Volume = AppSettings.MusicVolume;
-                    _bgmPlayer.Position = TimeSpan.Zero;
-                    _bgmPlayer.Play();
+                    currentBgmPath = trackPath;
+                    bgmPlayer.Open(new Uri(trackPath, UriKind.Absolute));
+                    bgmPlayer.Volume = AppSettings.MusicVolume;
+                    bgmPlayer.Position = TimeSpan.Zero;
+                    bgmPlayer.Play();
                 }
                 else {
-                    _bgmPlayer.Play();
+                    bgmPlayer.Play();
                 }
             }
             catch (Exception ex) {
@@ -89,6 +81,7 @@ namespace TetrisApp {
             base.OnStartup(e);
 
             await SupabaseService.InitializeAsync();
+            LocalSettingsService.LoadToAppSettings(null);
 
             string audioDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Audio");
             string candidate = (AppSettings.SelectedTrack ?? "").Trim();

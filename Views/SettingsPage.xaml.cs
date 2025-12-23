@@ -9,53 +9,55 @@ using TetrisApp.Services;
 
 namespace TetrisApp.Views {
     public partial class SettingsPage : Page {
-        private readonly MediaPlayer _clickSound = new MediaPlayer();
-
-        private SettingsSnapshot _initial;
-        private bool _isApplying;
-
+        private readonly MediaPlayer clickSound = new MediaPlayer();
+        private SettingsSnapshot initial;
+        private bool isApplying;
+        private bool isLoaded;
         // Chỉ bật khi mày nhấn Enter ở TrackCombo (mở dropdown)
-        private bool _isTrackTabMode;
+        private bool isTrackTabMode;
 
-        // 1. Dependency Property: Công tắc Hover
+        // Dependency Property: Công tắc Hover
+        public static readonly DependencyProperty IsHoverEnabledProperty = DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(SettingsPage), new PropertyMetadata(true));
         public bool IsHoverEnabled {
             get { return (bool)GetValue(IsHoverEnabledProperty); }
             set { SetValue(IsHoverEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty IsHoverEnabledProperty =
-            DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(SettingsPage), new PropertyMetadata(true));
-
         public SettingsPage() {
             InitializeComponent();
+
+            Loaded += SettingsPage_Loaded;
         }
 
-        // 2) LOAD: không focus vào control nào; Tab lần đầu mới vào MusicToggle
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e) {
+            if (isLoaded) {
+                ApplyUIFromSettings();
+                return;
+            }
+
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
-                // Snapshot để Cancel revert
-                _initial = new SettingsSnapshot {
+
+                initial = new SettingsSnapshot {
                     IsMusicEnabled = AppSettings.IsMusicEnabled,
                     MusicVolume = AppSettings.MusicVolume,
                     SfxVolume = AppSettings.SfxVolume,
                     SelectedTrack = AppSettings.SelectedTrack ?? ""
                 };
 
-                _isApplying = true;
+                isApplying = true;
 
-                if (MusicToggle != null) MusicToggle.IsChecked = _initial.IsMusicEnabled;
-                if (MusicVolumeSlider != null) MusicVolumeSlider.Value = _initial.MusicVolume;
-                if (SfxVolumeSlider != null) SfxVolumeSlider.Value = _initial.SfxVolume;
+                if (MusicToggle != null) MusicToggle.IsChecked = initial.IsMusicEnabled;
+                if (MusicVolumeSlider != null) MusicVolumeSlider.Value = initial.MusicVolume * 100.0;
+                if (SfxVolumeSlider != null) SfxVolumeSlider.Value = initial.SfxVolume * 100.0;
 
                 if (TrackCombo != null) {
-                    SetTrackSelectionByName(_initial.SelectedTrack);
+                    SetTrackSelectionByName(initial.SelectedTrack);
                     TrackCombo.IsDropDownOpen = false;
                 }
 
-                _isTrackTabMode = false;
-                _isApplying = false;
-
-                // Không focus vào gì cả (nhưng vẫn nhận Tab)
+                isTrackTabMode = false;
+                isApplying = false;
+                isLoaded = true;
                 Keyboard.ClearFocus();
                 RootGrid.Focus();
                 Keyboard.Focus(RootGrid);
@@ -63,55 +65,58 @@ namespace TetrisApp.Views {
         }
 
         // ===== LIVE APPLY =====
-        // XAML đang gắn cho CheckBox + ComboBox
         private void SettingControl_Changed(object sender, RoutedEventArgs e) {
-            if (_isApplying) return;
+            if (isApplying) return;
             ApplyLiveFromUI();
         }
 
         // XAML đang gắn cho Slider.ValueChanged
         private void SettingControl_Changed(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            if (_isApplying) return;
+            if (isApplying) return;
             ApplyLiveFromUI();
         }
         private void TrackCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (_isApplying) return;
+            if (isApplying) return;
             ApplyLiveFromUI();
         }
         private void SettingControl_RoutedChanged(object sender, RoutedEventArgs e) {
-            if (_isApplying) return;
+            if (isApplying) return;
             ApplyLiveFromUI();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            if (_isApplying) return;
+            if (isApplying) return;
             ApplyLiveFromUI();
         }
 
         private void ApplyLiveFromUI() {
             AppSettings.IsMusicEnabled = MusicToggle?.IsChecked ?? true;
-            AppSettings.MusicVolume = MusicVolumeSlider?.Value ?? 1.0;
-            AppSettings.SfxVolume = SfxVolumeSlider?.Value ?? 1.0;
+            AppSettings.MusicVolume = (MusicVolumeSlider?.Value ?? 100.0) / 100.0;
+            AppSettings.SfxVolume = (SfxVolumeSlider?.Value ?? 100.0) / 100.0;
 
             if (TrackCombo?.SelectedItem is ComboBoxItem item) {
                 AppSettings.SelectedTrack = item.Tag?.ToString()?.Trim() ?? "";
             }
 
-            if (Application.Current is App myApp) {
-                myApp.UpdateBackgroundMusic();
-            }
+            if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
+        }
+        private void ApplyUIFromSettings() {
+            isApplying = true;
+            MusicToggle.IsChecked = AppSettings.IsMusicEnabled;
+            MusicVolumeSlider.Value = AppSettings.MusicVolume * 100.0;
+            SfxVolumeSlider.Value = AppSettings.SfxVolume * 100.0;
+            isApplying = false;
         }
 
         // ===== TAB/ENTER LOGIC =====
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
-            // Tắt hover khi dùng keyboard điều hướng
+            // Turn off hover when using keyboard
             if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Tab) {
                 IsHoverEnabled = false;
             }
 
             var currentFocus = Keyboard.FocusedElement;
 
-            // Nếu chưa focus vào control nào: Tab/Up/Down -> nhảy vào MusicToggle (TabIndex=0)
             if (currentFocus == null || currentFocus == this || currentFocus is Frame || currentFocus == RootGrid) {
                 if (e.Key == Key.Tab || e.Key == Key.Down || e.Key == Key.Up) {
                     MusicToggle?.Focus();
@@ -172,7 +177,7 @@ namespace TetrisApp.Views {
                 if (!TrackCombo.IsDropDownOpen) {
                     // Enter lần 1: mở và bật track-mode
                     TrackCombo.IsDropDownOpen = true;
-                    _isTrackTabMode = true;
+                    isTrackTabMode = true;
 
                     if (TrackCombo.SelectedIndex < 0 && count > 0)
                         TrackCombo.SelectedIndex = 0;
@@ -183,9 +188,9 @@ namespace TetrisApp.Views {
                     return;
                 }
                 else {
-                    // Enter lần 2: chốt selection và đóng
+                    // Enter lần 2: selection và đóng
                     TrackCombo.IsDropDownOpen = false;
-                    _isTrackTabMode = false;
+                    isTrackTabMode = false;
 
                     PlayClickSound();
                     ApplyLiveFromUI();
@@ -198,19 +203,19 @@ namespace TetrisApp.Views {
             if (e.Key == Key.Escape && TrackCombo.IsDropDownOpen) {
                 e.Handled = true;
                 TrackCombo.IsDropDownOpen = false;
-                _isTrackTabMode = false;
+                isTrackTabMode = false;
                 TrackCombo.Focus();
                 return;
             }
 
-            // Nếu dropdown đóng vì lý do khác (click chuột), thoát track-mode
+            // If not in track-mode or dropdown closed, exit track-mode
             if (!TrackCombo.IsDropDownOpen) {
-                _isTrackTabMode = false;
+                isTrackTabMode = false;
                 return;
             }
 
             // Track-mode + dropdown mở: TAB / UP / DOWN sẽ cycle trong list (wrap vòng)
-            if (_isTrackTabMode && TrackCombo.IsDropDownOpen) {
+            if (isTrackTabMode && TrackCombo.IsDropDownOpen) {
                 if (count <= 0) return;
 
                 if (e.Key == Key.Tab) {
@@ -238,10 +243,8 @@ namespace TetrisApp.Views {
 
             TrackCombo.SelectedIndex = next;
 
-            // feel liền
             ApplyLiveFromUI();
 
-            // giữ focus ở combo 
             TrackCombo.Focus();
         }
 
@@ -257,10 +260,10 @@ namespace TetrisApp.Views {
         private void PlayClickSound() {
             try {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "click.mp3");
-                _clickSound.Open(new Uri(soundPath));
-                _clickSound.Volume = AppSettings.SfxVolume;
-                _clickSound.Stop();
-                _clickSound.Play();
+                clickSound.Open(new Uri(soundPath));
+                clickSound.Volume = AppSettings.SfxVolume;
+                clickSound.Stop();
+                clickSound.Play();
             }
             catch { }
         }
@@ -268,34 +271,35 @@ namespace TetrisApp.Views {
         // ===== ACCEPT / CANCEL =====
         private async void Accept_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-
             ApplyLiveFromUI();
 
-            await SupabaseService.SaveUserData();
-            NavigationService?.Navigate(new MenuPage());
+            var username = SupabaseService.CurrentUser?.Username; 
+            LocalSettingsService.SaveFromAppSettings(username);
+
+            NavigationService?.Navigate(new MenuPage()); 
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            // Revert runtime + UI về snapshot ban đầu
-            _isApplying = true;
+            // Revert to initial settings
+            isApplying = true;
 
-            AppSettings.IsMusicEnabled = _initial.IsMusicEnabled;
-            AppSettings.MusicVolume = _initial.MusicVolume;
-            AppSettings.SfxVolume = _initial.SfxVolume;
-            AppSettings.SelectedTrack = _initial.SelectedTrack;
+            AppSettings.IsMusicEnabled = initial.IsMusicEnabled;
+            AppSettings.MusicVolume = initial.MusicVolume;
+            AppSettings.SfxVolume = initial.SfxVolume;
+            AppSettings.SelectedTrack = initial.SelectedTrack;
 
-            if (MusicToggle != null) MusicToggle.IsChecked = _initial.IsMusicEnabled;
-            if (MusicVolumeSlider != null) MusicVolumeSlider.Value = _initial.MusicVolume;
-            if (SfxVolumeSlider != null) SfxVolumeSlider.Value = _initial.SfxVolume;
+            if (MusicToggle != null) MusicToggle.IsChecked = initial.IsMusicEnabled;
+            if (MusicVolumeSlider != null) MusicVolumeSlider.Value = initial.MusicVolume * 100.0;
+            if (SfxVolumeSlider != null) SfxVolumeSlider.Value = initial.SfxVolume * 100.0;
             if (TrackCombo != null) {
-                SetTrackSelectionByName(_initial.SelectedTrack);
+                SetTrackSelectionByName(initial.SelectedTrack);
                 TrackCombo.IsDropDownOpen = false;
             }
 
-            _isTrackTabMode = false;
-            _isApplying = false;
+            isTrackTabMode = false;
+            isApplying = false;
 
             if (Application.Current is App myApp)
                 myApp.UpdateBackgroundMusic();

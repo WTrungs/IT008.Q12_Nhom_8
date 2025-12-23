@@ -171,7 +171,8 @@ namespace TetrisApp.Views {
 
         private void SaveGameButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            ((MainWindow)Application.Current.MainWindow).ShowOverlay("Information", "The game will be auto saved when you exit the game.");
+            SupabaseService.SaveUserData();
+            ((MainWindow)Application.Current.MainWindow).ShowOverlay("Save Game", "Your game has been saved successfully.");
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e) {
