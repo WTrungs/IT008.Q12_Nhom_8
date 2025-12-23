@@ -65,6 +65,7 @@ namespace TetrisApp.Views {
 			currentLevel = 0;
 			currentLine = 0;
 			isHolded = false;
+			isHoldedInThisTurn = false;
 			currentTime = dropTick;
 			currentPosition = startPosition;
 			holdTetromino = TetrominoKind.O;
@@ -99,6 +100,14 @@ namespace TetrisApp.Views {
 
 		public bool GetIsHolded() {
 			return isHolded;
+		}
+
+		public TetrominoKind GetHoldTetromino() {
+			return holdTetromino;
+		}
+
+		public TetrominoKind GetNextTetromino() {
+			return kindArray[1];
 		}
 
 		public void ChangeHold() { // 1 lượt chỉ được đổi hold 1 lần

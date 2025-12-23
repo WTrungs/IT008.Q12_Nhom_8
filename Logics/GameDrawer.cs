@@ -55,6 +55,8 @@ namespace TetrisApp.Views {
 			colorBrush = GetBrush(gameEngine.tetrominoColor[currentKind]);
 			DrawCurrentTetromino();
 			DrawGhostTetromino();
+			DrawHoldTetromino();
+			DrawNextTetromino();
 		}
 
 		private void ResetBoard() {
@@ -117,8 +119,25 @@ namespace TetrisApp.Views {
 		}
 
 		private void DrawHoldTetromino() {
-			if (!gameEngine.GetIsHolded()) return;
-			
+			if (!gameEngine.GetIsHolded()) {
+				HoldBorder.Child = null;
+				return;
+			}
+			Control piece = new Control();
+			string resourceName = "Tetromino" + gameEngine.tetrominoName[gameEngine.GetHoldTetromino()];
+			piece.Template = (ControlTemplate)this.FindResource(resourceName);
+			piece.HorizontalAlignment = HorizontalAlignment.Center;
+			piece.VerticalAlignment = VerticalAlignment.Center;
+			HoldBorder.Child = piece;
+		}
+
+		private void DrawNextTetromino() {
+			Control piece = new Control();
+			string resourceName = "Tetromino" + gameEngine.tetrominoName[gameEngine.GetNextTetromino()];
+			piece.Template = (ControlTemplate)this.FindResource(resourceName);
+			piece.HorizontalAlignment = HorizontalAlignment.Center;
+			piece.VerticalAlignment = VerticalAlignment.Center;
+			NextBorder.Child = piece;
 		}
 	}
 }

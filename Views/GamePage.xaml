@@ -29,7 +29,143 @@
                 </GeometryDrawing>
             </DrawingBrush.Drawing>
         </DrawingBrush>
-    </Page.Resources>
+
+		<SolidColorBrush x:Key="ColorI" Color="#00FFFF"/>
+		<SolidColorBrush x:Key="ColorL" Color="#FF7F00"/>
+		<SolidColorBrush x:Key="ColorJ" Color="#0000FF"/>
+		<SolidColorBrush x:Key="ColorO" Color="#FFFF00"/>
+		<SolidColorBrush x:Key="ColorS" Color="#00FF00"/>
+		<SolidColorBrush x:Key="ColorT" Color="#800080"/>
+		<SolidColorBrush x:Key="ColorZ" Color="#FF0000"/>
+
+		<Style x:Key="BlockStyle" TargetType="Border">
+			<Setter Property="BorderBrush" Value="#44ffffff"/>
+			<Setter Property="BorderThickness" Value="0.5"/>
+			<Setter Property="CornerRadius" Value="3"/>
+		</Style>
+
+		<ControlTemplate x:Key="TetrominoI">
+			<Grid Width="104" Height="26">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Column="0" Background="{StaticResource ColorI}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Column="1" Background="{StaticResource ColorI}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Column="2" Background="{StaticResource ColorI}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Column="3" Background="{StaticResource ColorI}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="TetrominoJ">
+			<Grid Width="78" Height="52">
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Row="0" Grid.Column="0" Background="{StaticResource ColorJ}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="0" Background="{StaticResource ColorJ}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="1" Background="{StaticResource ColorJ}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="2" Background="{StaticResource ColorJ}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="TetrominoL">
+			<Grid Width="78" Height="52">
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Row="0" Grid.Column="2" Background="{StaticResource ColorL}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="0" Background="{StaticResource ColorL}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="1" Background="{StaticResource ColorL}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="2" Background="{StaticResource ColorL}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="TetrominoO">
+			<Grid Width="52" Height="52">
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Row="0" Grid.Column="0" Background="{StaticResource ColorO}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="0" Grid.Column="1" Background="{StaticResource ColorO}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="0" Background="{StaticResource ColorO}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="1" Background="{StaticResource ColorO}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="TetrominoS">
+			<Grid Width="78" Height="52">
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Row="0" Grid.Column="1" Background="{StaticResource ColorS}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="0" Grid.Column="2" Background="{StaticResource ColorS}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="0" Background="{StaticResource ColorS}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="1" Background="{StaticResource ColorS}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="TetrominoT">
+			<Grid Width="78" Height="52">
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Row="0" Grid.Column="1" Background="{StaticResource ColorT}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="0" Background="{StaticResource ColorT}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="1" Background="{StaticResource ColorT}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="2" Background="{StaticResource ColorT}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="TetrominoZ">
+			<Grid Width="78" Height="52">
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Row="0" Grid.Column="0" Background="{StaticResource ColorZ}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="0" Grid.Column="1" Background="{StaticResource ColorZ}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="1" Background="{StaticResource ColorZ}" Style="{StaticResource BlockStyle}"/>
+				<Border Grid.Row="1" Grid.Column="2" Background="{StaticResource ColorZ}" Style="{StaticResource BlockStyle}"/>
+			</Grid>
+		</ControlTemplate>
+	</Page.Resources>
 
     <Grid>
         <!-- NỀN -->
@@ -195,14 +331,16 @@
                                            Foreground="{StaticResource TextMuted}" 
                                            HorizontalAlignment="Center" 
                                            FontWeight="Bold"/>
-                                <Border Height="131.25"
-                                        Width="131.25"
-                                        Margin="0,8,0,0"
-                                        CornerRadius="12"
-                                        BorderBrush="#2A2A33"
-                                        BorderThickness="1"
-                                        Background="#0D1020"/>
-                            </StackPanel>
+								<Border x:Name="HoldBorder"  Height="130" Width="130"
+                                    CornerRadius="12"
+                                    BorderBrush="#2A2A33"
+                                    BorderThickness="0"
+									Margin="0,8,0,0"
+									Padding="15"
+                                    Background="#0D1020">
+									
+								</Border>
+							</StackPanel>
                         </Border>
                         <Border Grid.Column="1"
                                 Padding="12"
@@ -226,14 +364,17 @@
                                            Foreground="{StaticResource TextMuted}"
                                            HorizontalAlignment="Center"
                                            FontWeight="Bold"/>
-                                <Border Height="131.25"
-                                        Width="131.25"
-                                        Margin="0,8,0,0"
-                                        CornerRadius="12"
-                                        BorderBrush="#2A2A33"
-                                        BorderThickness="1"
-                                        Background="#0D1020"/>
-                            </StackPanel>
+								<Border x:Name="NextBorder"
+									Height="130" Width="130"
+                                    CornerRadius="12"
+                                    BorderBrush="#2A2A33"
+                                    BorderThickness="0"
+								                Margin="0,8,0,0"
+                                    Background="#0D1020"
+										Padding="15">
+									
+								</Border>
+							</StackPanel>
                         </Border>
                     </Grid>
 
