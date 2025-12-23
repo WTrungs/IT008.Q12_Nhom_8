@@ -33,7 +33,7 @@ namespace TetrisApp.Views {
 		}
 
 		private void GamePage_Loaded(object sender, RoutedEventArgs e) {
-			InitializeGrid();
+			InitializeDrawer();
 			InitializeSounds();
 			CompositionTarget.Rendering += OnRender;
 			this.Focusable = true;

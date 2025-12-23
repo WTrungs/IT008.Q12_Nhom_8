@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Newtonsoft.Json;
 using TetrisApp.Views;
+using System.Windows.Media.Animation;
 
 namespace TetrisApp.Views {
 	public struct Position {
@@ -308,6 +309,7 @@ namespace TetrisApp.Views {
 					}
 					boardGame[curRow, curCol].isFilled = true;
 					boardGame[curRow, curCol].color = tetrominoColor[GetCurrentKind()];
+					gamePage.ApplyFlashAnimation(curRow, curCol);
 				}
 			}
 		}
@@ -360,6 +362,10 @@ namespace TetrisApp.Views {
 
 		void MakeEraseLineAnimation(int line) {
 
+		}
+
+		void MakeHardDropAnimation() {
+			
 		}
 
 		void LoseGame() {

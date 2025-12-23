@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using TetrisApp.Models;
 using TetrisApp.Services;
 using TetrisApp.Views;
+using System.Windows.Media.Animation;
 
 namespace TetrisApp.Views {
 	public partial class GamePage : Page {
@@ -17,8 +18,9 @@ namespace TetrisApp.Views {
 		TetrominoKind currentKind;
 		int[,] shape;
 		SolidColorBrush colorBrush;
+		DoubleAnimation flashAnimation;
 
-		private void InitializeGrid() {
+		private void InitializeDrawer() {
 			GameGrid.Children.Clear();
 			for (int r = 0; r < 20; r++) {
 				for (int c = 0; c < 10; c++) {
@@ -36,6 +38,12 @@ namespace TetrisApp.Views {
 					GameGrid.Children.Add(b);
 				}
 			}
+			flashAnimation = new DoubleAnimation {
+				From = 1.0,
+				To = 0.5,
+				Duration = TimeSpan.FromSeconds(0.15),
+				AutoReverse = true,
+			};
 		}
 
 		private SolidColorBrush GetBrush(string colorCode) {
@@ -45,6 +53,11 @@ namespace TetrisApp.Views {
 				brushCache[colorCode] = brush;
 			}
 			return brushCache[colorCode];
+		}
+
+		public void ApplyFlashAnimation(int row, int col) {
+			Border cell = gridCells[19 - row, col];
+			cell.BeginAnimation(Border.OpacityProperty, flashAnimation);
 		}
 
 		public void Draw() {
@@ -105,13 +118,6 @@ namespace TetrisApp.Views {
 						if (r >= 0 && r < 20 && c >= 0 && c < 10) {
 							gridCells[19 - r, c].BorderThickness = new Thickness(1);
 							gridCells[19 - r, c].BorderBrush = colorBrush;
-							gridCells[19 - r, c].Effect = new DropShadowEffect {
-								Color = color,
-								BlurRadius = 10,     // Độ tỏa của ánh sáng
-								ShadowDepth = 0,     // Bắt buộc bằng 0 để tỏa đều 4 hướng
-								Opacity = 1,         // Độ đậm
-								RenderingBias = RenderingBias.Quality // Tối ưu hiển thị
-							};
 						}
 					}
 				}
