@@ -12,6 +12,14 @@ namespace TetrisApp.Views {
 			this.row = row;
 			this.col = col;
 		}
+
+		public static bool operator == (Position a, Position b) {
+			return a.row == b.row && a.col == b.col;
+		}
+
+		public static bool operator != (Position a, Position b) {
+			return !(a == b);
+		}
 	}
 
 	public partial class GameEngine {
@@ -245,10 +253,8 @@ namespace TetrisApp.Views {
 			--newPos.row;
 			if (CheckValidPosition(newPos)) {
 				currentPosition = newPos;
+				gamePage.PlaySound(gamePage.moveSound);
 				currentTime = dropTick;
-			}
-			else {
-				MakeNewTurn();
 			}
 		}
 
