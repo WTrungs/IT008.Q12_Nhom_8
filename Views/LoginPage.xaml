@@ -286,6 +286,7 @@
                              Visibility="Collapsed" Margin="0,0,0,10"/>
 
                     <TextBlock
+                        x:Name="UsernameLabel"
                         Text="USERNAME"
                         Style="{StaticResource LabelText}"/>
 
@@ -305,15 +306,15 @@
                         x:Name="PasswordBox"
                         Style="{StaticResource SpacePasswordBox}"
                         KeyboardNavigation.TabIndex="1"
-                        GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10
-                        "/>
+                        GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10"/>
 
                     <TextBlock 
                         x:Name="OtpLabel" 
                         Text="OTP CODE (CHECK EMAIL)" 
                         Style="{StaticResource LabelText}" 
-                        Margin="0,15,0,5" 
+                        Margin="0,0,0,5" 
                         Visibility="Collapsed"/>
+                    
                     <TextBox 
                         x:Name="OtpTextBox" 
                         Style="{StaticResource SpaceTextBox}" 

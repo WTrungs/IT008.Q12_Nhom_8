@@ -4,22 +4,18 @@ using System.Threading.Tasks;
 using Supabase;
 using TetrisApp.Models;
 using System;
-using System.IO; 
+using System.IO;
 
-namespace TetrisApp.Services
-{
-    public static class SupabaseService
-    {
+namespace TetrisApp.Services {
+    public static class SupabaseService {
         private static Supabase.Client _client;
         private const string SupabaseUrl = "https://yyfsgusobkxzwnjuaimi.supabase.co";
         private const string SupabaseKey = "sb_publishable_9Vub2HaUQ7Er3sGBUpSEzQ_YKWoxmtP";
 
         public static PlayerProfile CurrentUser { get; private set; }
 
-        public static async Task InitializeAsync()
-        {
-            var options = new SupabaseOptions
-            {
+        public static async Task InitializeAsync() {
+            var options = new SupabaseOptions {
                 AutoRefreshToken = true,
                 AutoConnectRealtime = true
             };
@@ -27,26 +23,22 @@ namespace TetrisApp.Services
             await _client.InitializeAsync();
         }
 
-        public static void Logout()
-        {
+        public static void Logout() {
             CurrentUser = null;
             LocalSettingsService.LoadToAppSettings(null);
         }
 
-        public static async Task<bool> Login(string username, string password)
-        {
-            try
-            {
+        public static async Task<bool> Login(string username, string password) {
+            try {
                 var response = await _client.From<PlayerProfile>()
                                             .Where(x => x.Username == username)
                                             .Get();
                 var user = response.Models.FirstOrDefault();
 
-                if (user != null && user.Password == password)
-                {
+                if (user != null && user.Password == password) {
                     CurrentUser = user;
 
-                    
+
                     AppSettings.IsMusicEnabled = CurrentUser.MusicEnabled;
                     AppSettings.MusicVolume = CurrentUser.MusicVolume;
                     AppSettings.SfxVolume = CurrentUser.SfxVolume;
@@ -54,8 +46,7 @@ namespace TetrisApp.Services
                     string trackName = CurrentUser.SelectedTrack;
                     string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/Audio", trackName + ".mp3");
 
-                    if (!File.Exists(audioPath))
-                    {
+                    if (!File.Exists(audioPath)) {
                         trackName = "Puzzle";
                     }
                     AppSettings.SelectedTrack = trackName;
@@ -69,10 +60,8 @@ namespace TetrisApp.Services
             catch { return false; }
         }
 
-        public static async Task<string> Register(string username, string password, string email)
-        {
-            try
-            {
+        public static async Task<string> Register(string username, string password, string email) {
+            try {
                 var checkUser = await _client.From<PlayerProfile>()
                                          .Where(x => x.Username == username)
                                          .Get();
@@ -83,15 +72,14 @@ namespace TetrisApp.Services
                                           .Get();
                 if (checkEmail.Models.Count > 0) return "Email already exists!";
 
-                var newUser = new PlayerProfile
-                {
+                var newUser = new PlayerProfile {
                     Username = username,
                     Password = password,
                     Email = email,
                     MusicEnabled = true,
                     MusicVolume = 0.5,
                     SfxVolume = 0.5,
-                    SelectedTrack = "Puzzle", 
+                    SelectedTrack = "Puzzle",
                     Highscore = 0
                 };
 
@@ -102,10 +90,8 @@ namespace TetrisApp.Services
             catch (System.Exception ex) { return "Error: " + ex.Message; }
         }
 
-        public static async Task<bool> ResetPassword(string username, string newPassword)
-        {
-            try
-            {
+        public static async Task<bool> ResetPassword(string username, string newPassword) {
+            try {
                 var response = await _client.From<PlayerProfile>()
                                             .Where(x => x.Username == username)
                                             .Get();
@@ -120,12 +106,10 @@ namespace TetrisApp.Services
             catch { return false; }
         }
 
-        public static async Task SaveUserData(string gameDataJson = null)
-        {
+        public static async Task SaveUserData(string gameDataJson = null) {
             if (CurrentUser == null) return;
 
-            try
-            {
+            try {
                 var q = _client.From<PlayerProfile>()
                     .Where(x => x.Username == CurrentUser.Username)
                     .Set(x => x.MusicEnabled, AppSettings.IsMusicEnabled)
@@ -139,36 +123,29 @@ namespace TetrisApp.Services
 
                 await q.Update();
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine("[SaveUserData ERROR] " + ex);
             }
         }
 
-        public static async Task<List<PlayerProfile>> GetLeaderboard()
-        {
-            try
-            {
+        public static async Task<List<PlayerProfile>> GetLeaderboard() {
+            try {
                 var response = await _client.From<PlayerProfile>()
                                             .Order("highscore", Supabase.Postgrest.Constants.Ordering.Descending)
                                             .Limit(1000)
                                             .Get();
                 return response.Models;
             }
-            catch
-            {
+            catch {
                 return new List<PlayerProfile>();
             }
         }
 
-        public static async Task<bool> GenerateAndSendOtp(string email)
-        {
-            try
-            {
+        public static async Task<bool> GenerateAndSendOtp(string email) {
+            try {
                 string otp = new Random().Next(100000, 999999).ToString();
 
-                var updateModel = new PlayerProfile
-                {
+                var updateModel = new PlayerProfile {
                     OtpCode = otp,
                     OtpExpiry = DateTime.UtcNow.AddMinutes(5)
                 };
@@ -179,33 +156,27 @@ namespace TetrisApp.Services
                                             .Set(x => x.OtpExpiry, updateModel.OtpExpiry)
                                             .Update();
 
-                if (response.Models.Count > 0)
-                {
+                if (response.Models.Count > 0) {
                     EmailService.SendOtp(email, otp);
                     return true;
                 }
                 return false;
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 return false;
             }
         }
 
-        public static async Task<bool> VerifyOtp(string email, string inputOtp)
-        {
-            try
-            {
+        public static async Task<bool> VerifyOtp(string email, string inputOtp) {
+            try {
                 var response = await _client.From<PlayerProfile>()
                                             .Where(x => x.Email == email)
                                             .Get();
 
                 var user = response.Models.FirstOrDefault();
 
-                if (user != null)
-                {
-                    if (user.OtpCode == inputOtp && user.OtpExpiry > DateTime.UtcNow)
-                    {
+                if (user != null) {
+                    if (user.OtpCode == inputOtp && user.OtpExpiry > DateTime.UtcNow) {
                         await _client.From<PlayerProfile>()
                                      .Where(x => x.Email == email)
                                      .Set(x => x.OtpCode, (string)null)
@@ -217,10 +188,26 @@ namespace TetrisApp.Services
                 }
                 return false;
             }
-            catch
-            {
+            catch {
                 return false;
             }
         }
+
+        public static async Task<bool> ResetPasswordByEmail(string email, string newPassword) {
+            try {
+                var response = await _client.From<PlayerProfile>()
+                    .Where(x => x.Email == email)
+                    .Set(x => x.Password, newPassword)
+                    .Set(x => x.OtpCode, (string)null)    // Clears OTP code after password reset
+                    .Set(x => x.OtpExpiry, (DateTime?)null) // Clears OTP expiry after password reset
+                    .Update();
+
+                return response.Models.Count > 0;
+            }
+            catch {
+                return false;
+            }
+        }
+
     }
 }

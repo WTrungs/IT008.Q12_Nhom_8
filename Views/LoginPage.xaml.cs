@@ -47,7 +47,9 @@ namespace TetrisApp.Views {
             ContinueAsGuestButton.Content = "CONTINUE AS GUEST";
             if (PasswordLabel != null) PasswordLabel.Text = "PASSWORD";
 
+            UsernameLabel.Visibility = Visibility.Visible;
             UsernameTextBox.Visibility = Visibility.Visible;
+
             PasswordLabel.Visibility = Visibility.Visible;
             PasswordBox.Visibility = Visibility.Visible;
             ForgotPasswordLink.Visibility = Visibility.Visible;
@@ -95,6 +97,9 @@ namespace TetrisApp.Views {
             TitleText.Text = "RESET PASSWORD";
             LoginButton.Content = "SEND OTP";
             ContinueAsGuestButton.Content = "BACK TO LOGIN";
+
+            UsernameLabel.Visibility = Visibility.Collapsed;
+            UsernameTextBox.Visibility = Visibility.Collapsed;
 
             EmailLabel.Visibility = Visibility.Visible;
             EmailTextBox.Visibility = Visibility.Visible;
@@ -301,7 +306,6 @@ namespace TetrisApp.Views {
             }
         }
 
-
         private void SwitchToOtpMode() {
             _isWaitingForOtp = true;
 
@@ -326,6 +330,14 @@ namespace TetrisApp.Views {
 
             OtpLabel.Visibility = Visibility.Collapsed;
             OtpTextBox.Visibility = Visibility.Collapsed;
+
+            EmailLabel.Visibility = Visibility.Visible;
+            EmailTextBox.Visibility = Visibility.Visible;
+            EmailTextBox.Text = _tempEmail;
+            EmailTextBox.IsReadOnly = true;
+            EmailTextBox.Focusable = false;
+
+            UsernameTextBox.Visibility = Visibility.Collapsed;
 
             PasswordLabel.Text = "NEW PASSWORD";
             PasswordLabel.Visibility = Visibility.Visible;
