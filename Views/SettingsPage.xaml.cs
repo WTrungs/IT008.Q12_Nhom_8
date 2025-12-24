@@ -275,6 +275,16 @@ namespace TetrisApp.Views {
             var username = SupabaseService.CurrentUser?.Username; 
             LocalSettingsService.SaveFromAppSettings(username);
 
+            if (SupabaseService.CurrentUser != null)
+            {
+                SupabaseService.CurrentUser.MusicEnabled = AppSettings.IsMusicEnabled;
+                SupabaseService.CurrentUser.MusicVolume = AppSettings.MusicVolume;
+                SupabaseService.CurrentUser.SfxVolume = AppSettings.SfxVolume;
+                SupabaseService.CurrentUser.SelectedTrack = AppSettings.SelectedTrack;
+
+                await SupabaseService.SaveUserData();
+            }
+
             NavigationService?.Navigate(new MenuPage()); 
         }
 
