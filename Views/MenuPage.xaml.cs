@@ -52,6 +52,10 @@ namespace TetrisApp.Views {
             if (IsDescendantOf(old, SideMenu)) HamburgerToggle.IsChecked = false;
         }
 
+        private void Control_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
+            ((App)Application.Current).PlayHoverSound();
+        }
+
         private static bool IsDescendantOf(DependencyObject? child, DependencyObject parent) {
             while (child != null) {
                 if (ReferenceEquals(child, parent)) return true;
@@ -169,9 +173,9 @@ namespace TetrisApp.Views {
             NavigationService?.Navigate(new GamePage(saveData));
         }
 
-        private void SaveGameButton_Click(object sender, RoutedEventArgs e) {
+        private async void SaveGameButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            SupabaseService.SaveUserData();
+            await SupabaseService.SaveUserData();
             ((MainWindow)Application.Current.MainWindow).ShowOverlay("Save Game", "Your game has been saved successfully.");
         }
 

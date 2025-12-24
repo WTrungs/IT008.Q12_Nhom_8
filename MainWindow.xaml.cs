@@ -18,7 +18,7 @@ namespace TetrisApp {
         private Action<bool>? _overlayClosedCallback;
         private IInputElement? _previousFocus;
 
-        // [MỚI] Trình phát âm thanh cho Overlay
+        // Overlay click sound
         private MediaPlayer _clickSound = new MediaPlayer();
 
         public MainWindow() {
@@ -29,14 +29,21 @@ namespace TetrisApp {
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
-            // Nếu Overlay thoát game đang hiện thì return để logic Overlay xử lý
+            // Ignore if overlay is visible
             if (OverlayLayer.Visibility == Visibility.Visible) return;
 
             if (e.Key == Key.Escape) {
                 if (MainFrame.Content is TetrisApp.Views.GamePage) {
                     return;
                 }
-                Application.Current.Shutdown();
+
+            ((MainWindow)Application.Current.MainWindow).ShowOverlay("Exit game?", "Are you sure you want to exit?", true, async (result) => {
+                if (result) {
+                    await SupabaseService.SaveUserData();
+                    await System.Threading.Tasks.Task.Delay(300);
+                    Application.Current.Shutdown();
+                }
+            });
             }
         }
 
@@ -80,7 +87,7 @@ namespace TetrisApp {
             cb?.Invoke(result);
         }
 
-        // [MỚI] Hàm phát tiếng click (copy từ các file kia qua)
+        // Play click sound method
         private void PlayClickSound() {
             try {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "click.mp3");
@@ -93,13 +100,17 @@ namespace TetrisApp {
             }
         }
 
-        // [ĐÃ SỬA] Thêm PlayClickSound() vào sự kiện click
+        private void Control_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
+            ((App)Application.Current).PlayHoverSound();
+        }
+
+        // Play click sound on button clicks
         private void OverlayOkButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             CloseOverlay(true);
         }
 
-        // [ĐÃ SỬA] Thêm PlayClickSound() vào sự kiện click
+        // Play click sound on button clicks
         private void OverlayCancelButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             CloseOverlay(false);
@@ -108,7 +119,7 @@ namespace TetrisApp {
         private void OverlayLayer_PreviewKeyDown(object sender, KeyEventArgs e) {
             if (OverlayLayer.Visibility != Visibility.Visible) return;
 
-            // KHÓA phím mũi tên
+            // Lock arrow keys and escape key
             if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Left || e.Key == Key.Right) {
                 e.Handled = true;
                 return;
@@ -123,10 +134,10 @@ namespace TetrisApp {
         private async void ExitButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            // Giả sử bạn đang ở GamePage, hãy lấy dữ liệu lưu
+            // Save game data if in game page
             if (MainFrame.Content is GamePage gamePage) {
                 string json = gamePage.Engine.GetSaveDataJson();
-                await SupabaseService.SaveUserData(json); // Lưu lên Cloud
+                await SupabaseService.SaveUserData(json); // Save with current game data
             }
 
             Application.Current.Shutdown();

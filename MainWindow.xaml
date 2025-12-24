@@ -67,6 +67,7 @@
                                 Height="40"
                                 MinWidth="110"
                                 Margin="0,0,10,0"
+                                GotKeyboardFocus="Control_GotKeyboardFocus"
                                 Click="OverlayOkButton_Click"
                                 TabIndex="0"/>
 
@@ -75,6 +76,7 @@
                                 Content="Cancel"
                                 Height="40"
                                 MinWidth="110"
+                                GotKeyboardFocus="Control_GotKeyboardFocus"
                                 Click="OverlayCancelButton_Click"
                                 TabIndex="1"/>
                     </StackPanel>

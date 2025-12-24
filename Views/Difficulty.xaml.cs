@@ -72,6 +72,15 @@ namespace TetrisApp.Views {
             catch { }
         }
 
+        private void Control_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
+            ((App)Application.Current).PlayHoverSound();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
+            PlayClickSound();
+            NavigationService?.Navigate(new Uri("Views/MenuPage.xaml", UriKind.Relative));
+        }
+
         private void EasyButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Easy");

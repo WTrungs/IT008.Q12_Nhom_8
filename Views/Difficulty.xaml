@@ -64,6 +64,7 @@
                     Height="50"
                     Margin="0,20,0,0"
                     Click="EasyButton_Click"
+                    GotKeyboardFocus="Control_GotKeyboardFocus"
                     TabIndex="0"
                     IsTabStop="True"/>
 
@@ -73,6 +74,7 @@
                     Height="50"
                     Margin="0,10,0,0"
                     Click="MediumButton_Click"
+                    GotKeyboardFocus="Control_GotKeyboardFocus"
                     TabIndex="1"
                     IsTabStop="True"/>
 
@@ -82,8 +84,20 @@
                     Height="50"
                     Margin="0,10,0,0"
                     Click="HardButton_Click"
+                    GotKeyboardFocus="Control_GotKeyboardFocus"
                     TabIndex="2"
                     IsTabStop="True"/>
+
+            <Button x:Name="BackButton"
+                    Style="{StaticResource SpaceButton}"
+                    Content="Back to Menu"
+                    Height="50"
+                    Margin="0,40,0,0"
+                    Click="BackButton_Click"
+                    GotKeyboardFocus="Control_GotKeyboardFocus"
+                    TabIndex="3"
+                    IsTabStop="True" Width="282"/>
+
         </StackPanel>
     </Grid>
 </Page> 

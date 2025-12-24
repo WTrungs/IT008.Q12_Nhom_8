@@ -23,7 +23,7 @@ namespace TetrisApp.Views {
 
         public LoginPage() {
             InitializeComponent();
-            // Khi user bấm phím / click lần đầu thì mới cho Enter hoạt động
+           
             PreviewMouseDown += (_, __) => _suppressEnterUntilUserInteracts = false;
             PreviewKeyDown += (_, __) => _suppressEnterUntilUserInteracts = false;
         }
@@ -42,7 +42,7 @@ namespace TetrisApp.Views {
             TitleText.Text = "LOGIN";
             LoginButton.Content = "LOGIN";
 
-            // TRẠNG THÁI MẶC ĐỊNH: Chữ là "CONTINUE AS GUEST"
+            // Default text for Continue as Guest button
             ContinueAsGuestButton.Content = "CONTINUE AS GUEST";
 
             if (PasswordLabel != null) PasswordLabel.Text = "PASSWORD";
@@ -52,6 +52,10 @@ namespace TetrisApp.Views {
 
             UsernameTextBox.Text = "";
             PasswordBox.Password = "";
+        }
+
+        private void Control_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) {
+            ((App)Application.Current).PlayHoverSound();
         }
 
         private void SignUpLink_Click(object sender, RoutedEventArgs e) {

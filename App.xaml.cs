@@ -24,7 +24,7 @@ namespace TetrisApp {
             PlayHoverSound();
         }
 
-        private void PlayHoverSound() {
+        public void PlayHoverSound() {
             try {
                 string soundPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "hover.mp3");
                 if (!File.Exists(soundPath)) return;
@@ -81,7 +81,7 @@ namespace TetrisApp {
             base.OnStartup(e);
 
             await SupabaseService.InitializeAsync();
-            LocalSettingsService.LoadToAppSettings(null);
+            //LocalSettingsService.LoadToAppSettings(null);
 
             string audioDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Audio");
             string candidate = (AppSettings.SelectedTrack ?? "").Trim();

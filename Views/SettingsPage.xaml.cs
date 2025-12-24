@@ -12,11 +12,11 @@ namespace TetrisApp.Views {
         private readonly MediaPlayer clickSound = new MediaPlayer();
         private SettingsSnapshot initial;
         private bool isApplying;
-        private bool isLoaded;
-        // Chỉ bật khi mày nhấn Enter ở TrackCombo (mở dropdown)
+        private bool isLoaded = false;
+        // Only true when in TrackCombo track-selection mode
         private bool isTrackTabMode;
 
-        // Dependency Property: Công tắc Hover
+        // DependencyProperty to control hover sound enabling/disabling
         public static readonly DependencyProperty IsHoverEnabledProperty = DependencyProperty.Register("IsHoverEnabled", typeof(bool), typeof(SettingsPage), new PropertyMetadata(true));
         public bool IsHoverEnabled {
             get { return (bool)GetValue(IsHoverEnabledProperty); }
@@ -32,7 +32,7 @@ namespace TetrisApp.Views {
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e) {
             if (isLoaded) {
                 ApplyUIFromSettings();
-                return;
+                return; 
             }
 
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
@@ -70,7 +70,6 @@ namespace TetrisApp.Views {
             ApplyLiveFromUI();
         }
 
-        // XAML đang gắn cho Slider.ValueChanged
         private void SettingControl_Changed(object sender, RoutedPropertyChangedEventArgs<double> e) {
             if (isApplying) return;
             ApplyLiveFromUI();
@@ -134,7 +133,7 @@ namespace TetrisApp.Views {
                 return;
             }
 
-            // Toggle checkbox bằng trái/phải
+            // Toggle MusicToggle with Left/Right
             if (currentFocus == MusicToggle && MusicToggle != null) {
                 if (e.Key == Key.Left) {
                     MusicToggle.IsChecked = false;
@@ -150,7 +149,7 @@ namespace TetrisApp.Views {
                 }
             }
 
-            // Nếu đang ở TrackCombo và dropdown đang mở (track-mode) thì để TrackCombo tự xử lý Tab/Up/Down/Enter
+            // If in track mode and drop down is on then let TrackCombo handle Tab/Up/Down/Enter
             if (TrackCombo != null && TrackCombo.IsDropDownOpen) {
                 return;
             }
@@ -164,18 +163,18 @@ namespace TetrisApp.Views {
             }
         }
 
-        // Track: Enter mở dropdown rồi Tab sẽ chạy qua các track; không Enter thì Tab nhảy xuống Cancel/Accept (mặc định WPF)
+        // TRACK COMBOBOX KEY HANDLING
         private void TrackCombo_PreviewKeyDown(object sender, KeyEventArgs e) {
             if (TrackCombo == null) return;
 
             int count = TrackCombo.Items.Count;
 
-            // ENTER: mở dropdown (lần 1) / đóng dropdown (lần 2)
+            // ENTER
             if (e.Key == Key.Enter) {
                 e.Handled = true;
 
                 if (!TrackCombo.IsDropDownOpen) {
-                    // Enter lần 1: mở và bật track-mode
+                    // First Enter: Open dropdown
                     TrackCombo.IsDropDownOpen = true;
                     isTrackTabMode = true;
 
@@ -188,7 +187,7 @@ namespace TetrisApp.Views {
                     return;
                 }
                 else {
-                    // Enter lần 2: selection và đóng
+                    // Second Enter: Close dropdown and exit track-mode
                     TrackCombo.IsDropDownOpen = false;
                     isTrackTabMode = false;
 
@@ -199,7 +198,7 @@ namespace TetrisApp.Views {
                 }
             }
 
-            // ESC: đóng dropdown và thoát track-mode
+            // ESC: Close dropdown and exit track-mode
             if (e.Key == Key.Escape && TrackCombo.IsDropDownOpen) {
                 e.Handled = true;
                 TrackCombo.IsDropDownOpen = false;
@@ -214,7 +213,7 @@ namespace TetrisApp.Views {
                 return;
             }
 
-            // Track-mode + dropdown mở: TAB / UP / DOWN sẽ cycle trong list (wrap vòng)
+            // Track mode and dropdown is open: handle Tab/Up/Down for cycling tracks
             if (isTrackTabMode && TrackCombo.IsDropDownOpen) {
                 if (count <= 0) return;
 
@@ -307,7 +306,7 @@ namespace TetrisApp.Views {
             NavigationService?.Navigate(new MenuPage());
         }
 
-        // ===== helpers =====
+        // ===== HELPERS =====
         private void SetTrackSelectionByName(string trackKey) {
             if (TrackCombo == null) return;
 

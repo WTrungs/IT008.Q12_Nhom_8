@@ -12,12 +12,10 @@ namespace TetrisApp.Services {
         private const string AppFolderName = "TetrisApp";
 
         private static string GetSettingsPath(string? username) {
-            // Guest
             string fileName = string.IsNullOrWhiteSpace(username) ? "settings_guest.json" : $"settings_{SanitizeFileName(username)}.json";
 
             string folder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                AppFolderName
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppFolderName
             );
 
             Directory.CreateDirectory(folder);
@@ -38,37 +36,31 @@ namespace TetrisApp.Services {
         }
 
         public static void LoadToAppSettings(string? username) {
-            try {
-                string path = GetSettingsPath(username);
-                if (!File.Exists(path)) return;
+            string path = GetSettingsPath(username);
+            if (!File.Exists(path)) return;
 
-                string json = File.ReadAllText(path);
-                var dto = JsonSerializer.Deserialize<SettingsDto>(json);
-                if (dto == null) return;
+            string json = File.ReadAllText(path);
+            var dto = JsonSerializer.Deserialize<SettingsDto>(json);
+            if (dto == null) return;
 
-                AppSettings.IsMusicEnabled = dto.IsMusicEnabled;
-                AppSettings.MusicVolume = Clamp01(dto.MusicVolume);
-                AppSettings.SfxVolume = Clamp01(dto.SfxVolume);
-                AppSettings.SelectedTrack = string.IsNullOrWhiteSpace(dto.SelectedTrack) ? "Puzzle" : dto.SelectedTrack;
-            }
-            catch { }
+            AppSettings.IsMusicEnabled = dto.IsMusicEnabled;
+            AppSettings.MusicVolume = Clamp01(dto.MusicVolume);
+            AppSettings.SfxVolume = Clamp01(dto.SfxVolume);
+            AppSettings.SelectedTrack = string.IsNullOrWhiteSpace(dto.SelectedTrack) ? "Puzzle" : dto.SelectedTrack;
         }
 
         public static void SaveFromAppSettings(string? username) {
-            try {
-                string path = GetSettingsPath(username);
+            string path = GetSettingsPath(username);
 
-                var dto = new SettingsDto {
-                    IsMusicEnabled = AppSettings.IsMusicEnabled,
-                    MusicVolume = Clamp01(AppSettings.MusicVolume),
-                    SfxVolume = Clamp01(AppSettings.SfxVolume),
-                    SelectedTrack = AppSettings.SelectedTrack ?? "Puzzle"
-                };
+            var dto = new SettingsDto {
+                IsMusicEnabled = AppSettings.IsMusicEnabled,
+                MusicVolume = Clamp01(AppSettings.MusicVolume),
+                SfxVolume = Clamp01(AppSettings.SfxVolume),
+                SelectedTrack = AppSettings.SelectedTrack ?? "Puzzle"
+            };
 
-                string json = JsonSerializer.Serialize(dto, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(path, json);
-            }
-            catch { }
+            string json = JsonSerializer.Serialize(dto, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(path, json);
         }
 
         private static double Clamp01(double v) => v < 0 ? 0 : (v > 1 ? 1 : v);

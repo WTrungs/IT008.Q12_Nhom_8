@@ -386,12 +386,6 @@
                                        Text="← → : Change&#10;↑ : Rotate&#10;↓ : Soft Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;Esc : Pause"/>
                         </StackPanel>
                     </Border>
-
-                    <!-- Back -->
-                    <Button Style="{StaticResource SpaceButton}"
-                            Content="Back to Menu"
-                            Margin="0,14,0,0"
-                            Click="BackButton_Click"/>
                 </StackPanel>
             </Border>
         </Grid>
@@ -415,20 +409,23 @@
                                Margin="0,0,0,20"/>
 
                         <Button Content="RESUME" 
-                            Height="40"
-                            Margin="0,0,0,10"
-                            Click="ResumeButton_Click"
-                            Style="{StaticResource SpaceButton}"/>
+                                Height="40"
+                                Margin="0,0,0,10"
+                                Click="ResumeButton_Click"
+                                GotKeyboardFocus="Control_GotKeyboardFocus"
+                                Style="{StaticResource SpaceButton}"/>
 
                         <Button Content="RESTART" 
                                 Height="40" 
                                 Margin="0,0,0,10"
                                 Click="RestartButton_Click" 
+                                GotKeyboardFocus="Control_GotKeyboardFocus"
                                 Style="{StaticResource SpaceButton}"/>
 
-                        <Button Content="QUIT TO MENU" 
+                        <Button Content="BACK TO MENU" 
                             Height="40"
                             Click="QuitButton_Click"
+                            GotKeyboardFocus="Control_GotKeyboardFocus"
                             Style="{StaticResource SpaceButton}"/>
                     </StackPanel>
                 </Border>
