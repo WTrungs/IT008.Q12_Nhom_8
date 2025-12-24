@@ -4,17 +4,22 @@ using System.Threading.Tasks;
 using Supabase;
 using TetrisApp.Models;
 using System;
+using System.IO; // <--- QUAN TRỌNG: Thêm dòng này để dùng Path và File
 
-namespace TetrisApp.Services {
-    public static class SupabaseService {
+namespace TetrisApp.Services
+{
+    public static class SupabaseService
+    {
         private static Supabase.Client _client;
         private const string SupabaseUrl = "https://yyfsgusobkxzwnjuaimi.supabase.co";
         private const string SupabaseKey = "sb_publishable_9Vub2HaUQ7Er3sGBUpSEzQ_YKWoxmtP";
 
         public static PlayerProfile CurrentUser { get; private set; }
 
-        public static async Task InitializeAsync() {
-            var options = new SupabaseOptions {
+        public static async Task InitializeAsync()
+        {
+            var options = new SupabaseOptions
+            {
                 AutoRefreshToken = true,
                 AutoConnectRealtime = true
             };
@@ -22,22 +27,41 @@ namespace TetrisApp.Services {
             await _client.InitializeAsync();
         }
 
-        public static void Logout() {
+        public static void Logout()
+        {
             CurrentUser = null;
             LocalSettingsService.LoadToAppSettings(null);
         }
 
-        public static async Task<bool> Login(string username, string password) {
-            try {
+        public static async Task<bool> Login(string username, string password)
+        {
+            try
+            {
                 var response = await _client.From<PlayerProfile>()
                                             .Where(x => x.Username == username)
                                             .Get();
                 var user = response.Models.FirstOrDefault();
 
-                if (user != null && user.Password == password) {
+                if (user != null && user.Password == password)
+                {
                     CurrentUser = user;
 
-                    LocalSettingsService.LoadToAppSettings(CurrentUser.Username);
+                    
+                    AppSettings.IsMusicEnabled = CurrentUser.MusicEnabled;
+                    AppSettings.MusicVolume = CurrentUser.MusicVolume;
+                    AppSettings.SfxVolume = CurrentUser.SfxVolume;
+
+                    string trackName = CurrentUser.SelectedTrack;
+                    string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/Audio", trackName + ".mp3");
+
+                    if (!File.Exists(audioPath))
+                    {
+                        trackName = "Puzzle";
+                    }
+                    AppSettings.SelectedTrack = trackName;
+
+                    LocalSettingsService.SaveFromAppSettings(CurrentUser.Username);
+
                     return true;
                 }
                 return false;
@@ -63,11 +87,11 @@ namespace TetrisApp.Services {
                 {
                     Username = username,
                     Password = password,
-                    Email = email, // Lưu email vào
+                    Email = email,
                     MusicEnabled = true,
                     MusicVolume = 0.5,
                     SfxVolume = 0.5,
-                    SelectedTrack = "Track 1",
+                    SelectedTrack = "Puzzle", 
                     Highscore = 0
                 };
 
@@ -78,8 +102,10 @@ namespace TetrisApp.Services {
             catch (System.Exception ex) { return "Error: " + ex.Message; }
         }
 
-        public static async Task<bool> ResetPassword(string username, string newPassword) {
-            try {
+        public static async Task<bool> ResetPassword(string username, string newPassword)
+        {
+            try
+            {
                 var response = await _client.From<PlayerProfile>()
                                             .Where(x => x.Username == username)
                                             .Get();
@@ -106,7 +132,7 @@ namespace TetrisApp.Services {
                     .Set(x => x.MusicVolume, AppSettings.MusicVolume)
                     .Set(x => x.SfxVolume, AppSettings.SfxVolume)
                     .Set(x => x.SelectedTrack, AppSettings.SelectedTrack)
-                    .Set(x => x.Highscore, CurrentUser.Highscore); 
+                    .Set(x => x.Highscore, CurrentUser.Highscore);
 
                 if (gameDataJson != null)
                     q = q.Set(x => x.GameSaveData, gameDataJson);
@@ -119,15 +145,18 @@ namespace TetrisApp.Services {
             }
         }
 
-        public static async Task<List<PlayerProfile>> GetLeaderboard() {
-            try {
+        public static async Task<List<PlayerProfile>> GetLeaderboard()
+        {
+            try
+            {
                 var response = await _client.From<PlayerProfile>()
                                             .Order("highscore", Supabase.Postgrest.Constants.Ordering.Descending)
                                             .Limit(10)
                                             .Get();
                 return response.Models;
             }
-            catch {
+            catch
+            {
                 return new List<PlayerProfile>();
             }
         }
@@ -193,7 +222,5 @@ namespace TetrisApp.Services {
                 return false;
             }
         }
-
-
     }
 }
