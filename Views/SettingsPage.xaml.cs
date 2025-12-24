@@ -66,24 +66,29 @@ namespace TetrisApp.Views {
 
         // ===== LIVE APPLY =====
         private void SettingControl_Changed(object sender, RoutedEventArgs e) {
+            if (!isLoaded) return;
             if (isApplying) return;
             ApplyLiveFromUI();
         }
 
         private void SettingControl_Changed(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (!isLoaded) return;
             if (isApplying) return;
             ApplyLiveFromUI();
         }
         private void TrackCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (!isLoaded) return;
             if (isApplying) return;
             ApplyLiveFromUI();
         }
         private void SettingControl_RoutedChanged(object sender, RoutedEventArgs e) {
+            if (!isLoaded) return;
             if (isApplying) return;
             ApplyLiveFromUI();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (!isLoaded) return;
             if (isApplying) return;
             ApplyLiveFromUI();
         }
