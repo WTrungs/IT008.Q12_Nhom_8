@@ -7,7 +7,7 @@ namespace TetrisApp.Models
     [Table("Players")]
     public class PlayerProfile : BaseModel
     {
-        [PrimaryKey("id", false)] // false nghĩa là ID này do DB tự sinh, code không cần gửi lên
+        [PrimaryKey("id", false)] 
         public long Id { get; set; }
 
         [Column("username")]
@@ -31,8 +31,16 @@ namespace TetrisApp.Models
         [Column("game_save_data")]
         public string GameSaveData { get; set; }
 
-        // [MỚI] Thêm cột Highscore
         [Column("highscore")]
         public int Highscore { get; set; }
+
+        [Column("email")]
+        public string Email { get; set; }
+
+        [Column("otp_code")]
+        public string OtpCode { get; set; }
+
+        [Column("otp_expiry")]
+        public DateTime? OtpExpiry { get; set; }
     }
 }

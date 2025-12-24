@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Supabase;
 using TetrisApp.Models;
+using System;
 
 namespace TetrisApp.Services {
     public static class SupabaseService {
@@ -44,22 +45,30 @@ namespace TetrisApp.Services {
             catch { return false; }
         }
 
-        public static async Task<string> Register(string username, string password) {
-            try {
-                var check = await _client.From<PlayerProfile>()
+        public static async Task<string> Register(string username, string password, string email)
+        {
+            try
+            {
+                var checkUser = await _client.From<PlayerProfile>()
                                          .Where(x => x.Username == username)
                                          .Get();
+                if (checkUser.Models.Count > 0) return "Username already exists!";
 
-                if (check.Models.Count > 0) return "Username already exists!";
+                var checkEmail = await _client.From<PlayerProfile>()
+                                          .Where(x => x.Email == email)
+                                          .Get();
+                if (checkEmail.Models.Count > 0) return "Email already exists!";
 
-                var newUser = new PlayerProfile {
+                var newUser = new PlayerProfile
+                {
                     Username = username,
                     Password = password,
+                    Email = email, // Lưu email vào
                     MusicEnabled = true,
                     MusicVolume = 0.5,
                     SfxVolume = 0.5,
                     SelectedTrack = "Track 1",
-                    Highscore = 0 // Mặc định điểm là 0
+                    Highscore = 0
                 };
 
                 var response = await _client.From<PlayerProfile>().Insert(newUser);
@@ -119,5 +128,69 @@ namespace TetrisApp.Services {
                 return new List<PlayerProfile>();
             }
         }
+
+        public static async Task<bool> GenerateAndSendOtp(string email)
+        {
+            try
+            {
+                string otp = new Random().Next(100000, 999999).ToString();
+
+                var updateModel = new PlayerProfile
+                {
+                    OtpCode = otp,
+                    OtpExpiry = DateTime.UtcNow.AddMinutes(5)
+                };
+
+                var response = await _client.From<PlayerProfile>()
+                                            .Where(x => x.Email == email)
+                                            .Set(x => x.OtpCode, otp)
+                                            .Set(x => x.OtpExpiry, updateModel.OtpExpiry)
+                                            .Update();
+
+                if (response.Models.Count > 0)
+                {
+                    EmailService.SendOtp(email, otp);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> VerifyOtp(string email, string inputOtp)
+        {
+            try
+            {
+                var response = await _client.From<PlayerProfile>()
+                                            .Where(x => x.Email == email)
+                                            .Get();
+
+                var user = response.Models.FirstOrDefault();
+
+                if (user != null)
+                {
+                    if (user.OtpCode == inputOtp && user.OtpExpiry > DateTime.UtcNow)
+                    {
+                        await _client.From<PlayerProfile>()
+                                     .Where(x => x.Email == email)
+                                     .Set(x => x.OtpCode, (string)null)
+                                     .Update();
+
+                        CurrentUser = user;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
     }
 }
