@@ -131,7 +131,6 @@ namespace TetrisApp.Views {
         {
             PlayClickSound();
 
-            // === 1. XỬ LÝ KHI ĐANG NHẬP OTP ===
             if (_isWaitingForOtp)
             {
                 string otp = OtpTextBox.Text.Trim();
@@ -140,7 +139,6 @@ namespace TetrisApp.Views {
                 bool isVerified = await SupabaseService.VerifyOtp(_tempEmail, otp);
                 if (isVerified)
                 {
-                    // [SỬA] Nếu đang là Reset Password -> Chuyển sang màn hình nhập mật khẩu mới
                     if (_currentMode == "Reset")
                     {
                         ShowError("Xác thực thành công! Hãy nhập mật khẩu mới.");
@@ -148,7 +146,6 @@ namespace TetrisApp.Views {
                         return;
                     }
 
-                    // Nếu là Register hoặc Login OTP bình thường -> Vào game
                     ShowError("Xác thực thành công!");
                     if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                     NavigationService?.Navigate(new MenuPage());
@@ -160,12 +157,10 @@ namespace TetrisApp.Views {
                 return;
             }
 
-            // === 2. XỬ LÝ LOGIC KHI KHÔNG PHẢI OTP ===
             string user = UsernameTextBox.Text.Trim();
             string pass = PasswordBox.Password;
             string email = EmailTextBox.Text.Trim();
 
-            // -- Logic Đăng Ký --
             if (_currentMode == "Register")
             {
                 if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(email))
@@ -183,7 +178,6 @@ namespace TetrisApp.Views {
                 }
                 else ShowError(result);
             }
-            // -- Logic Quên Mật Khẩu (Gửi OTP) --
             else if (_currentMode == "Reset")
             {
                 if (string.IsNullOrEmpty(email))
@@ -200,7 +194,6 @@ namespace TetrisApp.Views {
                 }
                 else ShowError("Không tìm thấy Email này trong hệ thống!");
             }
-            // -- [MỚI] Logic Cập Nhật Mật Khẩu Mới --
             else if (_currentMode == "NewPassword")
             {
                 if (string.IsNullOrEmpty(pass))
@@ -209,7 +202,6 @@ namespace TetrisApp.Views {
                     return;
                 }
 
-                // VerifyOtp đã gán CurrentUser, ta lấy username từ đó để đổi pass
                 if (SupabaseService.CurrentUser != null)
                 {
                     bool resetOk = await SupabaseService.ResetPassword(SupabaseService.CurrentUser.Username, pass);
@@ -225,8 +217,8 @@ namespace TetrisApp.Views {
                     }
                 }
             }
-            // -- Logic Đăng Nhập --
-            else // Mode "Login"
+            
+            else 
             {
                 if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
                 {
@@ -273,12 +265,10 @@ namespace TetrisApp.Views {
         }
 
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e) {
-            // 1. Tắt Hover ngay lập tức khi đụng vào phím
             IsHoverEnabled = false;
 
             var currentFocus = Keyboard.FocusedElement;
 
-            // 2. Logic "Đánh thức" (khi mới vào chưa chọn gì)
             bool IsIdleFocus = currentFocus == null || currentFocus == this || currentFocus == FocusPark || currentFocus is Grid;
 
             if (IsIdleFocus) {
@@ -295,14 +285,11 @@ namespace TetrisApp.Views {
                 }
             }
 
-            // --- PHẦN QUAN TRỌNG: XỬ LÝ PHÍM TRÁI / PHẢI ---
             if (e.Key == Key.Left || e.Key == Key.Right) {
-                // Nếu đang ở ô nhập liệu (TextBox/PasswordBox) -> Cho phép dùng để di chuyển con trỏ sửa chữ
                 if (currentFocus is TextBox || currentFocus is PasswordBox) {
-                    return; // Không làm gì cả, để mặc định cho Windows xử lý
+                    return; 
                 }
 
-                // Nếu đang ở bất kỳ đâu khác (Nút Login, Guest, Link...) -> CHẶN LUÔN
                 e.Handled = true;
                 return;
             }
