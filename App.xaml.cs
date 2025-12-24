@@ -91,7 +91,13 @@ namespace TetrisApp {
                 AppSettings.SelectedTrack = "Puzzle";
             }
 
-            UpdateBackgroundMusic();
         }
+
+
+        public void StopBackgroundMusic()
+        {
+            bgmPlayer.Stop();
+        }
+
     }
 }

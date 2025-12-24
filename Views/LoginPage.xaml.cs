@@ -36,6 +36,11 @@ namespace TetrisApp.Views {
                 Keyboard.ClearFocus();
                 FocusPark?.Focus();
             }));
+
+            if (Application.Current is App myApp)
+            {
+                myApp.StopBackgroundMusic();
+            }
         }
 
         private void ResetUI() {
@@ -117,8 +122,20 @@ namespace TetrisApp.Views {
         private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            if (_currentMode == "Login") {
+            if (_currentMode == "Login")
+            {
                 SupabaseService.Logout();
+
+                AppSettings.IsMusicEnabled = true;
+                AppSettings.MusicVolume = 0.5;
+                AppSettings.SfxVolume = 0.5;
+                AppSettings.SelectedTrack = "Puzzle";
+
+                if (Application.Current is App myApp)
+                {
+                    myApp.UpdateBackgroundMusic();
+                }
+
                 NavigationService?.Navigate(new MenuPage());
             }
             else {
