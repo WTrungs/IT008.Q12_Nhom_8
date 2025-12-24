@@ -23,8 +23,9 @@ namespace TetrisApp.Views
             public string RankText { get; set; }
             public string Username { get; set; }
             public int Score { get; set; }
-            public string ScoreText => Score.ToString("N0");
+            public string ScoreText => Score == -1 ? "" : Score.ToString("N0");
             public SolidColorBrush RankColorBrush { get; set; }
+            public FontWeight FontWeight { get; set; } = FontWeights.Normal; 
         }
 
         public GameOverPage(GameEngine gameEngine)
@@ -78,67 +79,90 @@ namespace TetrisApp.Views
 
             var items = new ObservableCollection<LeaderboardItem>();
 
-            void AddItem(int index)
+            // Hàm phụ để tạo Item chuẩn
+            LeaderboardItem CreateItem(int index)
             {
-                if (index < 0 || index >= players.Count) return;
+                if (index < 0 || index >= players.Count) return null;
 
                 var p = players[index];
-                int rank = index + 1; 
+                int rank = index + 1;
 
-                SolidColorBrush color = Brushes.Gray;
-                try { color = (SolidColorBrush)new BrushConverter().ConvertFrom("#8899AC"); } catch { }
+                SolidColorBrush color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8899AC")); // Màu mặc định
 
+                // Màu cho Top 3
                 if (rank == 1) color = Brushes.Gold;
                 else if (rank == 2) color = Brushes.Silver;
                 else if (rank == 3) color = Brushes.RosyBrown;
 
-                if (index == myIndex)
+                // Highlight người chơi hiện tại
+                bool isMe = (index == myIndex);
+                if (isMe)
                 {
-                    try { color = (SolidColorBrush)new BrushConverter().ConvertFrom("#22D3EE"); } catch { }
+                    color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#22D3EE"));
                 }
 
-                items.Add(new LeaderboardItem
+                return new LeaderboardItem
                 {
                     RankText = rank.ToString(),
                     Username = p.Username,
                     Score = p.Highscore,
-                    RankColorBrush = color
-                });
+                    RankColorBrush = color,
+                    FontWeight = isMe ? FontWeights.Bold : FontWeights.Normal
+                };
             }
 
-
-            if (myIndex < 10)
+            // Logic hiển thị danh sách
+            // Nếu người chơi nằm trong Top 10 hoặc không có trong bảng xếp hạng -> Hiện Top 10
+            if (myIndex == -1 || myIndex < 10)
             {
                 int count = Math.Min(players.Count, 10);
-                for (int i = 0; i < count; i++) AddItem(i);
+                for (int i = 0; i < count; i++)
+                {
+                    items.Add(CreateItem(i));
+                }
             }
             else
             {
-                for (int i = 0; i < 3; i++) AddItem(i);
+                // Luôn hiện Top 3 trước
+                for (int i = 0; i < 3; i++) items.Add(CreateItem(i));
 
-                items.Add(new LeaderboardItem { RankText = "...", Username = "...", Score = 0, RankColorBrush = Brushes.Gray });
-
-                int start = myIndex - 4;
-                int end = myIndex + 2;
+                // Tính toán vùng hiển thị xung quanh người chơi (Lấy trước 3 và sau 3 người)
+                int start = myIndex - 3;
+                int end = myIndex + 3;
                 int maxIndex = players.Count - 1;
 
-                if (end > maxIndex)
+                // Điều chỉnh biên
+                if (end > maxIndex) end = maxIndex;
+
+                // Kiểm tra xem có cần dấu "..." hay không
+                // Nếu start > 3 (tức là có khoảng cách giữa Top 3 và vùng người chơi) -> Thêm "..."
+                // Ngược lại, nếu start <= 3 thì nối liền luôn, không cần "..."
+                if (start > 3)
                 {
-                    int diff = end - maxIndex;
-                    end = maxIndex;
-                    start -= diff;
+                    items.Add(new LeaderboardItem
+                    {
+                        RankText = "...",
+                        Username = "...",
+                        Score = -1, // Đánh dấu là dòng phân cách
+                        RankColorBrush = Brushes.Gray
+                    });
+                }
+                else
+                {
+                    // Nếu chồng lấn hoặc sát nhau, bắt đầu ngay sau Top 3 (index 3)
+                    start = 3;
                 }
 
-                if (start < 3) start = 3;
-
+                // Thêm các item trong vùng của người chơi
                 for (int i = start; i <= end; i++)
                 {
-                    AddItem(i);
+                    items.Add(CreateItem(i));
                 }
             }
 
             LeaderboardList.ItemsSource = items;
 
+            // Scroll tới vị trí người chơi nếu có trong danh sách
             if (myIndex != -1)
             {
                 var myItem = items.FirstOrDefault(x => x.Username == SupabaseService.CurrentUser.Username);
