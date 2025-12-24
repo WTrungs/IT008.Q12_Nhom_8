@@ -327,7 +327,7 @@ namespace TetrisApp.Views {
 			int bottom = 0;
 			for (int i = 0; i < boardRow; i++) {
 				bool isFulled = true;
-				for (int j = 0; j < 10; j++) {
+				for (int j = 0; j < boardColumn; j++) {
 					if (!boardGame[i, j].isFilled) {
 						isFulled = false;
 						break;
@@ -337,7 +337,7 @@ namespace TetrisApp.Views {
 					deletedLine.Add(i);
 				}
 				else {
-					for (int j = 0; j < 10; j++) {
+					for (int j = 0; j < boardColumn; j++) {
 						newBoard[bottom, j] = new Cell(boardGame[i, j]);
 					}
 					++bottom;
@@ -421,6 +421,5 @@ namespace TetrisApp.Views {
 				gamePage.PlaySound(gamePage.moveSound);
 			}
 		}
-
 	}
 }

@@ -56,7 +56,7 @@ namespace TetrisApp.Views {
 			ColorAnimation colorAnimation = new ColorAnimation {
 				From = Colors.White,
 				To = originalColor,
-				Duration = TimeSpan.FromMilliseconds(500),
+				Duration = TimeSpan.FromMilliseconds(300),
 				EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
 			};
 			animatedColor.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
@@ -92,8 +92,13 @@ namespace TetrisApp.Views {
 				for (int c = 0; c < 10; c++) {
 					if (gameEngine.boardGame[r, c] != null && gameEngine.boardGame[r, c].isFilled) {
 						var cell = gridCells[19 - r, c];
+						// DEBUG: nếu engine filled mà UI vẫn transparent -> viền đỏ
+						if (cell.Background == Brushes.Transparent) {
+							cell.BorderThickness = new Thickness(2);
+							cell.BorderBrush = Brushes.Red;
+						}
 						if (cell.Background is SolidColorBrush currentBrush &&
-							currentBrush.GetAnimationBaseValue(SolidColorBrush.ColorProperty) != DependencyProperty.UnsetValue) {
+							currentBrush.HasAnimatedProperties) {
 							continue;
 						}
 						cell.Background = GetBrush(gameEngine.boardGame[r, c].color);
