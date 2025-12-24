@@ -22,15 +22,19 @@ namespace TetrisApp.Views {
 			[TetrominoKind.Z] = "Z",
 		};
 
-		public Dictionary<TetrominoKind, string> tetrominoColor = new() {
-			[TetrominoKind.I] = "#00FFFF",
-			[TetrominoKind.L] = "#FF7F00",
-			[TetrominoKind.J] = "#0000FF",
-			[TetrominoKind.O] = "#FFFF00",
-			[TetrominoKind.S] = "#00FF00",
-			[TetrominoKind.T] = "#800080",
-			[TetrominoKind.Z] = "#FF0000",
-		};
+		public Dictionary<TetrominoKind, string> tetrominoColor;
+
+		public void InitializeColor() {
+			tetrominoColor = new() {
+				[TetrominoKind.I] = ((SolidColorBrush)gamePage.FindResource("ColorI")).Color.ToString(),
+				[TetrominoKind.L] = ((SolidColorBrush)gamePage.FindResource("ColorL")).Color.ToString(),
+				[TetrominoKind.J] = ((SolidColorBrush)gamePage.FindResource("ColorJ")).Color.ToString(),
+				[TetrominoKind.O] = ((SolidColorBrush)gamePage.FindResource("ColorO")).Color.ToString(),
+				[TetrominoKind.S] = ((SolidColorBrush)gamePage.FindResource("ColorS")).Color.ToString(),
+				[TetrominoKind.T] = ((SolidColorBrush)gamePage.FindResource("ColorT")).Color.ToString(),
+				[TetrominoKind.Z] = ((SolidColorBrush)gamePage.FindResource("ColorZ")).Color.ToString(),
+			};
+		}
 
 		public Dictionary<TetrominoKind, int[][,]> tetrominos = new() {
 			[TetrominoKind.I] = new[]

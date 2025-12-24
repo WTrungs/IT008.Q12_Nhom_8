@@ -86,6 +86,7 @@ namespace TetrisApp.Views {
 					boardGame[i, j] = new Cell();
 				}
 			}
+			InitializeColor();
 		}
 
 		double CalculateDropTick() {
@@ -155,7 +156,7 @@ namespace TetrisApp.Views {
 		}
 
 		public void Update() {
-			if (isLose) {
+			if (IsPaused || isLose) {
 				return;
 			}
 			dropTick = CalculateDropTick();
@@ -376,7 +377,7 @@ namespace TetrisApp.Views {
 			
 		}
 
-		void LoseGame() {
+		async void LoseGame() {
 			isLose = true;
 			gamePage.NavigateToGameLose();
 		}
