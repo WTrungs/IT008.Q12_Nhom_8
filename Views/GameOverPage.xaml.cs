@@ -18,7 +18,6 @@ namespace TetrisApp.Views
         private MediaPlayer _clickSound = new MediaPlayer();
         private MediaPlayer gameOverSound;
 
-        // View Model cho từng dòng trong bảng xếp hạng
         public class LeaderboardItem
         {
             public string RankText { get; set; }
@@ -53,19 +52,15 @@ namespace TetrisApp.Views
 			PlayGameOverSound();
 			int currentScore = gameEngine.GetCurrentScore();
 
-            // 1. Xử lý lưu điểm cao nếu đã đăng nhập
             if (SupabaseService.CurrentUser != null)
             {
-                // Nếu điểm mới cao hơn điểm cũ trong DB
                 if (currentScore > SupabaseService.CurrentUser.Highscore)
                 {
                     SupabaseService.CurrentUser.Highscore = currentScore;
-                    // Lưu xuống DB
                     await SupabaseService.SaveUserData();
                 }
             }
 
-            // 2. Tải bảng xếp hạng
             await LoadLeaderboard();
         }
 
@@ -73,46 +68,90 @@ namespace TetrisApp.Views
         {
             var players = await SupabaseService.GetLeaderboard();
 
-            var items = new ObservableCollection<LeaderboardItem>();
-            int rank = 1;
-
-            foreach (var p in players)
+            int myIndex = -1;
+            if (SupabaseService.CurrentUser != null)
             {
-                // Xác định màu sắc cho top 1, 2, 3
-                SolidColorBrush color = Brushes.Gray; // Mặc định màu xám nhạt (#8899AC)
+                myIndex = players.FindIndex(p => p.Username == SupabaseService.CurrentUser.Username);
+            }
+
+            var items = new ObservableCollection<LeaderboardItem>();
+
+            void AddItem(int index)
+            {
+                if (index < 0 || index >= players.Count) return;
+
+                var p = players[index];
+                int rank = index + 1; 
+
+                SolidColorBrush color = Brushes.Gray;
                 try { color = (SolidColorBrush)new BrushConverter().ConvertFrom("#8899AC"); } catch { }
 
-                if (rank == 1) color = Brushes.Gold; // #F59E0B
-                else if (rank == 2) color = Brushes.Silver; // #C0C0C0
-                else if (rank == 3) color = Brushes.RosyBrown; // Bronze-ish
+                if (rank == 1) color = Brushes.Gold;
+                else if (rank == 2) color = Brushes.Silver;
+                else if (rank == 3) color = Brushes.RosyBrown;
 
-                // Nếu là màu tùy chỉnh hex từ code cũ
-                if (rank == 1) try { color = (SolidColorBrush)new BrushConverter().ConvertFrom("#F59E0B"); } catch { }
+                if (index == myIndex)
+                {
+                    try { color = (SolidColorBrush)new BrushConverter().ConvertFrom("#22D3EE"); } catch { }
+                }
 
-                var item = new LeaderboardItem
+                items.Add(new LeaderboardItem
                 {
                     RankText = rank.ToString(),
                     Username = p.Username,
                     Score = p.Highscore,
                     RankColorBrush = color
-                };
-
-                items.Add(item);
-                rank++;
+                });
             }
 
-            // Nếu người chơi hiện tại là Guest (chưa login) hoặc chưa lọt top, 
-            // ta có thể thêm một dòng hiển thị điểm của họ ở cuối (tùy chọn),
-            // ở đây tôi hiển thị danh sách lấy về từ DB.
+
+            if (myIndex != -1 && myIndex < 10)
+            {
+                int count = Math.Min(players.Count, 10);
+                for (int i = 0; i < count; i++) AddItem(i);
+            }
+
+            else if (myIndex >= 10)
+            {
+                for (int i = 0; i < 3; i++) AddItem(i);
+
+                items.Add(new LeaderboardItem { RankText = "...", Username = "...", Score = 0, RankColorBrush = Brushes.Gray });
+
+                
+                int start = myIndex - 4;
+                int end = myIndex + 2;
+
+                
+                int maxIndex = players.Count - 1;
+
+                if (end > maxIndex)
+                {
+                    int diff = end - maxIndex;
+                    end = maxIndex;
+                    start -= diff;
+                }
+
+                if (start < 3) start = 3;
+
+                for (int i = start; i <= end; i++)
+                {
+                    AddItem(i);
+                }
+            }
+
+            else
+            {
+                int count = Math.Min(players.Count, 10);
+                for (int i = 0; i < count; i++) AddItem(i);
+            }
+
             LeaderboardList.ItemsSource = items;
 
-            // Highlight người chơi hiện tại nếu họ có trong danh sách
             if (SupabaseService.CurrentUser != null)
             {
                 var myItem = items.FirstOrDefault(x => x.Username == SupabaseService.CurrentUser.Username);
                 if (myItem != null)
                 {
-                    LeaderboardList.SelectedItem = myItem;
                     LeaderboardList.ScrollIntoView(myItem);
                 }
             }
@@ -140,7 +179,6 @@ namespace TetrisApp.Views
         private void PlayAgainButton_Click(object sender, RoutedEventArgs e)
         {
             PlayClickSound();
-            // Quay lại trang chọn độ khó hoặc vào thẳng game
             NavigationService?.Navigate(new Uri("Views/Difficulty.xaml", UriKind.Relative));
         }
     }

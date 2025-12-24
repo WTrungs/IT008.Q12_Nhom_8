@@ -151,7 +151,7 @@ namespace TetrisApp.Services
             {
                 var response = await _client.From<PlayerProfile>()
                                             .Order("highscore", Supabase.Postgrest.Constants.Ordering.Descending)
-                                            .Limit(10)
+                                            .Limit(1000)
                                             .Get();
                 return response.Models;
             }
