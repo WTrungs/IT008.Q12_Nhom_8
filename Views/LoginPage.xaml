@@ -266,13 +266,24 @@
                 <StackPanel>
 
                     <TextBlock
-                        x:Name="TitleText"
-                        Text="LOGIN"
-                        FontSize="32"
-                        FontWeight="Bold"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,0,30"
-                        Foreground="#E6ECFF"/>
+                            x:Name="TitleText"
+                            Text="LOGIN"
+                            FontSize="32"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,30"
+                            Foreground="#E6ECFF"/>
+
+                    <TextBlock x:Name="EmailLabel"
+                               Text="EMAIL"
+                               Style="{StaticResource LabelText}"
+                               Margin="0,0,0,5"
+                               Visibility="Collapsed"/>
+
+                    <TextBox x:Name="EmailTextBox"
+                             Style="{StaticResource SpaceTextBox}"
+                             KeyboardNavigation.TabIndex="0"
+                             Visibility="Collapsed" Margin="0,0,0,10"/>
 
                     <TextBlock
                         Text="USERNAME"
@@ -282,31 +293,20 @@
                         x:Name="UsernameTextBox"
                         Style="{StaticResource SpaceTextBox}"
                         KeyboardNavigation.TabIndex="0"
-                        GotKeyboardFocus="Control_GotKeyboardFocus"/>
+                        GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10"/>
 
                     <TextBlock
                         x:Name="PasswordLabel"
                         Text="PASSWORD"
                         Style="{StaticResource LabelText}"
-                        Margin="0,15,0,5"/>
+                        Margin="0,0,0,5"/>
 
                     <PasswordBox
                         x:Name="PasswordBox"
                         Style="{StaticResource SpacePasswordBox}"
                         KeyboardNavigation.TabIndex="1"
-                        GotKeyboardFocus="Control_GotKeyboardFocus"/>
-
-                    <TextBlock 
-                        x:Name="EmailLabel" 
-                        Text="EMAIL" 
-                        Style="{StaticResource LabelText}" 
-                        Margin="0,15,0,5" 
-                        Visibility="Collapsed"/>
-                    <TextBox 
-                        x:Name="EmailTextBox" 
-                        Style="{StaticResource SpaceTextBox}" 
-                        KeyboardNavigation.TabIndex="2" 
-                        Visibility="Collapsed"/>
+                        GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10
+                        "/>
 
                     <TextBlock 
                         x:Name="OtpLabel" 
@@ -372,7 +372,6 @@
                         Click="ContinueAsGuestButton_Click"
                         GotKeyboardFocus="Control_GotKeyboardFocus"
                         KeyboardNavigation.TabIndex="5" Height="45"/>
-
                 </StackPanel>
             </Grid>
         </Border>

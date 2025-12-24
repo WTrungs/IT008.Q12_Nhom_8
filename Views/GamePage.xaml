@@ -31,12 +31,12 @@
 		</DrawingBrush>
 
 		<SolidColorBrush x:Key="ColorI" Color="#00FFFF"/>
-		<SolidColorBrush x:Key="ColorL" Color="#FF7F00"/>
-		<SolidColorBrush x:Key="ColorJ" Color="#0000FF"/>
-		<SolidColorBrush x:Key="ColorO" Color="#FFFF00"/>
-		<SolidColorBrush x:Key="ColorS" Color="#00FF00"/>
-		<SolidColorBrush x:Key="ColorT" Color="#800080"/>
-		<SolidColorBrush x:Key="ColorZ" Color="#FF0000"/>
+		<SolidColorBrush x:Key="ColorL" Color="#FFF6993E"/>
+		<SolidColorBrush x:Key="ColorJ" Color="#FF4D7FEB"/>
+		<SolidColorBrush x:Key="ColorO" Color="#FFFCFC3F"/>
+		<SolidColorBrush x:Key="ColorS" Color="#FF28E987"/>
+		<SolidColorBrush x:Key="ColorT" Color="#FFE664E6"/>
+		<SolidColorBrush x:Key="ColorZ" Color="#FFF45858"/>
 
 		<Style x:Key="BlockStyle" TargetType="Border">
 			<Setter Property="BorderBrush" Value="#44ffffff"/>
