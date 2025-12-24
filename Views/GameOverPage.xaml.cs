@@ -68,6 +68,8 @@ namespace TetrisApp.Views
         {
             var players = await SupabaseService.GetLeaderboard();
 
+            if (players == null || players.Count == 0) return;
+
             int myIndex = -1;
             if (SupabaseService.CurrentUser != null)
             {
@@ -105,23 +107,19 @@ namespace TetrisApp.Views
             }
 
 
-            if (myIndex != -1 && myIndex < 10)
+            if (myIndex < 10)
             {
                 int count = Math.Min(players.Count, 10);
                 for (int i = 0; i < count; i++) AddItem(i);
             }
-
-            else if (myIndex >= 10)
+            else
             {
                 for (int i = 0; i < 3; i++) AddItem(i);
 
                 items.Add(new LeaderboardItem { RankText = "...", Username = "...", Score = 0, RankColorBrush = Brushes.Gray });
 
-                
                 int start = myIndex - 4;
                 int end = myIndex + 2;
-
-                
                 int maxIndex = players.Count - 1;
 
                 if (end > maxIndex)
@@ -139,21 +137,12 @@ namespace TetrisApp.Views
                 }
             }
 
-            else
-            {
-                int count = Math.Min(players.Count, 10);
-                for (int i = 0; i < count; i++) AddItem(i);
-            }
-
             LeaderboardList.ItemsSource = items;
 
-            if (SupabaseService.CurrentUser != null)
+            if (myIndex != -1)
             {
                 var myItem = items.FirstOrDefault(x => x.Username == SupabaseService.CurrentUser.Username);
-                if (myItem != null)
-                {
-                    LeaderboardList.ScrollIntoView(myItem);
-                }
+                if (myItem != null) LeaderboardList.ScrollIntoView(myItem);
             }
         }
 

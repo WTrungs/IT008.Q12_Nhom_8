@@ -132,11 +132,13 @@ namespace TetrisApp.Services {
             try {
                 var response = await _client.From<PlayerProfile>()
                                             .Order("highscore", Supabase.Postgrest.Constants.Ordering.Descending)
-                                            .Limit(1000)
+                                            .Limit(50)
                                             .Get();
                 return response.Models;
             }
-            catch {
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("GetLeaderboard Error: " + ex.Message);
                 return new List<PlayerProfile>();
             }
         }
