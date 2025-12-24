@@ -387,45 +387,54 @@
 		</Grid>
 		
 		<!-- Pause game -->
-		<Grid>
-			<Grid x:Name="PauseOverlay" Visibility="Collapsed" Background="#B3000000">
-				<Border Background="{StaticResource SpaceBackground}" 
-					BorderBrush="#2A2A33" BorderThickness="1" 
-					CornerRadius="16" 
-					Padding="40"
-					HorizontalAlignment="Center" 
-					VerticalAlignment="Center">
+        <Grid>
+            <Grid x:Name="PauseOverlay" Visibility="Collapsed" Background="#B3000000">
+                <Border Background="{StaticResource SpaceBackground}" 
+                BorderBrush="#2A2A33" BorderThickness="1" 
+                CornerRadius="16" 
+                Padding="40"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center">
 
-					<StackPanel MinWidth="200">
-						<TextBlock Text="PAUSED" 
-							   Foreground="White" 
-							   FontSize="32" 
-							   FontWeight="Bold" 
-							   HorizontalAlignment="Center" 
-							   Margin="0,0,0,20"/>
+                    <StackPanel MinWidth="200"
+                        KeyboardNavigation.DirectionalNavigation="Cycle"
+                        KeyboardNavigation.TabNavigation="Cycle">
 
-						<Button Content="RESUME" 
-								Height="40"
-								Margin="0,0,0,10"
-								Click="ResumeButton_Click"
-								GotKeyboardFocus="Control_GotKeyboardFocus"
-								Style="{StaticResource SpaceButton}"/>
+                        <Border x:Name="FocusPark"
+					    Focusable="True"
+					    KeyboardNavigation.IsTabStop="False"
+						Width="0" Height="0"/>
 
-						<Button Content="RESTART" 
-								Height="40" 
-								Margin="0,0,0,10"
-								Click="RestartButton_Click" 
-								GotKeyboardFocus="Control_GotKeyboardFocus"
-								Style="{StaticResource SpaceButton}"/>
+                        <TextBlock Text="PAUSED" 
+                        Foreground="White" 
+                        FontSize="32" 
+                        FontWeight="Bold" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,0,0,30"/>
 
-						<Button Content="BACK TO MENU" 
-							Height="40"
-							Click="QuitButton_Click"
-							GotKeyboardFocus="Control_GotKeyboardFocus"
-							Style="{StaticResource SpaceButton}"/>
-					</StackPanel>
-				</Border>
-			</Grid>
-		</Grid>
-	</Grid>
+                        <Button x:Name="ResumeBtn"
+                        Content="RESUME" 
+                        Height="40"
+                        Margin="0,0,0,10"
+                        Click="ResumeButton_Click"
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        Style="{StaticResource SpaceButton}"/>
+
+                        <Button Content="RESTART" 
+                        Height="40" 
+                        Margin="0,0,0,10"
+                        Click="RestartButton_Click" 
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        Style="{StaticResource SpaceButton}"/>
+
+                        <Button Content="BACK TO MENU" 
+                        Height="40"
+                        Click="QuitButton_Click"
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        Style="{StaticResource SpaceButton}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
 </Page>

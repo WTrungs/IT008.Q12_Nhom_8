@@ -98,24 +98,24 @@ namespace TetrisApp.Views {
         }
 
         // Hàm bật/tắt Pause (Được gọi từ Page_KeyDown bên TetrominoControl.cs hoặc nút Resume)
-        public void TogglePause() {
-            gameEngine.TogglePause(); // Gọi vào logic của Engine
+        public void TogglePause()
+        {
+            gameEngine.TogglePause();
 
-            if (gameEngine.IsPaused) {
-                // Hiện màn hình Pause
+            if (gameEngine.IsPaused)
+            {
                 if (PauseOverlay != null) PauseOverlay.Visibility = Visibility.Visible;
 
-                // (Tùy chọn) Tạm dừng nhạc nền nếu có
+                Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() => {
+                    FocusPark.Focus();
+                }));
             }
-            else {
-                // Ẩn màn hình Pause
+            else
+            {
                 if (PauseOverlay != null) PauseOverlay.Visibility = Visibility.Collapsed;
-
-                // Reset lại bộ đếm bàn phím để tránh lỗi gạch tự trượt khi vừa resume
-                // Hàm ResetDASTimer nằm bên TetrominoControl.cs, vì là partial class nên gọi được
                 ResetDASTimer();
 
-                // Quan trọng: Lấy lại Focus vào trang game để nhận phím bấm tiếp
+                // Trả focus về trang game chính để điều khiển gạch
                 this.Focus();
             }
         }
