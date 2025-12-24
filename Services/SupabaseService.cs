@@ -94,28 +94,31 @@ namespace TetrisApp.Services {
             catch { return false; }
         }
 
-        public static async Task SaveUserData(string gameDataJson = null) {
+        public static async Task SaveUserData(string gameDataJson = null)
+        {
             if (CurrentUser == null) return;
 
-            try {
+            try
+            {
                 var q = _client.From<PlayerProfile>()
-                    .Where(x => x.Username == CurrentUser.Username) // or use ID if available
+                    .Where(x => x.Username == CurrentUser.Username)
                     .Set(x => x.MusicEnabled, AppSettings.IsMusicEnabled)
                     .Set(x => x.MusicVolume, AppSettings.MusicVolume)
                     .Set(x => x.SfxVolume, AppSettings.SfxVolume)
-                    .Set(x => x.SelectedTrack, AppSettings.SelectedTrack);
+                    .Set(x => x.SelectedTrack, AppSettings.SelectedTrack)
+                    .Set(x => x.Highscore, CurrentUser.Highscore); 
 
                 if (gameDataJson != null)
                     q = q.Set(x => x.GameSaveData, gameDataJson);
 
                 await q.Update();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 System.Diagnostics.Debug.WriteLine("[SaveUserData ERROR] " + ex);
             }
         }
 
-        // Function to update highscore if the new score is higher
         public static async Task<List<PlayerProfile>> GetLeaderboard() {
             try {
                 var response = await _client.From<PlayerProfile>()
