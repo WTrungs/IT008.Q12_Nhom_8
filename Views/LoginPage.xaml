@@ -371,7 +371,7 @@
                         Foreground="White"
                         Click="ContinueAsGuestButton_Click"
                         GotKeyboardFocus="Control_GotKeyboardFocus"
-                        KeyboardNavigation.TabIndex="5" Height="49"/>
+                        KeyboardNavigation.TabIndex="5" Height="45"/>
 
                 </StackPanel>
             </Grid>

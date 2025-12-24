@@ -45,59 +45,64 @@
                 </Ellipse.Effect>
             </Ellipse>
         </Canvas>
+        <Border Style="{StaticResource GlassCard}"
+                HorizontalAlignment="Center"
+                Width="380"
+                Height="420"
+                Padding="24" Margin="0,70,0,-40">
 
-        <StackPanel x:Name="DifficultyPanel"
-                    Width="420"
-                    VerticalAlignment="Center"
-                    KeyboardNavigation.TabNavigation="Cycle"
-                    KeyboardNavigation.DirectionalNavigation="Cycle">
+            <StackPanel x:Name="DifficultyPanel"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        KeyboardNavigation.TabNavigation="Cycle"
+                        KeyboardNavigation.DirectionalNavigation="Cycle">
+                <TextBlock Text="Difficulty"
+                           FontSize="44"
+                           FontWeight="Bold"
+                           FontStretch="Expanded"
+                           HorizontalAlignment="Center"/>
 
-            <TextBlock Text="Difficulty"
-                       FontSize="44"
-                       FontWeight="Bold"
-                       FontStretch="Expanded"
-                       HorizontalAlignment="Center"/>
+                <Button x:Name="EasyButton"
+                        Style="{StaticResource SpaceButton}"
+                        Content="Easy"
+                        Height="50"
+                        Margin="0,20,0,0"
+                        Click="EasyButton_Click"
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        TabIndex="0"
+                        IsTabStop="True" Width="280"/>
 
-            <Button x:Name="EasyButton"
-                    Style="{StaticResource SpaceButton}"
-                    Content="Easy"
-                    Height="50"
-                    Margin="0,20,0,0"
-                    Click="EasyButton_Click"
-                    GotKeyboardFocus="Control_GotKeyboardFocus"
-                    TabIndex="0"
-                    IsTabStop="True"/>
+                <Button x:Name="MediumButton"
+                        Style="{StaticResource SpaceButton}"
+                        Content="Medium"
+                        Height="50"
+                        Margin="0,10,0,0"
+                        Click="MediumButton_Click"
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        TabIndex="1"
+                        IsTabStop="True" Width="280"/>
 
-            <Button x:Name="MediumButton"
-                    Style="{StaticResource SpaceButton}"
-                    Content="Medium"
-                    Height="50"
-                    Margin="0,10,0,0"
-                    Click="MediumButton_Click"
-                    GotKeyboardFocus="Control_GotKeyboardFocus"
-                    TabIndex="1"
-                    IsTabStop="True"/>
+                <Button x:Name="HardButton"
+                        Style="{StaticResource SpaceButton}"
+                        Content="Hard"
+                        Height="50"
+                        Margin="0,10,0,0"
+                        Click="HardButton_Click"
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        TabIndex="2"
+                        IsTabStop="True" Width="280"/>
 
-            <Button x:Name="HardButton"
-                    Style="{StaticResource SpaceButton}"
-                    Content="Hard"
-                    Height="50"
-                    Margin="0,10,0,0"
-                    Click="HardButton_Click"
-                    GotKeyboardFocus="Control_GotKeyboardFocus"
-                    TabIndex="2"
-                    IsTabStop="True"/>
+                <Button x:Name="BackButton"
+                        Style="{StaticResource SpaceButton}"
+                        Content="Back to Menu"
+                        Height="50"
+                        Margin="0,40,0,0"
+                        Click="BackButton_Click"
+                        GotKeyboardFocus="Control_GotKeyboardFocus"
+                        TabIndex="3"
+                        IsTabStop="True" Width="280"/>
 
-            <Button x:Name="BackButton"
-                    Style="{StaticResource SpaceButton}"
-                    Content="Back to Menu"
-                    Height="50"
-                    Margin="0,40,0,0"
-                    Click="BackButton_Click"
-                    GotKeyboardFocus="Control_GotKeyboardFocus"
-                    TabIndex="3"
-                    IsTabStop="True" Width="282"/>
-
-        </StackPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page> 

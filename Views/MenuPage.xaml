@@ -203,9 +203,13 @@
           KeyboardNavigation.IsTabStop="False"
           KeyboardNavigation.TabNavigation="Cycle"
           Loaded="MenuPage_Loaded">
-        <Rectangle Fill="{StaticResource SpaceBackground}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <Rectangle Fill="{StaticResource SpaceBackground}" Grid.RowSpan="2"/>
 
-        <Canvas IsHitTestVisible="True" Opacity="0.9">
+        <Canvas IsHitTestVisible="True" Opacity="0.9" Grid.RowSpan="2">
             <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
                 <Ellipse.Effect>
                     <BlurEffect Radius="60"/>
@@ -237,9 +241,9 @@
             </Ellipse>
         </Canvas>
 
-        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False"/>
+        <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.35" IsHitTestVisible="False" Grid.RowSpan="2"/>
 
-        <Grid Margin="22">
+        <Grid Margin="22,22,22,21">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -253,7 +257,7 @@
                               PreviewKeyDown="HamburgerToggle_PreviewKeyDown"
                               GotKeyboardFocus="Control_GotKeyboardFocus"/>
 
-                <TextBlock Text="TETRIS"
+                <TextBlock 
                            FontSize="22"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
@@ -266,7 +270,15 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Style="{StaticResource GlassCard}" Width="520" VerticalAlignment="Center">
+                <TextBlock Text="TETRIS GAME"
+                           FontSize="88"
+                           FontWeight="Bold"
+                           FontStretch="Expanded"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top" Width="700" Height="120" Margin="0,32,0,0"/>
+
+                <Border Style="{StaticResource GlassCard}" VerticalAlignment="Top" Margin="313,273,313,0" Height="380" Width="330">
                     <StackPanel>
                         <TextBlock Text="MENU"
                                    FontSize="44"
@@ -283,26 +295,23 @@
                                 Style="{StaticResource SpaceButton}" Content="New Game"
                                 Click="NewGameButton_Click" 
                                 GotKeyboardFocus="Control_GotKeyboardFocus"
-                                Margin="0,0,0,10"
-                                TabIndex="0"/>
+                                TabIndex="0" Height="50" Margin="0,0,0,10" Effect="{Binding BasedOn.TargetType.BaseType.DeclaringType.DeclaringMethod, Mode=OneWay, Source={StaticResource SpaceButton}}"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Continue"
                                 Click="ContinueButton_Click" 
                                 GotKeyboardFocus="Control_GotKeyboardFocus"
-                                Margin="0,0,0,10" 
-                                TabIndex="1"/>
+                                TabIndex="1" Height="50" Margin="0,0,0,10"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Save Game"
                                 Click="SaveGameButton_Click"
                                 GotKeyboardFocus="Control_GotKeyboardFocus"
-                                Margin="0,0,0,10"
-                                TabIndex="2"/>
+                                TabIndex="2" Height="50" Margin="0,0,0,10"/>
 
                         <Button Style="{StaticResource SpaceButton}" Content="Exit"
                                 Click="ExitButton_Click" 
                                 GotKeyboardFocus="Control_GotKeyboardFocus"
                                 BorderBrush="#FB7185"
-                                TabIndex="3"/>
+                                TabIndex="3" Height="50"/>
                     </StackPanel>
                 </Border>
 
@@ -387,9 +396,9 @@
                             </Grid>
                         </Border>
 
-                        <Button Style="{StaticResource SpaceButton}" Content="Settings" Click="SettingsButton_Click" GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10" TabIndex="7"/>
-                        <Button Style="{StaticResource SpaceButton}" Content="About" Click="AboutButton_Click" GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10" TabIndex="8"/>
-                        <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" GotKeyboardFocus="Control_GotKeyboardFocus" TabIndex="9" BorderBrush="#FB7185"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="Settings" Click="SettingsButton_Click" GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10" TabIndex="7" Height="50"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="About" Click="AboutButton_Click" GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10" TabIndex="8" Height="50"/>
+                        <Button Style="{StaticResource SpaceButton}" Content="Log out" Click="LogoutButton_Click" GotKeyboardFocus="Control_GotKeyboardFocus" TabIndex="9" BorderBrush="#FB7185" Height="50"/>
                     </StackPanel>
                 </Border>
 

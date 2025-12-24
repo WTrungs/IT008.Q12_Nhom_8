@@ -93,7 +93,7 @@
                         </Border>
 
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger x:Name="MouseOverTrigger" Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
                                     <Setter.Value>
@@ -102,11 +102,11 @@
                                 </Setter>
                             </Trigger>
 
-                            <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Trigger x:Name="KeyboardFocusTrigger" Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="#22D3EE"/>
                                 <Setter TargetName="Bd" Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect Color="#22D3EE" BlurRadius="50" ShadowDepth="0" Opacity="0.8"/>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="50" ShadowDepth="0" Opacity="0.55"/>
                                     </Setter.Value>
                                 </Setter>
                                 <Setter Property="Foreground" Value="White"/>

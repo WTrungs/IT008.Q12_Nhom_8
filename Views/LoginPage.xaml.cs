@@ -24,7 +24,7 @@ namespace TetrisApp.Views {
 
         public LoginPage() {
             InitializeComponent();
-           
+
             PreviewMouseDown += (_, __) => _suppressEnterUntilUserInteracts = false;
             PreviewKeyDown += (_, __) => _suppressEnterUntilUserInteracts = false;
         }
@@ -38,8 +38,7 @@ namespace TetrisApp.Views {
             }));
         }
 
-        private void ResetUI()
-        {
+        private void ResetUI() {
             _currentMode = "Login";
             _isWaitingForOtp = false;
 
@@ -69,10 +68,9 @@ namespace TetrisApp.Views {
             ((App)Application.Current).PlayHoverSound();
         }
 
-        private void SignUpLink_Click(object sender, RoutedEventArgs e)
-        {
+        private void SignUpLink_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            ResetUI(); 
+            ResetUI();
 
             _currentMode = "Register";
             TitleText.Text = "REGISTER";
@@ -89,8 +87,7 @@ namespace TetrisApp.Views {
             FocusPark?.Focus();
         }
 
-        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e)
-        {
+        private void ForgotPasswordLink_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             ResetUI();
 
@@ -127,20 +124,16 @@ namespace TetrisApp.Views {
             }
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
+        private async void LoginButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            if (_isWaitingForOtp)
-            {
+            if (_isWaitingForOtp) {
                 string otp = OtpTextBox.Text.Trim();
                 if (string.IsNullOrEmpty(otp)) { ShowError("Hãy nhập mã OTP!"); return; }
 
                 bool isVerified = await SupabaseService.VerifyOtp(_tempEmail, otp);
-                if (isVerified)
-                {
-                    if (_currentMode == "Reset")
-                    {
+                if (isVerified) {
+                    if (_currentMode == "Reset") {
                         ShowError("Xác thực thành công! Hãy nhập mật khẩu mới.");
                         SwitchToNewPasswordMode();
                         return;
@@ -150,8 +143,7 @@ namespace TetrisApp.Views {
                     if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                     NavigationService?.Navigate(new MenuPage());
                 }
-                else
-                {
+                else {
                     ShowError("Mã OTP sai hoặc đã hết hạn!");
                 }
                 return;
@@ -161,87 +153,70 @@ namespace TetrisApp.Views {
             string pass = PasswordBox.Password;
             string email = EmailTextBox.Text.Trim();
 
-            if (_currentMode == "Register")
-            {
-                if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(email))
-                {
+            if (_currentMode == "Register") {
+                if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(email)) {
                     ShowError("Vui lòng nhập Username, Password và Email!");
                     return;
                 }
 
                 string result = await SupabaseService.Register(user, pass, email);
-                if (result == "OK")
-                {
+                if (result == "OK") {
                     _tempEmail = email;
                     await SupabaseService.GenerateAndSendOtp(email);
                     SwitchToOtpMode();
                 }
                 else ShowError(result);
             }
-            else if (_currentMode == "Reset")
-            {
-                if (string.IsNullOrEmpty(email))
-                {
+            else if (_currentMode == "Reset") {
+                if (string.IsNullOrEmpty(email)) {
                     ShowError("Vui lòng nhập Email!");
                     return;
                 }
 
                 bool sent = await SupabaseService.GenerateAndSendOtp(email);
-                if (sent)
-                {
+                if (sent) {
                     _tempEmail = email;
                     SwitchToOtpMode();
                 }
                 else ShowError("Không tìm thấy Email này trong hệ thống!");
             }
-            else if (_currentMode == "NewPassword")
-            {
-                if (string.IsNullOrEmpty(pass))
-                {
+            else if (_currentMode == "NewPassword") {
+                if (string.IsNullOrEmpty(pass)) {
                     ShowError("Vui lòng nhập mật khẩu mới!");
                     return;
                 }
 
-                if (SupabaseService.CurrentUser != null)
-                {
+                if (SupabaseService.CurrentUser != null) {
                     bool resetOk = await SupabaseService.ResetPassword(SupabaseService.CurrentUser.Username, pass);
-                    if (resetOk)
-                    {
+                    if (resetOk) {
                         ShowError("Đổi mật khẩu thành công! Đang vào game...");
                         if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                         NavigationService?.Navigate(new MenuPage());
                     }
-                    else
-                    {
+                    else {
                         ShowError("Có lỗi xảy ra khi cập nhật mật khẩu.");
                     }
                 }
             }
-            
-            else 
-            {
-                if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
-                {
+
+            else {
+                if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass)) {
                     ShowError("Nhập thiếu thông tin!");
                     return;
                 }
 
                 bool loginOk = await SupabaseService.Login(user, pass);
-                if (loginOk)
-                {
-                    if (SupabaseService.CurrentUser != null && !string.IsNullOrEmpty(SupabaseService.CurrentUser.Email))
-                    {
+                if (loginOk) {
+                    if (SupabaseService.CurrentUser != null && !string.IsNullOrEmpty(SupabaseService.CurrentUser.Email)) {
                         _tempEmail = SupabaseService.CurrentUser.Email;
                         await SupabaseService.GenerateAndSendOtp(_tempEmail);
                         SwitchToOtpMode();
                     }
-                    else
-                    {
+                    else {
                         NavigationService?.Navigate(new MenuPage());
                     }
                 }
-                else
-                {
+                else {
                     ShowError("Sai tên đăng nhập hoặc mật khẩu!");
                     PasswordBox.Clear();
                     PasswordBox.Focus();
@@ -287,7 +262,7 @@ namespace TetrisApp.Views {
 
             if (e.Key == Key.Left || e.Key == Key.Right) {
                 if (currentFocus is TextBox || currentFocus is PasswordBox) {
-                    return; 
+                    return;
                 }
 
                 e.Handled = true;
@@ -325,8 +300,7 @@ namespace TetrisApp.Views {
         }
 
 
-        private void SwitchToOtpMode()
-        {
+        private void SwitchToOtpMode() {
             _isWaitingForOtp = true;
 
             UsernameTextBox.Visibility = Visibility.Collapsed;
@@ -344,10 +318,9 @@ namespace TetrisApp.Views {
         }
 
 
-        private void SwitchToNewPasswordMode()
-        {
-            _currentMode = "NewPassword"; 
-            _isWaitingForOtp = false;     
+        private void SwitchToNewPasswordMode() {
+            _currentMode = "NewPassword";
+            _isWaitingForOtp = false;
 
             OtpLabel.Visibility = Visibility.Collapsed;
             OtpTextBox.Visibility = Visibility.Collapsed;
@@ -361,8 +334,5 @@ namespace TetrisApp.Views {
 
             PasswordBox.Focus();
         }
-
-
-
     }
 }
