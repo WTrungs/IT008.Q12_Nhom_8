@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Windows.Navigation;
 using TetrisApp.Models;
+using TetrisApp.Logics;
 
 namespace TetrisApp.Views {
     public partial class Difficulty : Page {
@@ -83,17 +84,20 @@ namespace TetrisApp.Views {
 
         private void EasyButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Easy");
-        }
+            var gamePage = new GamePage(new EasyMode());
+			NavigationService?.Navigate(gamePage);
+		}
 
         private void MediumButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Medium");
-        }
+			var gamePage = new GamePage(new MediumMode());
+			NavigationService?.Navigate(gamePage);
+		}
 
         private void HardButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
-            NavigationService?.Navigate(new Uri("Views/GamePage.xaml", UriKind.Relative), "Hard");
-        }
+			var gamePage = new GamePage(new HardMode());
+			NavigationService?.Navigate(gamePage);
+		}
     }
 }

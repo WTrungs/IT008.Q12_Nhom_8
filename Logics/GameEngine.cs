@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Newtonsoft.Json;
 using TetrisApp.Views;
+using TetrisApp.Logics;
 using System.Windows.Media.Animation;
 
 namespace TetrisApp.Views {
@@ -29,6 +30,13 @@ namespace TetrisApp.Views {
 
 		public GameEngine(GamePage gamePage) {
 			this.gamePage = gamePage;
+			currentMode = new EasyMode();
+			Start();
+		}
+
+		public GameEngine(GamePage gamePage, BaseMode mode) {
+			this.gamePage = gamePage;
+			currentMode = mode;
 			Start();
 		}
 
@@ -55,6 +63,7 @@ namespace TetrisApp.Views {
 		const int boardColumn = 10;
 		Position startPosition = new Position(20, 3);
 		Position currentPosition = new Position(20, 3);
+		BaseMode currentMode;
 		int currentScore = 0;
 		int currentLevel = 1;
 		int currentLine = 0;
@@ -87,13 +96,6 @@ namespace TetrisApp.Views {
 				}
 			}
 			InitializeColor();
-		}
-
-		double CalculateDropTick() {
-			if (currentLevel > 30) {
-				return 0.01;
-			}
-			return 0.8 / (Math.Pow(2, (currentLevel - 1) / 5.0));
 		}
 
 		public int GetCurrentLine() {
@@ -159,7 +161,7 @@ namespace TetrisApp.Views {
 			if (IsPaused || isLose) {
 				return;
 			}
-			dropTick = CalculateDropTick();
+			dropTick = currentMode.CalculateDropTick(currentLevel);
 			RunTickEvent();
 		}
 
@@ -356,17 +358,14 @@ namespace TetrisApp.Views {
 				}
 			}
 			if (deletedLine.Count > 0) gamePage.PlaySound(gamePage.clearLineSound);
-			AddScore(deletedLine.Count);
+			UpdateScore(deletedLine.Count);
 			boardGame = newBoard;
 		}
 
-		public void AddScore(int lines) {
+		public void UpdateScore(int lines) {
 			currentLine += lines;
 			currentLevel = currentLine / 10 + 1;
-			if (lines == 0) {
-				return;
-			}
-			currentScore += 1000 + (int)((lines - 1) * 1.5 * 1000);
+			currentScore += currentMode.GetNewScore(lines);
 		}
 
 		void MakeEraseLineAnimation(int line) {

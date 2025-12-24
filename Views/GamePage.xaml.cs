@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TetrisApp.Models;
 using TetrisApp.Views;
+using TetrisApp.Logics;
 using TetrisApp.Services;
 
 namespace TetrisApp.Views {
@@ -22,6 +23,13 @@ namespace TetrisApp.Views {
             this.Loaded += GamePage_Loaded;
             this.Unloaded += GamePage_Unloaded;
         }
+
+        public GamePage(BaseMode mode) : this() {
+			InitializeComponent();
+			gameEngine = new GameEngine(this, mode);
+			this.Loaded += GamePage_Loaded;
+			this.Unloaded += GamePage_Unloaded;
+		}
 
         public GamePage(string saveData) : this() {
             this.Loaded += (s, e) => {
