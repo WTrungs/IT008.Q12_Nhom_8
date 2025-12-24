@@ -56,7 +56,7 @@ namespace TetrisApp.Views {
 			ColorAnimation colorAnimation = new ColorAnimation {
 				From = Colors.White,
 				To = originalColor,
-				Duration = TimeSpan.FromMilliseconds(300),
+				Duration = TimeSpan.FromMilliseconds(500),
 				EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
 			};
 			animatedColor.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
