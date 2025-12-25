@@ -19,12 +19,13 @@ namespace TetrisApp.Views {
 		public MediaPlayer rotateSound;
 
 		public void InitializeSounds() {
-			Initialize(ref hardDropSound, "Assets/hard-drop.wav", 1);
-			Initialize(ref moveSound, "Assets/move.wav", 1);
-			Initialize(ref clearLineSound, "Assets/clear-line.wav", 1);
-			Initialize(ref landingSound, "Assets/landing.wav", 1);
-			Initialize(ref holdSound, "Assets/hold.wav", 1);
-			Initialize(ref rotateSound, "Assets/rotate.wav", 1);
+			double currentSfxVolume = AppSettings.SfxVolume;
+			Initialize(ref hardDropSound, "Assets/hard-drop.wav", currentSfxVolume);
+			Initialize(ref moveSound, "Assets/move.wav", currentSfxVolume);
+			Initialize(ref clearLineSound, "Assets/clear-line.wav", currentSfxVolume);
+			Initialize(ref landingSound, "Assets/landing.wav", currentSfxVolume);
+			Initialize(ref holdSound, "Assets/hold.wav", currentSfxVolume);
+			Initialize(ref rotateSound, "Assets/rotate.wav", currentSfxVolume);
 		}
 
 		public void Initialize(ref MediaPlayer sound, string path, double volume) {
