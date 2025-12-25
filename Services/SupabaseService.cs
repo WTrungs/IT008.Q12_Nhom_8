@@ -119,7 +119,10 @@ namespace TetrisApp.Services {
                     .Set(x => x.Highscore, CurrentUser.Highscore);
 
                 if (gameDataJson != null)
+                {
                     q = q.Set(x => x.GameSaveData, gameDataJson);
+                    CurrentUser.GameSaveData = gameDataJson;
+                }    
 
                 await q.Update();
             }
