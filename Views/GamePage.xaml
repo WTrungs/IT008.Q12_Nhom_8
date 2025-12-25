@@ -230,20 +230,19 @@
 					</DockPanel>
 
 					<!-- Board -->
-					<Border Grid.Row="1"
+                    <Border Grid.Row="1"
 							CornerRadius="14"
 							BorderBrush="#2A2A33"
 							BorderThickness="1"
 							Background="#0D1020"
-							Padding="12"
-							>
+							Padding="12">
 
-						<!-- Viewbox để board có thể phóng to/thu nhỏ theo màn hình nhưng giữ tỉ lệ -->
+                        <!-- Viewbox to scale the board while maintaining aspect ratio -->
 						<Viewbox Stretch="Uniform"
 								 HorizontalAlignment="Center"
 								 VerticalAlignment="Center">
 
-							<!-- Vùng board: 10*26 = 260, 20*26 = 520 -->
+							<!-- Board area: 10*26 = 260, 20*26 = 520 -->
 							<Grid Width="260" Height="520">
 								<Border x:Name="GridBackground"
 									CornerRadius="10"
@@ -258,10 +257,10 @@
 									</Grid>
 								</Border>
 								<Border x:Name="BoardBorder"
-									CornerRadius="10"
-									BorderBrush="#FF5E5E7E"
-									BorderThickness="2"
-									IsHitTestVisible="False"/>
+										CornerRadius="10"
+										BorderBrush="#FF5E5E7E"
+										BorderThickness="2"
+										IsHitTestVisible="False"/>
 							</Grid>
 						</Viewbox>
 					</Border>
@@ -332,11 +331,11 @@
 										   HorizontalAlignment="Center" 
 										   FontWeight="Bold"/>
 								<Border x:Name="HoldBorder"  Height="130" Width="130"
-									CornerRadius="12"
-									BorderBrush="#2A2A33"
-									BorderThickness="0"
-									Margin="0,8,0,0"
-									Background="#0D1020">
+										CornerRadius="12"
+										BorderBrush="#2A2A33"
+										BorderThickness="0"
+										Margin="0,8,0,0"
+										Background="#0D1020">
 								</Border>
 							</StackPanel>
 						</Border>
@@ -363,12 +362,12 @@
 										   HorizontalAlignment="Center"
 										   FontWeight="Bold"/>
 								<Border x:Name="NextBorder"
-									Height="130" Width="130"
-									CornerRadius="12"
-									BorderBrush="#2A2A33"
-									BorderThickness="0"
-									Margin="0,8,0,0"
-									Background="#0D1020">
+										Height="130" Width="130"
+										CornerRadius="12"
+										BorderBrush="#2A2A33"
+										BorderThickness="0"
+										Margin="0,8,0,0"
+										Background="#0D1020">
 								</Border>
 							</StackPanel>
 						</Border>
@@ -401,37 +400,43 @@
                         KeyboardNavigation.TabNavigation="Cycle">
 
                         <Border x:Name="FocusPark"
-					    Focusable="True"
-					    KeyboardNavigation.IsTabStop="False"
-						Width="0" Height="0"/>
+								Focusable="True"
+								KeyboardNavigation.IsTabStop="False"
+								Width="0" Height="0"/>
 
                         <TextBlock Text="PAUSED" 
-                        Foreground="White" 
-                        FontSize="32" 
-                        FontWeight="Bold" 
-                        HorizontalAlignment="Center" 
-                        Margin="0,0,0,30"/>
+								Foreground="White" 
+								FontSize="32" 
+								FontWeight="Bold" 
+								HorizontalAlignment="Center" 
+								Margin="0,0,0,30"/>
 
                         <Button x:Name="ResumeBtn"
-                        Content="RESUME" 
-                        Height="40"
-                        Margin="0,0,0,10"
-                        Click="ResumeButton_Click"
-                        GotKeyboardFocus="Control_GotKeyboardFocus"
-                        Style="{StaticResource SpaceButton}"/>
+								Content="RESUME" 
+								Height="40"
+								Margin="0,0,0,10"
+								Click="ResumeButton_Click"
+								GotKeyboardFocus="Control_GotKeyboardFocus"
+								Style="{StaticResource SpaceButton}"
+								IsTabStop="True"
+                                TabIndex="0"/>
 
                         <Button Content="RESTART" 
-                        Height="40" 
-                        Margin="0,0,0,10"
-                        Click="RestartButton_Click" 
-                        GotKeyboardFocus="Control_GotKeyboardFocus"
-                        Style="{StaticResource SpaceButton}"/>
+								Height="40" 
+								Margin="0,0,0,10"
+								Click="RestartButton_Click" 
+								GotKeyboardFocus="Control_GotKeyboardFocus"
+								Style="{StaticResource SpaceButton}"
+								IsTabStop="True"
+                                TabIndex="1"/>
 
                         <Button Content="BACK TO MENU" 
-                        Height="40"
-                        Click="QuitButton_Click"
-                        GotKeyboardFocus="Control_GotKeyboardFocus"
-                        Style="{StaticResource SpaceButton}"/>
+								Height="40"
+								Click="QuitButton_Click"
+								GotKeyboardFocus="Control_GotKeyboardFocus"
+								Style="{StaticResource SpaceButton}"
+                                IsTabStop="True"
+                                TabIndex="2"/>
                     </StackPanel>
                 </Border>
             </Grid>

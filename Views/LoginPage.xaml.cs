@@ -11,9 +11,10 @@ namespace TetrisApp.Views {
     public partial class LoginPage : Page {
         private readonly MediaPlayer _clickSound = new MediaPlayer();
         private string _currentMode = "Login";
-        private bool _suppressEnterUntilUserInteracts = true;
         private bool _isWaitingForOtp = false;
         private string _tempEmail = "";
+        private bool _isLoadingOverlay = false;
+
         public bool IsHoverEnabled {
             get { return (bool)GetValue(IsHoverEnabledProperty); }
             set { SetValue(IsHoverEnabledProperty, value); }
@@ -24,9 +25,6 @@ namespace TetrisApp.Views {
 
         public LoginPage() {
             InitializeComponent();
-
-            PreviewMouseDown += (_, __) => _suppressEnterUntilUserInteracts = false;
-            PreviewKeyDown += (_, __) => _suppressEnterUntilUserInteracts = false;
         }
 
         private void LoginPage_Loaded(object sender, RoutedEventArgs e) {
@@ -37,8 +35,7 @@ namespace TetrisApp.Views {
                 FocusPark?.Focus();
             }));
 
-            if (Application.Current is App myApp)
-            {
+            if (Application.Current is App myApp) {
                 myApp.StopBackgroundMusic();
             }
         }
@@ -85,7 +82,7 @@ namespace TetrisApp.Views {
             ContinueAsGuestButton.Content = "BACK TO LOGIN";
 
             EmailLabel.Visibility = Visibility.Visible;
-            EmailTextBox.Visibility = Visibility.Visible; 
+            EmailTextBox.Visibility = Visibility.Visible;
 
             ForgotPasswordLink.Visibility = Visibility.Collapsed;
             SignUpPanel.Visibility = Visibility.Collapsed;
@@ -122,8 +119,7 @@ namespace TetrisApp.Views {
         private void ContinueAsGuestButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
-            if (_currentMode == "Login")
-            {
+            if (_currentMode == "Login") {
                 SupabaseService.Logout();
 
                 AppSettings.IsMusicEnabled = true;
@@ -131,8 +127,7 @@ namespace TetrisApp.Views {
                 AppSettings.SfxVolume = 0.5;
                 AppSettings.SelectedTrack = "Puzzle";
 
-                if (Application.Current is App myApp)
-                {
+                if (Application.Current is App myApp) {
                     myApp.UpdateBackgroundMusic();
                 }
 
@@ -148,25 +143,37 @@ namespace TetrisApp.Views {
         private async void LoginButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
 
+            var main = (MainWindow)Application.Current.MainWindow;
+
+            // ==== OTP MODE ====
             if (_isWaitingForOtp) {
                 string otp = OtpTextBox.Text.Trim();
                 if (string.IsNullOrEmpty(otp)) { ShowError("Please enter the OTP!"); return; }
 
-                bool isVerified = await SupabaseService.VerifyOtp(_tempEmail, otp);
-                if (isVerified) {
-                    if (_currentMode == "Reset") {
-                        ShowError("Verification successful! Please enter a new password.");
-                        SwitchToNewPasswordMode();
-                        return;
-                    }
+                main.ShowLoadingOverlay("Verifying OTP...", "");
+                await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
 
-                    ShowError("Verification successful!");
-                    if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
-                    NavigationService?.Navigate(new MenuPage());
+                try {
+                    bool isVerified = await SupabaseService.VerifyOtp(_tempEmail, otp);
+                    if (isVerified) {
+                        if (_currentMode == "Reset") {
+                            ShowError("Verification successful! Please enter a new password.");
+                            SwitchToNewPasswordMode();
+                            return; 
+                        }
+
+                        ShowError("Verification successful!");
+                        if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
+                        NavigationService?.Navigate(new MenuPage());
+                    }
+                    else {
+                        ShowError("Incorrect or expired OTP!");
+                    }
                 }
-                else {
-                    ShowError("Incorrect or expired OTP!");
+                finally {
+                    main.HideLoadingOverlay();
                 }
+
                 return;
             }
 
@@ -174,71 +181,113 @@ namespace TetrisApp.Views {
             string pass = PasswordBox.Password;
             string email = EmailTextBox.Text.Trim();
 
+            // ==== REGISTER ====
             if (_currentMode == "Register") {
                 if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(email)) {
                     ShowError("Please enter Username, Password, and Email!");
                     return;
                 }
 
-                if (!email.Trim().EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
-                {
+                if (!email.Trim().EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase)) {
                     ShowError("Please enter a valid Gmail address!");
                     return;
                 }
 
-                string result = await SupabaseService.Register(user, pass, email);
-                if (result == "OK") {
-                    _tempEmail = email;
-                    await SupabaseService.GenerateAndSendOtp(email);
-                    SwitchToOtpMode();
+                main.ShowLoadingOverlay("Registering...", "");
+                await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
+
+                try {
+                    string result = await SupabaseService.Register(user, pass, email);
+
+                    if (result == "OK") {
+                        _tempEmail = email;
+                        await SupabaseService.GenerateAndSendOtp(email);
+                        SwitchToOtpMode();
+                    }
+                    else {
+                        ShowError(result);
+                    }
                 }
-                else ShowError(result);
+                finally {
+                    main.HideLoadingOverlay();
+                }
+
+                return;
             }
-            else if (_currentMode == "Reset") {
+
+            // ==== RESET (FORGOT PASSWORD) ====
+            if (_currentMode == "Reset") {
                 if (string.IsNullOrEmpty(email)) {
                     ShowError("Please enter your Email!");
                     return;
                 }
 
-                bool sent = await SupabaseService.GenerateAndSendOtp(email);
-                if (sent) {
-                    _tempEmail = email;
-                    SwitchToOtpMode();
+                main.ShowLoadingOverlay("Sending OTP...", "");
+                await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
+
+                try {
+                    bool sent = await SupabaseService.GenerateAndSendOtp(email);
+                    if (sent) {
+                        _tempEmail = email;
+                        SwitchToOtpMode();
+                    }
+                    else {
+                        ShowError("Email not found in the system!");
+                    }
                 }
-                else ShowError("Email not found in the system!");
+                finally {
+                    main.HideLoadingOverlay();
+                }
+
+                return;
             }
-            else if (_currentMode == "NewPassword") {
+
+            // ==== NEW PASSWORD ====
+            if (_currentMode == "NewPassword") {
                 if (string.IsNullOrEmpty(pass)) {
                     ShowError("Please enter a new password!");
                     return;
                 }
 
                 if (SupabaseService.CurrentUser != null) {
-                    bool resetOk = await SupabaseService.ResetPassword(SupabaseService.CurrentUser.Username, pass);
-                    if (resetOk) {
-                        ShowError("Password changed successfully! Entering game...");
-                        if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
-                        NavigationService?.Navigate(new MenuPage());
+                    main.ShowLoadingOverlay("Updating password...", "");
+                    await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
+
+                    try {
+                        bool resetOk = await SupabaseService.ResetPassword(SupabaseService.CurrentUser.Username, pass);
+                        if (resetOk) {
+                            ShowError("Password changed successfully!");
+                            if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
+                            NavigationService?.Navigate(new LoginPage());
+                        }
+                        else {
+                            ShowError("An error occurred while updating the password. Please try again");
+                        }
                     }
-                    else {
-                        ShowError("An error occurred while updating the password.");
+                    finally {
+                        main.HideLoadingOverlay();
                     }
                 }
+
+                return;
             }
 
-            else {
-                if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass)) {
-                    ShowError("Missing information!");
-                    return;
-                }
+            // ==== LOGIN ====
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass)) {
+                ShowError("Missing information!");
+                return;
+            }
 
+            main.ShowLoadingOverlay("Logging in...", "");
+            await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
+
+            try {
                 bool loginOk = await SupabaseService.Login(user, pass);
+
                 if (loginOk) {
-
-                    
-
                     if (SupabaseService.CurrentUser != null && !string.IsNullOrEmpty(SupabaseService.CurrentUser.Email)) {
                         _tempEmail = SupabaseService.CurrentUser.Email;
+
                         await SupabaseService.GenerateAndSendOtp(_tempEmail);
                         SwitchToOtpMode();
                     }
@@ -252,6 +301,9 @@ namespace TetrisApp.Views {
                     PasswordBox.Clear();
                     PasswordBox.Focus();
                 }
+            }
+            finally {
+                main.HideLoadingOverlay();
             }
         }
 
@@ -278,24 +330,16 @@ namespace TetrisApp.Views {
             bool IsIdleFocus = currentFocus == null || currentFocus == this || currentFocus == FocusPark || currentFocus is Grid;
 
             if (IsIdleFocus) {
-                if (e.Key == Key.Tab) {
+                if (e.Key == Key.Tab || e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Enter) {
                     e.Handled = true;
-                    UsernameTextBox.Focus();
-                    return;
-                }
-
-                if (e.Key == Key.Down || e.Key == Key.Up || e.Key == Key.Enter) {
-                    e.Handled = true;
-                    UsernameTextBox.Focus();
+                    FocusFirstFieldForCurrentMode();
                     return;
                 }
             }
 
+            // Left/Right arrows lock
             if (e.Key == Key.Left || e.Key == Key.Right) {
-                if (currentFocus is TextBox || currentFocus is PasswordBox) {
-                    return;
-                }
-
+                if (currentFocus is TextBox || currentFocus is PasswordBox) return;
                 e.Handled = true;
                 return;
             }
@@ -310,17 +354,45 @@ namespace TetrisApp.Views {
             }
             else if (e.Key == Key.Enter) {
                 e.Handled = true;
-
-                if (currentFocus == UsernameTextBox) {
-                    PasswordBox.Focus();
-                }
-                else if (currentFocus == PasswordBox) {
-                    LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-                }
-                else if (currentFocus is Button btn) {
-                    btn.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-                }
+                HandleEnterKey(currentFocus);
             }
+        }
+
+        private void HandleEnterKey(object? currentFocus) {
+            // OTP: Enter OTP => Verify
+            if (_isWaitingForOtp) {
+                if (currentFocus == OtpTextBox) LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                else if (currentFocus is Button b1) b1.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                return;
+            }
+
+            // Reset: Enter Email => Send OTP
+            if (_currentMode == "Reset") {
+                if (currentFocus == EmailTextBox) LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                else if (currentFocus is Button b2) b2.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                return;
+            }
+
+            //Register: Email -> Username -> Password -> Create Account
+            if (_currentMode == "Register") {
+                if (currentFocus == EmailTextBox) { UsernameTextBox.Focus(); return; }
+                if (currentFocus == UsernameTextBox) { PasswordBox.Focus(); return; }
+                if (currentFocus == PasswordBox) { LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent)); return; }
+                if (currentFocus is Button b3) b3.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                return;
+            }
+
+            // NewPassword: Enter Password => Update
+            if (_currentMode == "NewPassword") {
+                if (currentFocus == PasswordBox) LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                else if (currentFocus is Button b4) b4.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                return;
+            }
+
+            // Login: Username -> Password -> Login
+            if (currentFocus == UsernameTextBox) PasswordBox.Focus();
+            else if (currentFocus == PasswordBox) LoginButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            else if (currentFocus is Button b5) b5.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }
 
         private void MoveFocus(FocusNavigationDirection direction) {
@@ -347,7 +419,6 @@ namespace TetrisApp.Views {
             OtpTextBox.Focus();
         }
 
-
         private void SwitchToNewPasswordMode() {
             _currentMode = "NewPassword";
             _isWaitingForOtp = false;
@@ -372,5 +443,44 @@ namespace TetrisApp.Views {
 
             PasswordBox.Focus();
         }
+
+        // Helpers
+        private UIElement? GetFirstFieldForCurrentMode() {
+            if (_isWaitingForOtp && OtpTextBox.Visibility == Visibility.Visible) return OtpTextBox;
+
+            if (_currentMode == "NewPassword") {
+                if (PasswordBox.Visibility == Visibility.Visible) return PasswordBox;
+                return LoginButton;
+            }
+
+            if (_currentMode == "Reset") {
+                if (EmailTextBox.Visibility == Visibility.Visible) return EmailTextBox;
+                return LoginButton;
+            }
+
+            if (_currentMode == "Register") {
+                if (EmailTextBox.Visibility == Visibility.Visible) return EmailTextBox;
+                if (UsernameTextBox.Visibility == Visibility.Visible) return UsernameTextBox;
+                if (PasswordBox.Visibility == Visibility.Visible) return PasswordBox;
+                return LoginButton;
+            }
+
+            // Login
+            if (UsernameTextBox.Visibility == Visibility.Visible) return UsernameTextBox;
+            if (PasswordBox.Visibility == Visibility.Visible) return PasswordBox;
+            return LoginButton;
+        }
+
+        private void FocusFirstFieldForCurrentMode() {
+            var first = GetFirstFieldForCurrentMode();
+            if (first == null) return;
+
+            // Focus asynchronously to avoid focus issues
+            Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => {
+                Keyboard.ClearFocus();
+                first.Focus();
+            }));
+        }
+
     }
 }

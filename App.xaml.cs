@@ -93,9 +93,7 @@ namespace TetrisApp {
 
         }
 
-
-        public void StopBackgroundMusic()
-        {
+        public void StopBackgroundMusic() {
             bgmPlayer.Stop();
         }
 

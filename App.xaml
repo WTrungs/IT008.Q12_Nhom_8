@@ -88,8 +88,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="20">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 
                         <ControlTemplate.Triggers>
@@ -122,6 +121,60 @@
         </Style>
 
         <Style TargetType="Button" BasedOn="{StaticResource SpaceButton}"/>
+
+        <!-- PROGRESSBAR -->
+        <Style x:Key="SpaceProgressBar" TargetType="ProgressBar">
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Background" Value="#1A2033"/>
+            <Setter Property="BorderBrush" Value="#33405A"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Foreground" Value="#22D3EE"/>
+            <Setter Property="IsIndeterminate" Value="True"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ClipToBounds="True">
+                            <Grid>
+                                <Border x:Name="Bar"
+                                        Width="200"
+                                        HorizontalAlignment="Left"
+                                        CornerRadius="12">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{Binding Foreground.Color, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    </Border.Background>
+
+                                    <Border.RenderTransform>
+                                        <TranslateTransform X="-90"/>
+                                    </Border.RenderTransform>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsIndeterminate" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Bar"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                From="-90" To="340"
+                                                Duration="0:0:1.4"
+                                                AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </Application.Resources>
 </Application>

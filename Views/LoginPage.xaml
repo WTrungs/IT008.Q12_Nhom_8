@@ -293,7 +293,7 @@
                     <TextBox
                         x:Name="UsernameTextBox"
                         Style="{StaticResource SpaceTextBox}"
-                        KeyboardNavigation.TabIndex="0"
+                        KeyboardNavigation.TabIndex="1"
                         GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10"/>
 
                     <TextBlock
@@ -305,7 +305,7 @@
                     <PasswordBox
                         x:Name="PasswordBox"
                         Style="{StaticResource SpacePasswordBox}"
-                        KeyboardNavigation.TabIndex="1"
+                        KeyboardNavigation.TabIndex="2"
                         GotKeyboardFocus="Control_GotKeyboardFocus" Margin="0,0,0,10"/>
 
                     <TextBlock 
@@ -329,7 +329,7 @@
                             HorizontalAlignment="Left"
                             Click="ForgotPasswordLink_Click"
                             GotKeyboardFocus="Control_GotKeyboardFocus"
-                            KeyboardNavigation.TabIndex="2"/>
+                            KeyboardNavigation.TabIndex="4"/>
                     </Grid>
 
                     <Button
@@ -341,7 +341,7 @@
                         Margin="0,-5,0,-7"
                         Click="LoginButton_Click"
                         GotKeyboardFocus="Control_GotKeyboardFocus"
-                        KeyboardNavigation.TabIndex="3" Height="45"/>
+                        KeyboardNavigation.TabIndex="5" Height="45"/>
 
                     <StackPanel
                         x:Name="SignUpPanel"
@@ -359,7 +359,7 @@
                             Content="Create Account"
                             Click="SignUpLink_Click"
                             GotKeyboardFocus="Control_GotKeyboardFocus"
-                            KeyboardNavigation.TabIndex="4"/>
+                            KeyboardNavigation.TabIndex="6"/>
                     </StackPanel>
 
                     <Button
@@ -372,7 +372,7 @@
                         Foreground="White"
                         Click="ContinueAsGuestButton_Click"
                         GotKeyboardFocus="Control_GotKeyboardFocus"
-                        KeyboardNavigation.TabIndex="5" Height="45"/>
+                        KeyboardNavigation.TabIndex="7" Height="45"/>
                 </StackPanel>
             </Grid>
         </Border>

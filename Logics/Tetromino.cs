@@ -22,7 +22,7 @@ namespace TetrisApp.Views {
 			[TetrominoKind.Z] = "Z",
 		};
 
-		public Dictionary<TetrominoKind, string> tetrominoColor;
+			public Dictionary<TetrominoKind, string> tetrominoColor;
 
 		public void InitializeColor() {
 			tetrominoColor = new() {

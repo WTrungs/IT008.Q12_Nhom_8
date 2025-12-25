@@ -17,6 +17,7 @@ namespace TetrisApp {
     public partial class MainWindow : Window {
         private Action<bool>? _overlayClosedCallback;
         private IInputElement? _previousFocus;
+        private bool _isLoadingOverlay = false;
 
         // Overlay click sound
         private MediaPlayer _clickSound = new MediaPlayer();
@@ -47,11 +48,42 @@ namespace TetrisApp {
             }
         }
 
+        private void OverlayLayer_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if (OverlayLayer.Visibility != Visibility.Visible) return;
+
+            if (_isLoadingOverlay) { 
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.Left || e.Key == Key.Up) {
+                e.Handled = true;
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
+                return;
+            }
+
+            if (e.Key == Key.Right || e.Key == Key.Down) {
+                e.Handled = true;
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                return;
+            }
+
+            if (e.Key == Key.Escape) {
+                e.Handled = true;
+                CloseOverlay(false);
+            }
+        }
+
         public void ShowOverlay(string title, string message, bool showCancel = false, Action<bool>? onClosed = null) {
+            _isLoadingOverlay = false;
             _overlayClosedCallback = onClosed;
 
             OverlayTitleText.Text = title;
             OverlayMessageText.Text = message;
+
+            OverlayProgress.Visibility = Visibility.Collapsed;
+            OverlayButtonPanel.Visibility = Visibility.Visible;
+
             OverlayCancelButton.Visibility = showCancel ? Visibility.Visible : Visibility.Collapsed;
 
             _previousFocus = Keyboard.FocusedElement;
@@ -62,8 +94,51 @@ namespace TetrisApp {
             OverlayLayer.Visibility = Visibility.Visible;
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() => {
+                OverlayLayer.Focus();
+                OverlayOkButton.Focus(); 
+                Keyboard.Focus(OverlayOkButton);
+            }));
+        }
+
+        public void ShowLoadingOverlay(string message, string title = "Notification") {
+            _isLoadingOverlay = true;
+            _overlayClosedCallback = null;
+
+            OverlayTitleText.Text = title;
+            OverlayMessageText.Text = message;
+
+            OverlayTitleText.Visibility = Visibility.Visible;
+            OverlayButtonPanel.Visibility = Visibility.Collapsed;
+            OverlayProgress.Visibility = Visibility.Visible;
+
+            _previousFocus = Keyboard.FocusedElement;
+
+            MainFrame.IsHitTestVisible = false;
+            OverlayLayer.IsHitTestVisible = true;
+            OverlayLayer.Visibility = Visibility.Visible;
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() => {
                 Keyboard.Focus(OverlayLayer);
                 OverlayLayer.Focus();
+            }));
+        }
+
+        public void HideLoadingOverlay() {
+            if (!_isLoadingOverlay) return;
+            _isLoadingOverlay = false;
+
+            OverlayProgress.Visibility = Visibility.Collapsed;
+            OverlayButtonPanel.Visibility = Visibility.Visible;
+
+            OverlayLayer.IsHitTestVisible = false;
+            OverlayLayer.Visibility = Visibility.Collapsed;
+
+            MainFrame.IsHitTestVisible = true;
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() => {
+                if (_previousFocus is UIElement el && el.IsVisible && el.Focusable) el.Focus();
+                else MainFrame.Focus();
+                _previousFocus = null;
             }));
         }
 
@@ -87,7 +162,6 @@ namespace TetrisApp {
             cb?.Invoke(result);
         }
 
-        // Play click sound method
         private void PlayClickSound() {
             try {
                 string soundPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "click.mp3");
@@ -104,31 +178,14 @@ namespace TetrisApp {
             ((App)Application.Current).PlayHoverSound();
         }
 
-        // Play click sound on button clicks
         private void OverlayOkButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             CloseOverlay(true);
         }
 
-        // Play click sound on button clicks
         private void OverlayCancelButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             CloseOverlay(false);
-        }
-
-        private void OverlayLayer_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (OverlayLayer.Visibility != Visibility.Visible) return;
-
-            // Lock arrow keys and escape key
-            if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Left || e.Key == Key.Right) {
-                e.Handled = true;
-                return;
-            }
-
-            if (e.Key == Key.Escape) {
-                e.Handled = true;
-                CloseOverlay(false);
-            }
         }
 
         private async void ExitButton_Click(object sender, RoutedEventArgs e) {
