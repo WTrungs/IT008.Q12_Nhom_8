@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using Newtonsoft.Json;
 using TetrisApp.Views;
+using TetrisApp.Logics;
+
 
 namespace TetrisApp.Views
 {
@@ -12,15 +14,12 @@ namespace TetrisApp.Views
         public int Level { get; set; }
         public int Line { get; set; }
         public string[,] BoardColors { get; set; }
-
-
+        public string ModeName { get; set; }
         public int CurrentTetrominoKind { get; set; }
         public int NextTetrominoKind { get; set; }
-
         public int CurrentRow { get; set; }
         public int CurrentCol { get; set; }
         public int RotationState { get; set; }
-
         public int HoldTetrominoKind { get; set; }
         public bool IsHolded { get; set; }
         public bool IsHoldedInThisTurn { get; set; }
@@ -36,14 +35,12 @@ namespace TetrisApp.Views
                 Level = this.currentLevel,
                 Line = this.currentLine,
                 BoardColors = new string[boardRow, boardColumn],
-
+                ModeName = this.currentMode != null ? this.currentMode.GetType().Name : "EasyMode",
                 CurrentTetrominoKind = (int)this.kindArray[0],
                 NextTetrominoKind = (int)this.kindArray[1],
-
                 CurrentRow = this.currentPosition.row,
                 CurrentCol = this.currentPosition.col,
                 RotationState = this.tetrominoState,
-
                 HoldTetrominoKind = (int)this.holdTetromino,
                 IsHolded = this.isHolded,
                 IsHoldedInThisTurn = this.isHoldedInThisTurn
@@ -78,13 +75,24 @@ namespace TetrisApp.Views
                 this.currentLevel = state.Level;
                 this.currentLine = state.Line;
 
+                switch (state.ModeName)
+                {
+                    case "HardMode":
+                        this.currentMode = new HardMode();
+                        break;
+                    case "MediumMode":
+                        this.currentMode = new MediumMode();
+                        break;
+                    case "EasyMode":
+                    default:
+                        this.currentMode = new EasyMode();
+                        break;
+                }
 
                 this.kindArray[0] = (TetrominoKind)state.CurrentTetrominoKind;
                 this.kindArray[1] = (TetrominoKind)state.NextTetrominoKind;
-
                 this.currentPosition = new Position(state.CurrentRow, state.CurrentCol);
                 this.tetrominoState = state.RotationState;
-
                 this.holdTetromino = (TetrominoKind)state.HoldTetrominoKind;
                 this.isHolded = state.IsHolded;
                 this.isHoldedInThisTurn = state.IsHoldedInThisTurn;
@@ -108,10 +116,7 @@ namespace TetrisApp.Views
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Load Error: " + ex.Message);
-            }
+            catch (Exception) { }
         }
     }
 }
