@@ -59,14 +59,36 @@ namespace TetrisApp.Views {
             this.NavigationService.Navigate(gameOverPage);
         }
 
-        private async System.Threading.Tasks.Task SaveGameToCloud() {
-            try {
-                string json = gameEngine.GetSaveDataJson();
-                await SupabaseService.SaveUserData(json);
+        
+
+      
+        private async System.Threading.Tasks.Task SaveGameToCloud()
+        {
+            try
+            {
+                if (gameEngine.IsGameOver)
+                {
+                    await SupabaseService.SaveUserData("");
+                }
+                else
+                {
+                    string json = gameEngine.GetSaveDataJson();
+                    await SupabaseService.SaveUserData(json);
+                }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Save Error: " + ex.Message);
+            }
         }
 
+
+        private async void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClickSound();
+            await SaveGameToCloud();
+            NavigationService?.Navigate(new Uri("Views/MenuPage.xaml", UriKind.Relative));
+        }
         private void OnRender(object? sender, EventArgs e) {
             RenderingEventArgs renderArgs = (RenderingEventArgs)e;
             if (lastRenderTime == TimeSpan.Zero) {
@@ -105,7 +127,7 @@ namespace TetrisApp.Views {
             ((App)Application.Current).PlayHoverSound();
         }
 
-        // Hàm bật/tắt Pause (Được gọi từ Page_KeyDown bên TetrominoControl.cs hoặc nút Resume)
+       
         public void TogglePause()
         {
             gameEngine.TogglePause();
@@ -123,12 +145,11 @@ namespace TetrisApp.Views {
                 if (PauseOverlay != null) PauseOverlay.Visibility = Visibility.Collapsed;
                 ResetDASTimer();
 
-                // Trả focus về trang game chính để điều khiển gạch
+                
                 this.Focus();
             }
         }
 
-        // Sự kiện khi bấm nút RESUME trên màn hình
         private void ResumeButton_Click(object sender, RoutedEventArgs e) {
             PlayClickSound();
             TogglePause();
@@ -157,11 +178,7 @@ namespace TetrisApp.Views {
             this.Focus();
         }
 
-        // Sự kiện khi bấm nút QUIT
-        private void QuitButton_Click(object sender, RoutedEventArgs e) {
-            PlayClickSound();
-            // Quay về menu chính
-            NavigationService?.Navigate(new Uri("Views/MenuPage.xaml", UriKind.Relative));
-        }
+       
+        
     }
 }

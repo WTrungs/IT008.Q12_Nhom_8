@@ -24,6 +24,8 @@ namespace TetrisApp.Views {
 	}
 
 	public partial class GameEngine {
+
+
 		public GameEngine() {
 			Start();
 		}
@@ -74,7 +76,9 @@ namespace TetrisApp.Views {
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 		GamePage gamePage;
 		bool isLose = false;
-		bool isHolded = false;
+        public bool IsGameOver => isLose;
+
+        bool isHolded = false;
 		bool isHoldedInThisTurn = false;
 		TetrominoKind holdTetromino = TetrominoKind.O;
 
