@@ -229,7 +229,7 @@ namespace TetrisApp.Views {
                 bool loginOk = await SupabaseService.Login(user, pass);
                 if (loginOk) {
 
-                    if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
+                    
 
                     if (SupabaseService.CurrentUser != null && !string.IsNullOrEmpty(SupabaseService.CurrentUser.Email)) {
                         _tempEmail = SupabaseService.CurrentUser.Email;
@@ -237,6 +237,7 @@ namespace TetrisApp.Views {
                         SwitchToOtpMode();
                     }
                     else {
+                        if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                         NavigationService?.Navigate(new MenuPage());
                     }
                 }
