@@ -180,6 +180,12 @@ namespace TetrisApp.Views {
                     return;
                 }
 
+                if (!email.Trim().EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
+                {
+                    ShowError("Please enter a valid Gmail address!");
+                    return;
+                }
+
                 string result = await SupabaseService.Register(user, pass, email);
                 if (result == "OK") {
                     _tempEmail = email;
