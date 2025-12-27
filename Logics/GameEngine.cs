@@ -131,6 +131,8 @@ namespace TetrisApp.Views {
 				if (CheckValidPosition(currentPosition)) {
 					isHolded = true;
 					isHoldedInThisTurn = true;
+					tetrominoState = 0;
+					currentPosition = FindNewPosition();
 					gamePage.PlaySound(gamePage.holdSound);
 					kindArray[1] = GetRandomTetrominoKind();
 				}
@@ -145,6 +147,8 @@ namespace TetrisApp.Views {
 				kindArray[0] = temp;
 				if (CheckValidPosition(currentPosition)) {
 					isHoldedInThisTurn = true;
+					tetrominoState = 0;
+					currentPosition = FindNewPosition();
 					gamePage.PlaySound(gamePage.holdSound);
 				}
 				else {
@@ -221,6 +225,7 @@ namespace TetrisApp.Views {
 		void MakeNewTurn() {
 			isHoldedInThisTurn = false;
 			FillBlockToBoard();
+			tetrominoState = 0;
 			gamePage.PlaySound(gamePage.landingSound);
 			DeleteFilledLine();
 			ResetKindQueue();
