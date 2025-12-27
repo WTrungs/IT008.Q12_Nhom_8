@@ -1,10 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using System.Windows.Media;
-using TetrisApp.Models;
+﻿using System.Windows.Media;
 
 namespace TetrisApp.Views {
 	public enum TetrominoKind {
@@ -22,7 +16,7 @@ namespace TetrisApp.Views {
 			[TetrominoKind.Z] = "Z",
 		};
 
-			public Dictionary<TetrominoKind, string> tetrominoColor;
+		public Dictionary<TetrominoKind, string> tetrominoColor;
 
 		public void InitializeColor() {
 			tetrominoColor = new() {
@@ -63,16 +57,6 @@ namespace TetrisApp.Views {
 			[TetrominoKind.L] = new[]
 			{
 				new int[4,4] {
-					{0,0,0,0},
-					{1,1,1,0},
-					{1,0,0,0},
-					{0,0,0,0} },
-				new int[4,4] {
-					{1,1,0,0},
-					{0,1,0,0},
-					{0,1,0,0},
-					{0,0,0,0} },
-				new int[4,4] {
 					{0,0,1,0},
 					{1,1,1,0},
 					{0,0,0,0},
@@ -81,21 +65,21 @@ namespace TetrisApp.Views {
 					{0,1,0,0},
 					{0,1,0,0},
 					{0,1,1,0},
+					{0,0,0,0} },
+				new int[4,4] {
+					{0,0,0,0},
+					{1,1,1,0},
+					{1,0,0,0},
+					{0,0,0,0} },
+				new int[4,4] {
+					{1,1,0,0},
+					{0,1,0,0},
+					{0,1,0,0},
 					{0,0,0,0} },
 			},
 			[TetrominoKind.J] = new[]
 			{
 				new int[4,4] {
-					{0,0,0,0},
-					{1,1,1,0},
-					{0,0,1,0},
-					{0,0,0,0} },
-				new int[4,4] {
-					{0,1,0,0},
-					{0,1,0,0},
-					{1,1,0,0},
-					{0,0,0,0} },
-				new int[4,4] {
 					{1,0,0,0},
 					{1,1,1,0},
 					{0,0,0,0},
@@ -104,6 +88,16 @@ namespace TetrisApp.Views {
 					{0,1,1,0},
 					{0,1,0,0},
 					{0,1,0,0},
+					{0,0,0,0} },
+				new int[4,4] {
+					{0,0,0,0},
+					{1,1,1,0},
+					{0,0,1,0},
+					{0,0,0,0} },
+				new int[4,4] {
+					{0,1,0,0},
+					{0,1,0,0},
+					{1,1,0,0},
 					{0,0,0,0} },
 			},
 			[TetrominoKind.O] = new[]
@@ -132,14 +126,14 @@ namespace TetrisApp.Views {
 			[TetrominoKind.S] = new[]
 			{
 				new int[4,4] {
-					{0,0,0,0},
 					{0,1,1,0},
 					{1,1,0,0},
+					{0,0,0,0},
 					{0,0,0,0} },
 				new int[4,4] {
-					{1,0,0,0},
-					{1,1,0,0},
 					{0,1,0,0},
+					{0,1,1,0},
+					{0,0,1,0},
 					{0,0,0,0} },
 				new int[4,4] {
 					{0,0,0,0},
@@ -155,16 +149,6 @@ namespace TetrisApp.Views {
 			[TetrominoKind.T] = new[]
 			{
 				new int[4,4] {
-					{0,0,0,0},
-					{1,1,1,0},
-					{0,1,0,0},
-					{0,0,0,0} },
-				new int[4,4] {
-					{0,1,0,0},
-					{1,1,0,0},
-					{0,1,0,0},
-					{0,0,0,0} },
-				new int[4,4] {
 					{0,1,0,0},
 					{1,1,1,0},
 					{0,0,0,0},
@@ -172,20 +156,30 @@ namespace TetrisApp.Views {
 				new int[4,4] {
 					{0,1,0,0},
 					{0,1,1,0},
+					{0,1,0,0},
+					{0,0,0,0} },
+				new int[4,4] {
+					{0,0,0,0},
+					{1,1,1,0},
+					{0,1,0,0},
+					{0,0,0,0} },
+				new int[4,4] {
+					{0,1,0,0},
+					{1,1,0,0},
 					{0,1,0,0},
 					{0,0,0,0} },
 			},
 			[TetrominoKind.Z] = new[]
 			{
 				new int[4,4] {
-					{0,0,0,0},
 					{1,1,0,0},
 					{0,1,1,0},
+					{0,0,0,0},
 					{0,0,0,0} },
 				new int[4,4] {
+					{0,0,1,0},
+					{0,1,1,0},
 					{0,1,0,0},
-					{1,1,0,0},
-					{1,0,0,0},
 					{0,0,0,0} },
 				new int[4,4] {
 					{0,0,0,0},
