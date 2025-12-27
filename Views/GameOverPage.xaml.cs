@@ -50,8 +50,20 @@ namespace TetrisApp.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-			PlayGameOverSound();
-			int currentScore = gameEngine.GetCurrentScore();
+            // Đảm bảo trang nhận focus
+            this.Focusable = true;
+            this.Focus();
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() =>
+            {
+                if (FocusPark != null)
+                {
+                    FocusPark.Focus();
+                }
+            }));
+
+            PlayGameOverSound();
+            int currentScore = gameEngine.GetCurrentScore();
 
             if (SupabaseService.CurrentUser != null)
             {
