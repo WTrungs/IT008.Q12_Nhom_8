@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using Newtonsoft.Json;
-using TetrisApp.Views;
-using TetrisApp.Logics;
-using System.Windows.Media.Animation;
+﻿using TetrisApp.Logics;
 
 namespace TetrisApp.Views {
 	public struct Position {
@@ -14,11 +8,11 @@ namespace TetrisApp.Views {
 			this.col = col;
 		}
 
-		public static bool operator == (Position a, Position b) {
+		public static bool operator ==(Position a, Position b) {
 			return a.row == b.row && a.col == b.col;
 		}
 
-		public static bool operator != (Position a, Position b) {
+		public static bool operator !=(Position a, Position b) {
 			return !(a == b);
 		}
 	}
@@ -76,9 +70,9 @@ namespace TetrisApp.Views {
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
 		GamePage gamePage;
 		bool isLose = false;
-        public bool IsGameOver => isLose;
+		public bool IsGameOver => isLose;
 
-        bool isHolded = false;
+		bool isHolded = false;
 		bool isHoldedInThisTurn = false;
 		TetrominoKind holdTetromino = TetrominoKind.O;
 
@@ -377,7 +371,7 @@ namespace TetrisApp.Views {
 		}
 
 		void MakeHardDropAnimation() {
-			
+
 		}
 
 		async void LoseGame() {
@@ -388,6 +382,64 @@ namespace TetrisApp.Views {
 		public void ChangeStateToLeft() {
 			int oldState = tetrominoState;
 			tetrominoState = (tetrominoState - 1 + 4) % 4;
+			gamePage.PlaySound(gamePage.rotateSound);
+			if (!CheckValidPosition(currentPosition)) {
+				if (currentPosition.col < 0) {
+					Position temp = new Position(currentPosition.row, 0);
+					if (CheckValidPosition(temp)) {
+						currentPosition = temp;
+					}
+					else {
+						tetrominoState = oldState;
+					}
+				}
+				else if (currentPosition.col > 6) {
+					Position temp = new Position(currentPosition.row, 6);
+					if (CheckValidPosition(temp)) {
+						currentPosition = temp;
+					}
+					else {
+						tetrominoState = oldState;
+					}
+				}
+				else {
+					tetrominoState = oldState;
+				}
+			}
+		}
+
+		public void ChangeStateToRight() {
+			int oldState = tetrominoState;
+			tetrominoState = (tetrominoState + 1) % 4;
+			gamePage.PlaySound(gamePage.rotateSound);
+			if (!CheckValidPosition(currentPosition)) {
+				if (currentPosition.col < 0) {
+					Position temp = new Position(currentPosition.row, 0);
+					if (CheckValidPosition(temp)) {
+						currentPosition = temp;
+					}
+					else {
+						tetrominoState = oldState;
+					}
+				}
+				else if (currentPosition.col > 6) {
+					Position temp = new Position(currentPosition.row, 6);
+					if (CheckValidPosition(temp)) {
+						currentPosition = temp;
+					}
+					else {
+						tetrominoState = oldState;
+					}
+				}
+				else {
+					tetrominoState = oldState;
+				}
+			}
+		}
+
+		public void Rotate180() {
+			int oldState = tetrominoState;
+			tetrominoState = (tetrominoState + 2) % 4;
 			gamePage.PlaySound(gamePage.rotateSound);
 			if (!CheckValidPosition(currentPosition)) {
 				if (currentPosition.col < 0) {

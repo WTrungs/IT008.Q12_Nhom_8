@@ -1,13 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TetrisApp.Models;
-using TetrisApp.Views;
-using TetrisApp.Services;
 
 namespace TetrisApp.Views {
 	public partial class GamePage : Page {
@@ -42,20 +34,32 @@ namespace TetrisApp.Views {
 		}
 
 		private void Page_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Escape) {
-                TogglePause();
-                e.Handled = true;
-                return;
-            }
-            if (gameEngine.IsPaused) return;
-            if (!e.IsRepeat) {
+			if (e.Key == Key.Escape) {
+				TogglePause();
+				e.Handled = true;
+				return;
+			}
+			if (gameEngine.IsPaused) return;
+			if (!e.IsRepeat) {
 				switch (e.Key) {
 					case Key.Up:
-						gameEngine.ChangeStateToLeft();
+						gameEngine.ChangeStateToRight();
 						e.Handled = true;
 						break;
 					case Key.Space:
 						gameEngine.HardDrop();
+						e.Handled = true;
+						break;
+					case Key.Z:
+						gameEngine.ChangeStateToLeft();
+						e.Handled = true;
+						break;
+					case Key.X:
+						gameEngine.ChangeStateToRight();
+						e.Handled = true;
+						break;
+					case Key.A:
+						gameEngine.Rotate180();
 						e.Handled = true;
 						break;
 				}
