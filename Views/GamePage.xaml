@@ -377,8 +377,16 @@
 					<Border Padding="12" CornerRadius="12" Background="#6610152A" BorderBrush="#2A2A33" BorderThickness="1">
 						<StackPanel>
 							<TextBlock Text="CONTROLS" Foreground="{StaticResource TextMuted}" FontWeight="Bold" HorizontalAlignment="Center"/>
-							<TextBlock Margin="0,8,0,0"
-									   Text="← → : Change&#10;↑ : Rotate&#10;↓ : Soft Drop&#10;Space : Hard Drop&#10;C/Shift : Hold&#10;Esc : Pause"/>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Row="0" Grid.Column="0" Margin="0,8,0,0"
+									Text="← → : Move&#10;↓ : Soft Drop&#10;Space : Hard Drop&#10;C LeftShift RightShift : Hold&#10;Esc : Pause"/>
+								<TextBlock Grid.Row="0" Grid.Column="1" Margin="0,8,0,0"
+									Text="Z : Rotate Counter-clockwise&#10;↑ X : Rotate Clockwise&#10;A : Rotate 180°&#10;"/>
+							</Grid>
 						</StackPanel>
 					</Border>
 				</StackPanel>
