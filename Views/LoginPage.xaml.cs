@@ -162,10 +162,10 @@ namespace TetrisApp.Views {
                             return; 
                         }
 
-                        ShowError("Verification successful!");
                         if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
                         NavigationService?.Navigate(new MenuPage());
-                    }
+						ShowError("Verification successful!");
+					}
                     else {
                         ShowError("Incorrect or expired OTP!");
                     }

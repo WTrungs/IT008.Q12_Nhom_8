@@ -93,12 +93,12 @@ namespace TetrisApp {
             OverlayLayer.IsHitTestVisible = true;
             OverlayLayer.Visibility = Visibility.Visible;
 
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() => {
-                OverlayLayer.Focus();
-                OverlayOkButton.Focus(); 
-                Keyboard.Focus(OverlayOkButton);
-            }));
-        }
+			Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() => {
+				this.Activate();
+				OverlayOkButton.Focus();
+				Keyboard.Focus(OverlayOkButton);
+			}));
+		}
 
         public void ShowLoadingOverlay(string message, string title = "Notification") {
             _isLoadingOverlay = true;
