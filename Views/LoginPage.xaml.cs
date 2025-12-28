@@ -226,7 +226,7 @@ namespace TetrisApp.Views {
                 await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
 
                 try {
-                    bool sent = await SupabaseService.GenerateAndSendOtp(email);
+                    bool sent = await Task.Run(() => SupabaseService.GenerateAndSendOtp(email));
                     if (sent) {
                         _tempEmail = email;
                         SwitchToOtpMode();
