@@ -62,30 +62,11 @@
                 Width="0"
                 Height="0"/>
 
-        <Rectangle Fill="{StaticResource SpaceBackground}"/>
-
-        <Canvas IsHitTestVisible="False" Opacity="0.8">
-            <Ellipse Width="800"
-                     Height="800"
-                     Canvas.Left="-200"
-                     Canvas.Top="-300"
-                     Fill="#44FB7185">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="120"/>
-                </Ellipse.Effect>
-            </Ellipse>
-
-            <Ellipse Width="600"
-                     Height="600"
-                     Canvas.Right="-100"
-                     Canvas.Bottom="-150"
-                     Fill="#44557C3A">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="100"/>
-                </Ellipse.Effect>
-            </Ellipse>
-        </Canvas>
-
+        <Image Source="/Assets/Images/Background.png"
+               Stretch="UniformToFill"
+               RenderOptions.BitmapScalingMode="HighQuality"
+               IsHitTestVisible="False"/>
+        
         <Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.4"/>
 
         <Grid>
@@ -215,7 +196,6 @@
                                 Style="{StaticResource SpaceButton}"
                                 Content="MENU"
                                 BorderBrush="#3A4058"
-                                Background="Transparent"
                                 Height="45"
                                 Click="MenuButton_Click"
                                 KeyboardNavigation.TabIndex="1"/>

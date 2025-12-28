@@ -15,6 +15,7 @@
     <None Remove="Assets\clear-line.wav" />
     <None Remove="Assets\hard-drop.wav" />
     <None Remove="Assets\hold.wav" />
+    <None Remove="Assets\Images\Background.png" />
     <None Remove="Assets\landing.wav" />
     <None Remove="Assets\move.wav" />
     <None Remove="Assets\rotate.wav" />
@@ -53,6 +54,12 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Supabase" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\Background.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

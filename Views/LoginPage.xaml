@@ -218,38 +218,11 @@
             Width="0"
             Height="0"/>
 
-        <Canvas IsHitTestVisible="True" Opacity="0.9">
-            <Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="60"/>
-                </Ellipse.Effect>
-            </Ellipse>
-
-            <Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="60"/>
-                </Ellipse.Effect>
-            </Ellipse>
-
-            <Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="60"/>
-                </Ellipse.Effect>
-            </Ellipse>
-
-            <Ellipse Width="700" Height="700" Canvas.Left="890" Canvas.Top="325" Fill="#5522D3EE">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="70"/>
-                </Ellipse.Effect>
-            </Ellipse>
-
-            <Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Top="356" Canvas.Bottom="-220" Fill="#44FB7185">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="80"/>
-                </Ellipse.Effect>
-            </Ellipse>
-        </Canvas>
-
+        <Image Source="/Assets/Images/Background.png"
+               Stretch="UniformToFill"
+               RenderOptions.BitmapScalingMode="HighQuality"
+               IsHitTestVisible="False"/>
+        
         <Rectangle
             Fill="{StaticResource StarsBrush}"
             Opacity="0.30"

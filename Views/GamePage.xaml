@@ -169,42 +169,12 @@
 
 	<Grid>
 		<!-- NỀN -->
-		<Rectangle Fill="{StaticResource SpaceBackground}"/>
+        <Image Source="/Assets/Images/Background.png"
+               Stretch="UniformToFill"
+               RenderOptions.BitmapScalingMode="HighQuality"
+               IsHitTestVisible="False"/>
 
-		<!-- NEBULA / GLOW -->
-		<Canvas IsHitTestVisible="True" Opacity="0.9">
-			<Ellipse Width="700" Height="700" Canvas.Left="-219" Canvas.Top="-340" Fill="#557C3AED">
-				<Ellipse.Effect>
-					<BlurEffect Radius="60"/>
-				</Ellipse.Effect>
-			</Ellipse>
-
-			<Ellipse Width="700" Height="700" Canvas.Left="190" Canvas.Top="325" Fill="#BA748D" HorizontalAlignment="Left" VerticalAlignment="Center">
-				<Ellipse.Effect>
-					<BlurEffect Radius="60"/>
-				</Ellipse.Effect>
-			</Ellipse>
-
-			<Ellipse Width="700" Height="694" Canvas.Left="650" Canvas.Top="-267" Fill="#4E7198">
-				<Ellipse.Effect>
-					<BlurEffect Radius="60"/>
-				</Ellipse.Effect>
-			</Ellipse>
-
-			<Ellipse Width="700" Height="700" Canvas.Right="-160" Canvas.Top="325" Fill="#5522D3EE" Canvas.Left="890" HorizontalAlignment="Left" VerticalAlignment="Top">
-				<Ellipse.Effect>
-					<BlurEffect Radius="70"/>
-				</Ellipse.Effect>
-			</Ellipse>
-
-			<Ellipse Width="700" Height="700" Canvas.Left="-536" Canvas.Bottom="-220" Fill="#44FB7185" HorizontalAlignment="Left" Canvas.Top="356" VerticalAlignment="Top">
-				<Ellipse.Effect>
-					<BlurEffect Radius="80"/>
-				</Ellipse.Effect>
-			</Ellipse>
-		</Canvas>
-
-		<!-- STARS -->
+        <!-- STARS -->
 		<Rectangle Fill="{StaticResource StarsBrush}" Opacity="0.30" IsHitTestVisible="False"/>
 
 		<Grid Margin="22">
@@ -231,11 +201,9 @@
 
 					<!-- Board -->
                     <Border Grid.Row="1"
-							CornerRadius="14"
-							BorderBrush="#2A2A33"
-							BorderThickness="1"
-							Background="#0D1020"
-							Padding="12">
+							Padding="12"
+							Background="Transparent"
+							BorderThickness="0">
 
                         <!-- Viewbox to scale the board while maintaining aspect ratio -->
 						<Viewbox Stretch="Uniform"
