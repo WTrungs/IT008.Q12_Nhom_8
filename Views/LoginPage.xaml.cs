@@ -197,11 +197,11 @@ namespace TetrisApp.Views {
                 await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
 
                 try {
-                    string result = await SupabaseService.Register(user, pass, email);
+                    string result = await Task.Run(() => SupabaseService.Register(user, pass, email));
 
                     if (result == "OK") {
                         _tempEmail = email;
-                        await SupabaseService.GenerateAndSendOtp(email);
+                        await Task.Run(() => SupabaseService.GenerateAndSendOtp(email));
                         SwitchToOtpMode();
                     }
                     else {
@@ -279,17 +279,17 @@ namespace TetrisApp.Views {
             }
 
             main.ShowLoadingOverlay("Logging in...", "");
-            await Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Render);
+            Task.Delay(100);
 
             try {
-                bool loginOk = await SupabaseService.Login(user, pass);
+                bool loginOk = await Task.Run(() => SupabaseService.Login(user, pass));
 
                 if (loginOk) {
                     if (SupabaseService.CurrentUser != null && !string.IsNullOrEmpty(SupabaseService.CurrentUser.Email)) {
                         _tempEmail = SupabaseService.CurrentUser.Email;
 
-                        await SupabaseService.GenerateAndSendOtp(_tempEmail);
-                        SwitchToOtpMode();
+						await Task.Run(() => SupabaseService.GenerateAndSendOtp(_tempEmail));
+						SwitchToOtpMode();
                     }
                     else {
                         if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
