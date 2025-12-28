@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="SingleBorderWindow"
-        ResizeMode="CanMinimize"
+        WindowStyle="None"
+        ResizeMode="NoResize"
         WindowState="Maximized" d:DesignHeight="800" d:DesignWidth="600" PreviewKeyDown="Window_PreviewKeyDown">
 
     <Grid x:Name="RootGrid" Background="{StaticResource SpaceBackground}">
