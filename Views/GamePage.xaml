@@ -212,6 +212,9 @@
 
 							<!-- Board area: 10*26 = 260, 20*26 = 520 -->
 							<Grid Width="260" Height="520">
+								<Grid.RenderTransform>
+									<TranslateTransform x:Name="ShakeBoardTransform" X="0" Y="0" />
+								</Grid.RenderTransform>
 								<Border x:Name="GridBackground"
 									CornerRadius="10"
 									Background="{StaticResource GridTileBrush}"/>

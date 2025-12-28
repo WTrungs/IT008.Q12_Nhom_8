@@ -354,6 +354,7 @@ namespace TetrisApp.Views {
 					}
 				}
 			}
+			gamePage.ApplyShakeBoardAnimation();
 		}
 
 		void DeleteFilledLine() {

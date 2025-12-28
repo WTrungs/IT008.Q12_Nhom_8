@@ -62,6 +62,16 @@ namespace TetrisApp.Views {
 			animatedColor.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
 		}
 
+		public void ApplyShakeBoardAnimation() {
+			DoubleAnimationUsingKeyFrames dropAnimation = new DoubleAnimationUsingKeyFrames();
+			var impactKeyFrame = new EasingDoubleKeyFrame(5, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(25)));
+			dropAnimation.KeyFrames.Add(impactKeyFrame);
+			var recoveryKeyFrame = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(200)));
+			recoveryKeyFrame.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut };
+			dropAnimation.KeyFrames.Add(recoveryKeyFrame);
+			ShakeBoardTransform.BeginAnimation(TranslateTransform.YProperty, dropAnimation);
+		}
+
 		public void Draw() {
 			ResetBoard();
 			DrawFilledBoard();
