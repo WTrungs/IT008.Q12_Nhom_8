@@ -64,6 +64,9 @@ namespace TetrisApp.Views {
 		int currentLevel = 1;
 		int currentLine = 0;
 		TetrominoKind[] kindArray = new TetrominoKind[2];
+		TetrominoKind[][] tetrominoBag = new TetrominoKind[2][];
+		int currentBagIndex = 0;
+		int nextBagIndex = 1;
 		int tetrominoState = 0;
 		double dropTick = 1;
 		double currentTime = 1.0;
@@ -85,15 +88,119 @@ namespace TetrisApp.Views {
 			currentTime = dropTick;
 			currentPosition = startPosition;
 			holdTetromino = TetrominoKind.O;
-			for (int i = 0; i < 2; i++) {
-				kindArray[i] = GetRandomTetrominoKind();
-			}
 			for (int i = 0; i < boardRow; i++) {
 				for (int j = 0; j < boardColumn; j++) {
 					boardGame[i, j] = new Cell();
 				}
 			}
+			for (int i = 0; i < 2; i++) {
+				tetrominoBag[i] = GetNewTetrominoBag();
+			}
+			kindArray[0] = tetrominoBag[0][currentBagIndex];
+			kindArray[1] = tetrominoBag[0][nextBagIndex];
 			InitializeColor();
+		}
+
+		public void Update() {
+			if (IsPaused || isLose) {
+				return;
+			}
+			dropTick = currentMode.CalculateDropTick(currentLevel);
+			RunTickEvent();
+		}
+
+		void RunTickEvent() {
+			currentTime -= Time.deltaTime;
+			if (currentTime <= 0) {
+				Position newPos = currentPosition;
+				--newPos.row;
+				if (CheckValidPosition(newPos)) {
+					currentPosition = newPos;
+				}
+				else {
+					MakeNewTurn();
+				}
+				currentTime = dropTick;
+			}
+		}
+
+		void MakeNewTurn() {
+			isHoldedInThisTurn = false;
+			FillBlockToBoard();
+			tetrominoState = 0;
+			gamePage.PlaySound(gamePage.landingSound);
+			DeleteFilledLine();
+			UpdateTetrominoBag();
+			Position plannedPosition = FindNewPosition();
+			if (DoNotHaveValidBlock(plannedPosition)) {
+				LoseGame();
+			}
+			currentPosition = plannedPosition;
+			currentTime = dropTick;
+		}
+
+		public TetrominoKind[] GetNewTetrominoBag() {
+			TetrominoKind[] newBag = new TetrominoKind[7] {
+				TetrominoKind.O,
+				TetrominoKind.I,
+				TetrominoKind.S,
+				TetrominoKind.Z,
+				TetrominoKind.L,
+				TetrominoKind.J,
+				TetrominoKind.T
+			};
+			Utils.Shuffle(newBag);
+			return newBag;
+		}
+
+		public void UpdateTetrominoBag() {
+			nextBagIndex = (nextBagIndex + 1) % 7;
+			currentBagIndex = (nextBagIndex - 1 + 7) % 7;
+			if (nextBagIndex == 0) {
+				kindArray[0] = tetrominoBag[0][currentBagIndex];
+				tetrominoBag[0] = (TetrominoKind[])tetrominoBag[1].Clone();
+				tetrominoBag[1] = GetNewTetrominoBag();
+				kindArray[1] = tetrominoBag[0][nextBagIndex];
+			}
+			else {
+				kindArray[0] = tetrominoBag[0][currentBagIndex];
+				kindArray[1] = tetrominoBag[0][nextBagIndex];
+			}
+		}
+
+		public void ChangeHold() { // 1 lượt chỉ được đổi hold 1 lần
+			if (isHoldedInThisTurn) {
+				//không cho hold
+				return;
+			}
+			if (!isHolded) { //chưa hold lần nào
+				holdTetromino = kindArray[0];
+				kindArray[0] = kindArray[1];
+				if (CheckValidPosition(currentPosition)) {
+					isHolded = true;
+					isHoldedInThisTurn = true;
+					tetrominoState = 0;
+					currentPosition = FindNewPosition();
+					gamePage.PlaySound(gamePage.holdSound);
+					UpdateTetrominoBag();
+				}
+				else { //không thể hold, trả lại
+					kindArray[0] = holdTetromino;
+				}
+			}
+			else { //đã hold rồi
+				   //swap 2 cái tetromino
+				Utils.Swap(ref holdTetromino, ref kindArray[0]);
+				if (CheckValidPosition(currentPosition)) {
+					isHoldedInThisTurn = true;
+					tetrominoState = 0;
+					currentPosition = FindNewPosition();
+					gamePage.PlaySound(gamePage.holdSound);
+				}
+				else {
+					Utils.Swap(ref holdTetromino, ref kindArray[0]);
+				}
+			}
 		}
 
 		public int GetCurrentLine() {
@@ -118,53 +225,6 @@ namespace TetrisApp.Views {
 
 		public TetrominoKind GetNextTetromino() {
 			return kindArray[1];
-		}
-
-		public void ChangeHold() { // 1 lượt chỉ được đổi hold 1 lần
-			if (isHoldedInThisTurn) {
-				//không cho hold
-				return;
-			}
-			if (!isHolded) {
-				holdTetromino = kindArray[0];
-				kindArray[0] = kindArray[1];
-				if (CheckValidPosition(currentPosition)) {
-					isHolded = true;
-					isHoldedInThisTurn = true;
-					tetrominoState = 0;
-					currentPosition = FindNewPosition();
-					gamePage.PlaySound(gamePage.holdSound);
-					kindArray[1] = GetRandomTetrominoKind();
-				}
-				else {
-					kindArray[0] = holdTetromino;
-				}
-			}
-			else {
-				//swap 2 cái tetromino
-				TetrominoKind temp = holdTetromino;
-				holdTetromino = kindArray[0];
-				kindArray[0] = temp;
-				if (CheckValidPosition(currentPosition)) {
-					isHoldedInThisTurn = true;
-					tetrominoState = 0;
-					currentPosition = FindNewPosition();
-					gamePage.PlaySound(gamePage.holdSound);
-				}
-				else {
-					temp = holdTetromino;
-					holdTetromino = kindArray[0];
-					kindArray[0] = temp;
-				}
-			}
-		}
-
-		public void Update() {
-			if (IsPaused || isLose) {
-				return;
-			}
-			dropTick = currentMode.CalculateDropTick(currentLevel);
-			RunTickEvent();
 		}
 
 		bool CheckBlockInBoard(Position pos) {
@@ -205,36 +265,6 @@ namespace TetrisApp.Views {
 		TetrominoKind GetRandomTetrominoKind() {
 			Random rand = new Random();
 			return (TetrominoKind)rand.Next(0, 7);
-		}
-
-		void RunTickEvent() {
-			currentTime -= Time.deltaTime;
-			if (currentTime <= 0) {
-				Position newPos = currentPosition;
-				--newPos.row;
-				if (CheckValidPosition(newPos)) {
-					currentPosition = newPos;
-				}
-				else {
-					MakeNewTurn();
-				}
-				currentTime = dropTick;
-			}
-		}
-
-		void MakeNewTurn() {
-			isHoldedInThisTurn = false;
-			FillBlockToBoard();
-			tetrominoState = 0;
-			gamePage.PlaySound(gamePage.landingSound);
-			DeleteFilledLine();
-			ResetKindQueue();
-			Position plannedPosition = FindNewPosition();
-			if (DoNotHaveValidBlock(plannedPosition)) {
-				LoseGame();
-			}
-			currentPosition = plannedPosition;
-			currentTime = dropTick;
 		}
 
 		public Position FindDeepestPosition() {
