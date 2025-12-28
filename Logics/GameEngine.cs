@@ -40,8 +40,6 @@ namespace TetrisApp.Views {
 			IsPaused = !IsPaused;
 		}
 
-		public bool IsPaused { get; private set; } = false;
-
 		public class Cell {
 			public bool isFilled = false;
 			public string color = "null";
@@ -57,6 +55,7 @@ namespace TetrisApp.Views {
 
 		const int boardRow = 30;
 		const int boardColumn = 10;
+		GamePage gamePage;
 		Position startPosition = new Position(20, 3);
 		Position currentPosition = new Position(20, 3);
 		BaseMode currentMode;
@@ -71,13 +70,12 @@ namespace TetrisApp.Views {
 		double dropTick = 1;
 		double currentTime = 1.0;
 		public Cell[,] boardGame = new Cell[boardRow, boardColumn];
-		GamePage gamePage;
-		bool isLose = false;
-		public bool IsGameOver => isLose;
-
 		bool isHolded = false;
 		bool isHoldedInThisTurn = false;
 		TetrominoKind holdTetromino = TetrominoKind.O;
+		bool isLose = false;
+		public bool IsGameOver => isLose;
+		public bool IsPaused { get; private set; } = false;
 
 		public void Start() {
 			currentScore = 0;
