@@ -68,6 +68,7 @@
             <Setter Property="Background" Value="#9910152A"/>
         </Style>
 
+        
         <Style x:Key="SpaceButton" TargetType="Button">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Height" Value="50"/>
@@ -120,6 +121,7 @@
             </Setter>
         </Style>
 
+        <!-- DEFAULT BUTTON STYLE-->
         <Style TargetType="Button" BasedOn="{StaticResource SpaceButton}"/>
 
         <!-- PROGRESSBAR -->

@@ -59,9 +59,6 @@ namespace TetrisApp.Views {
             this.NavigationService.Navigate(gameOverPage);
         }
 
-        
-
-      
         private async System.Threading.Tasks.Task SaveGameToCloud()
         {
             try
@@ -177,8 +174,5 @@ namespace TetrisApp.Views {
             // 5. Lấy lại focus để nhận phím bấm ngay
             this.Focus();
         }
-
-       
-        
     }
 }
