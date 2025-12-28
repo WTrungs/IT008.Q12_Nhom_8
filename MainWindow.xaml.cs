@@ -26,7 +26,7 @@ namespace TetrisApp {
             InitializeComponent();
             MainFrame.Navigate(new LoginPage());
 
-            ((App)Application.Current).UpdateBackgroundMusic();
+            //((App)Application.Current).UpdateBackgroundMusic();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
