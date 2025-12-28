@@ -27,37 +27,28 @@ namespace TetrisApp.Views {
         private void Difficulty_PreviewKeyDown(object sender, KeyEventArgs e) {
             bool IsOnAnyButton = Keyboard.FocusedElement == EasyButton || Keyboard.FocusedElement == MediumButton || Keyboard.FocusedElement == HardButton;
 
-            if (e.Key == Key.Tab && !IsOnAnyButton) {
+            bool IsOnBack = Keyboard.FocusedElement == BackButton;
+
+            if (!IsOnAnyButton && !IsOnBack && (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Tab)) {
                 e.Handled = true;
-                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-                    HardButton.Focus();
+                if (e.Key == Key.Up || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+                    BackButton.Focus();
                 else
                     EasyButton.Focus();
                 return;
             }
 
-            if ((e.Key == Key.Down || e.Key == Key.Up) && !IsOnAnyButton) {
+            if (IsOnBack && e.Key == Key.Down) {
                 e.Handled = true;
                 EasyButton.Focus();
                 return;
             }
 
-            if (e.Key == Key.Down) {
+            if (Keyboard.FocusedElement == EasyButton && e.Key == Key.Up) {
                 e.Handled = true;
-                MoveFocus(FocusNavigationDirection.Next);
+                BackButton.Focus();
                 return;
             }
-
-            if (e.Key == Key.Up) {
-                e.Handled = true;
-                MoveFocus(FocusNavigationDirection.Previous);
-                return;
-            }
-        }
-
-        private static void MoveFocus(FocusNavigationDirection direction) {
-            if (Keyboard.FocusedElement is UIElement element)
-                element.MoveFocus(new TraversalRequest(direction));
         }
 
         private void PlayClickSound() {
