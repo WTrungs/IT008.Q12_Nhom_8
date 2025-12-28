@@ -23,6 +23,11 @@ namespace TetrisApp.Views
         public int HoldTetrominoKind { get; set; }
         public bool IsHolded { get; set; }
         public bool IsHoldedInThisTurn { get; set; }
+
+        public int CurrentBagIndex { get; set; }
+        public int NextBagIndex { get; set; }
+        public int[] Bag0 { get; set; } 
+        public int[] Bag1 { get; set; } 
     }
 
     public partial class GameEngine
@@ -43,7 +48,11 @@ namespace TetrisApp.Views
                 RotationState = this.tetrominoState,
                 HoldTetrominoKind = (int)this.holdTetromino,
                 IsHolded = this.isHolded,
-                IsHoldedInThisTurn = this.isHoldedInThisTurn
+                IsHoldedInThisTurn = this.isHoldedInThisTurn,
+                CurrentBagIndex = this.currentBagIndex,
+                NextBagIndex = this.nextBagIndex,
+                Bag0 = this.tetrominoBag[0] != null ? Array.ConvertAll(this.tetrominoBag[0], x => (int)x) : null,
+                Bag1 = this.tetrominoBag[1] != null ? Array.ConvertAll(this.tetrominoBag[1], x => (int)x) : null
             };
 
             for (int r = 0; r < boardRow; r++)
@@ -96,6 +105,16 @@ namespace TetrisApp.Views
                 this.holdTetromino = (TetrominoKind)state.HoldTetrominoKind;
                 this.isHolded = state.IsHolded;
                 this.isHoldedInThisTurn = state.IsHoldedInThisTurn;
+                this.currentBagIndex = state.CurrentBagIndex;
+                this.nextBagIndex = state.NextBagIndex;
+
+                if (this.tetrominoBag == null) this.tetrominoBag = new TetrominoKind[2][];
+
+                if (state.Bag0 != null)
+                    this.tetrominoBag[0] = Array.ConvertAll(state.Bag0, x => (TetrominoKind)x);
+
+                if (state.Bag1 != null)
+                    this.tetrominoBag[1] = Array.ConvertAll(state.Bag1, x => (TetrominoKind)x);
 
                 for (int r = 0; r < boardRow; r++)
                 {
