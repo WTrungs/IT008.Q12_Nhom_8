@@ -162,7 +162,9 @@ namespace TetrisApp.Services {
                                             .Update();
 
                 if (response.Models.Count > 0) {
-                    EmailService.SendOtp(email, otp);
+                    var user = response.Models.First();
+                    string usernameCanLay = user.Username;
+                    EmailService.SendOtp(email, otp, usernameCanLay);
                     return true;
                 }
                 return false;

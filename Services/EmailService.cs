@@ -9,7 +9,7 @@ using Supabase;
 
 public static class EmailService
 {
-    public static void SendOtp(string toEmail, string otpCode, string Username)
+    public static void SendOtp(string toEmail, string otpCode, string username)
     {
         try
         {
@@ -17,8 +17,7 @@ public static class EmailService
             var toAddress = new MailAddress(toEmail);
             const string fromPassword = "lhxj ftqf pdzt pzxm";
             string subject = "Tetris OTP Code";
-            string body = $"Hello {Username},\nYour OTP code is: {otpCode}\nThe code is valid for 5 minutes.";
-
+            string body = $"Hello {username},\n\nYour OTP code is: {otpCode}\nThe code is valid for 5 minutes.\n\nGood luck!";
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",

@@ -256,9 +256,10 @@ namespace TetrisApp.Views {
                     try {
                         bool resetOk = await SupabaseService.ResetPassword(SupabaseService.CurrentUser.Username, pass);
                         if (resetOk) {
+                            await SupabaseService.Login(SupabaseService.CurrentUser.Username, pass);
                             ShowError("Password changed successfully!");
                             if (Application.Current is App myApp) myApp.UpdateBackgroundMusic();
-                            NavigationService?.Navigate(new LoginPage());
+                            NavigationService?.Navigate(new MenuPage());
                         }
                         else {
                             ShowError("An error occurred while updating the password. Please try again");
