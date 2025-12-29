@@ -15,8 +15,8 @@ public static class EmailService
             var fromAddress = new MailAddress("blackmeettetris@gmail.com", "Tetris Game");
             var toAddress = new MailAddress(toEmail);
             const string fromPassword = "lhxj ftqf pdzt pzxm";
-            string subject = "Mã xác thực OTP Tetris";
-            string body = $"Mã OTP của bạn là: {otpCode}\nMã có hiệu lực trong 5 phút.";
+            string subject = "Tetris OTP Code";
+            string body = $"Your OTP code is: {otpCode}\nThe code is valid for 5 minutes.";
 
             var smtp = new SmtpClient
             {
@@ -38,7 +38,7 @@ public static class EmailService
         }
         catch (Exception ex)
         {
-            throw new Exception("Không thể gửi email: " + ex.Message);
+            throw new Exception("Unable to send email: " + ex.Message);
         }
     }
 }
