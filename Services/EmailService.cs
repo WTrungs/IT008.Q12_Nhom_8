@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
+using Supabase;
 
 public static class EmailService
 {
-    public static void SendOtp(string toEmail, string otpCode)
+    public static void SendOtp(string toEmail, string otpCode, string Username)
     {
         try
         {
@@ -16,7 +17,7 @@ public static class EmailService
             var toAddress = new MailAddress(toEmail);
             const string fromPassword = "lhxj ftqf pdzt pzxm";
             string subject = "Tetris OTP Code";
-            string body = $"Your OTP code is: {otpCode}\nThe code is valid for 5 minutes.";
+            string body = $"Hello {Username},\nYour OTP code is: {otpCode}\nThe code is valid for 5 minutes.";
 
             var smtp = new SmtpClient
             {
